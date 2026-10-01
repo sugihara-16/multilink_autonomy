@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 22d69b6..bee680a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ cmake_minimum_required (VERSION 2.8)
+ project(lightweight_filtering)
+-add_definitions(-std=c++11)
++set(CMAKE_CXX_STANDARD 17)
+ 
+ ##################### Find, include, and compile library #####################
+ 

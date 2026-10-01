@@ -1,0 +1,24 @@
+<launch>
+  <arg name="calibration"/>
+  <arg name="imu_topic" default="/slam/input/imu"/>
+  <arg name="cam0_topic" default="/vio/cam0/image"/>
+  <arg name="cam1_topic" default="/vio/cam1/image"/>
+  <arg name="cam2_topic" default="/vio/cam2/image"/>
+  <node pkg="rovio" type="rovio_node" name="rovio" output="screen" required="true">
+    <param name="filter_config" value="$(arg calibration)/rovio.info"/>
+    <param name="camera0_config" value="$(arg calibration)/cam0.yaml"/>
+    <param name="camera1_config" value="$(arg calibration)/cam1.yaml"/>
+    <param name="camera2_config" value="$(arg calibration)/cam2.yaml"/>
+    <param name="world_frame" value="vio_world"/>
+    <param name="imu_frame" value="vio_imu"/>
+    <param name="camera_frame" value="vio_camera"/>
+    <remap from="imu0" to="$(arg imu_topic)"/>
+    <remap from="cam0/image_raw" to="$(arg cam0_topic)"/>
+    <remap from="cam1/image_raw" to="$(arg cam1_topic)"/>
+    <remap from="cam2/image_raw" to="$(arg cam2_topic)"/>
+    <!-- Do not expose optional ground-truth corrections in this estimator. -->
+    <remap from="pose" to="/vio/unused/pose"/>
+    <remap from="odometry" to="/vio/unused/odometry"/>
+    <remap from="abss/twist" to="/vio/unused/twist"/>
+  </node>
+</launch>

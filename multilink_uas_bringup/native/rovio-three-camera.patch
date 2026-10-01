@@ -1,0 +1,121 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3ee2a8d..f9d8835 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ cmake_minimum_required (VERSION 2.6)
+ project(rovio)
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -march=native")
++set(CMAKE_CXX_STANDARD 17)
+ set(ROVIO_NMAXFEATURE 25 CACHE STRING "Number of features for ROVIO")
+ set(ROVIO_NCAM 1 CACHE STRING "Number of enabled cameras")
+ set(ROVIO_NLEVELS 4 CACHE STRING "Number of image leavels for the features")
+@@ -97,7 +97,6 @@ catkin_package(
+ 	std_msgs
+ 	tf
+ 	rosbag
+-  yaml_cpp_catkin
+ )
+ 
+ include_directories(include ${catkin_INCLUDE_DIRS} ${YamlCpp_INCLUDE_DIRS})
+diff --git a/include/rovio/ImgUpdate.hpp b/include/rovio/ImgUpdate.hpp
+index 084cf4b..fb4f7a6 100644
+--- a/include/rovio/ImgUpdate.hpp
++++ b/include/rovio/ImgUpdate.hpp
+@@ -587,7 +587,7 @@ ImgOutlierDetection<typename FILTERSTATE::mtState>,false>{
+     assert(filterState.t_ == meas.aux().imgTime_);
+     for(int i=0;i<mtState::nCam_;i++){
+       if(doFrameVisualisation_){
+-        cvtColor(meas.aux().pyr_[i].imgs_[0], filterState.img_[i], CV_GRAY2RGB);
++        cvtColor(meas.aux().pyr_[i].imgs_[0], filterState.img_[i], cv::COLOR_GRAY2RGB);
+       }
+     }
+     filterState.imgTime_ = filterState.t_;
+diff --git a/include/rovio/RovioNode.hpp b/include/rovio/RovioNode.hpp
+index 92c0030..20131ea 100644
+--- a/include/rovio/RovioNode.hpp
++++ b/include/rovio/RovioNode.hpp
+@@ -40,6 +40,8 @@
+ #include <geometry_msgs/TwistWithCovarianceStamped.h>
+ #include <nav_msgs/Odometry.h>
+ #include <ros/ros.h>
++#include <array>
++#include <map>
+ #include <sensor_msgs/Image.h>
+ #include <sensor_msgs/image_encodings.h>
+ #include <sensor_msgs/Imu.h>
+@@ -129,8 +131,9 @@ class RovioNode{
+   ros::NodeHandle nh_;
+   ros::NodeHandle nh_private_;
+   ros::Subscriber subImu_;
+-  ros::Subscriber subImg0_;
+-  ros::Subscriber subImg1_;
++  std::vector<ros::Subscriber> subImages_;
++  std::map<uint64_t, std::array<sensor_msgs::ImageConstPtr, mtState::nCam_>> imageSets_;
++  uint64_t lastImageStamp_ = 0;
+   ros::Subscriber subGroundtruth_;
+   ros::Subscriber subGroundtruthOdometry_;
+   ros::Subscriber subVelocity_;
+@@ -206,8 +209,25 @@ class RovioNode{
+ 
+     // Subscribe topics
+     subImu_ = nh_.subscribe("imu0", 1000, &RovioNode::imuCallback,this);
+-    subImg0_ = nh_.subscribe("cam0/image_raw", 1000, &RovioNode::imgCallback0,this);
+-    subImg1_ = nh_.subscribe("cam1/image_raw", 1000, &RovioNode::imgCallback1,this);
++    for (int id = 0; id < mtState::nCam_; ++id) {
++      subImages_.push_back(nh_.subscribe<sensor_msgs::Image>(
++          "cam" + std::to_string(id) + "/image_raw", 10,
++          [this, id](const sensor_msgs::ImageConstPtr& img) {
++            std::lock_guard<std::mutex> lock(m_filter_);
++            const auto stamp = img->header.stamp.toNSec();
++            if (stamp <= lastImageStamp_) return;
++            auto& images = imageSets_[stamp];
++            images[id] = img;
++            bool complete = true;
++            for (const auto& image : images) complete = complete && bool(image);
++            if (complete) {
++              for (int i = 0; i < mtState::nCam_; ++i) imgCallback(images[i], i);
++              lastImageStamp_ = stamp;
++              imageSets_.erase(imageSets_.begin(), imageSets_.upper_bound(stamp));
++            }
++            while (imageSets_.size() > 10) imageSets_.erase(imageSets_.begin());
++          }));
++    }
+     subGroundtruth_ = nh_.subscribe("pose", 1000, &RovioNode::groundtruthCallback,this);
+     subGroundtruthOdometry_ = nh_.subscribe("odometry", 1000, &RovioNode::groundtruthOdometryCallback, this);
+     subVelocity_ = nh_.subscribe("abss/twist", 1000, &RovioNode::velocityCallback,this);
+@@ -499,7 +519,7 @@ class RovioNode{
+     // Get image from msg
+     cv_bridge::CvImagePtr cv_ptr;
+     try {
+-      cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::TYPE_8UC1);
++      cv_ptr = cv_bridge::toCvCopy(img, sensor_msgs::image_encodings::MONO8);
+     } catch (cv_bridge::Exception& e) {
+       ROS_ERROR("cv_bridge exception: %s", e.what());
+       return;
+diff --git a/package.xml b/package.xml
+index c443ac1..aad8184 100644
+--- a/package.xml
++++ b/package.xml
+@@ -27,5 +27,5 @@
+   <depend>nav_msgs</depend>
+   <depend>tf</depend>
+   <depend>rosbag</depend>
+-  <depend>yaml_cpp_catkin</depend>
++  <depend>yaml-cpp</depend>
+ </package>
+diff --git a/src/rovio_node.cpp b/src/rovio_node.cpp
+index 96b6cad..05b3aad 100644
+--- a/src/rovio_node.cpp
++++ b/src/rovio_node.cpp
+@@ -111,7 +111,9 @@ int main(int argc, char** argv){
+ 
+   // Node
+   rovio::RovioNode<mtFilter> rovioNode(nh, nh_private, mpFilter);
+-  rovioNode.makeTest();
++  bool run_self_test = false;
++  nh_private.param("run_self_test", run_self_test, false);
++  if (run_self_test) rovioNode.makeTest();
+ 
+ #ifdef MAKE_SCENE
+   // Scene

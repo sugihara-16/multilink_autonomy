@@ -1,0 +1,14 @@
+{
+  "rovio": {
+    "commit": "34735c0bfd786d44f6d21d31c0776290f1f91185",
+    "url": "https://github.com/ethz-asl/rovio.git"
+  },
+  "kindr": {
+    "commit": "22a19ddd30ccfeba72bb2c35361e090bca7d16ec",
+    "url": "https://github.com/ethz-asl/kindr.git"
+  },
+  "rovio/lightweight_filtering": {
+    "commit": "0c8517a5eb19a00a4f8d36dac4ffdc45dac6a363",
+    "url": "https://bitbucket.org/bloesch/lightweight_filtering.git"
+  }
+}
