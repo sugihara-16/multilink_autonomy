@@ -1,0 +1,36 @@
+# ROS / CMake build output
+build/
+build_isolated/
+install/
+install_isolated/
+devel/
+devel_isolated/
+log/
+logs/
+.catkin_tools/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+
+# Python and editor caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.swp
+*.swo
+*~
+
+# Native supervisor runtime state and locally compiled checks
+/multilink_uas_bringup/native/state.json
+/multilink_uas_bringup/native/.supervisor.lock
+/multilink_uas_bringup/native/check_normals
+
+# Local migration records, backups and legacy reference snapshots
+/multilink_uas_bringup/native/*.before-workspace-migration
+/multilink_uas_bringup/native/workspace-migration*.json
+/multilink_uas_bringup/native/relocation.json
+/multilink_uas_bringup/native/handoff_reference/
+
+# Windows download metadata
+*:Zone.Identifier
