@@ -1,0 +1,42 @@
+# RL simulation: no NMPC takeoff services. TF static needs transient-local QoS.
+topics:
+- topic: /gbplanner_path
+  type: nav_msgs/msg/Path
+  queue_size: 10
+- topic: /rmf_unipilot/odom
+  type: nav_msgs/msg/Odometry
+  queue_size: 10
+- topic: /rmf_unipilot/lidar/points_downsampled
+  type: sensor_msgs/msg/PointCloud2
+  queue_size: 10
+- topic: /tf
+  type: tf2_msgs/msg/TFMessage
+  queue_size: 10
+- topic: /tf_static
+  type: tf2_msgs/msg/TFMessage
+  queue_size: 10
+  qos:
+    history: keep_last
+    depth: 100
+    reliability: reliable
+    durability: transient_local
+- topic: /clock
+  type: rosgraph_msgs/msg/Clock
+  queue_size: 10
+- topic: /mavros/setpoint_raw/local
+  type: mavros_msgs/msg/PositionTarget
+  queue_size: 10
+- topic: /sdf_nmpc/horizon_ref
+  type: trajectory_msgs/msg/MultiDOFJointTrajectory
+  queue_size: 10
+- topic: /rl_node/cmd_vel
+  type: geometry_msgs/msg/Twist
+  queue_size: 10
+- topic: /sdf_nmpc/viz/horizon_ref
+  type: nav_msgs/msg/Path
+  queue_size: 10
+- topic: /sdf_nmpc/viz/horizon_traj
+  type: nav_msgs/msg/Path
+  queue_size: 10
+services_1_to_2: []
+services_2_to_1: []

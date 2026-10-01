@@ -1,0 +1,89 @@
+--- a/grid_map_filters/CMakeLists.txt
++++ b/grid_map_filters/CMakeLists.txt
+@@ -32,7 +32,7 @@
+   ${CATKIN_PACKAGE_DEPENDENCIES}
+ )
+ 
+-find_package(TBB 2020.1 EXACT REQUIRED)
++find_package(TBB 2021 REQUIRED)
+ 
+ find_package(OpenCV REQUIRED)
+ 
+@@ -104,7 +104,7 @@
+ 
+ target_link_libraries(${PROJECT_NAME}
+   ${catkin_LIBRARIES}
+-  ${TBB_LIBRARIES}
++  TBB::tbb
+   ${OpenCV_LIBRARIES}
+ )
+ 
+@@ -124,7 +124,7 @@
+ 
+ target_link_libraries(${PROJECT_NAME}_plugins
+   ${PROJECT_NAME}
+-  ${TBB_LIBRARIES} # is this necessary?
++  TBB::tbb # is this necessary?
+   ${OpenCV_LIBRARIES} # is this necessary?
+ )
+ 
+--- a/grid_map_filters/src/NormalVectorsFilter.cpp
++++ b/grid_map_filters/src/NormalVectorsFilter.cpp
+@@ -12,7 +12,7 @@
+ #include <memory>
+ #include <stdexcept>
+ 
+-#include <tbb/task_scheduler_init.h>
++#include <tbb/task_arena.h>
+ #include <tbb/tbb.h>
+ #include <Eigen/Dense>
+ 
+@@ -62,7 +62,7 @@
+   // if parameter is not found an error is thrown and the default is to set it to automatic.
+   if (!FilterBase::getParam(std::string("thread_number"), threadCount_)) {
+     ROS_WARN("Could not find the parameter: `thread_number`. Setting to default value: 'automatic'.");
+-    threadCount_ = tbb::task_scheduler_init::automatic;
++    threadCount_ = tbb::task_arena::automatic;
+   }
+   ROS_DEBUG("Thread_number = %d", threadCount_);
+ 
+@@ -174,18 +174,17 @@
+   grid_map::Size gridMapSize = map.getSize();
+ 
+   // Set number of thread to use for parallel programming.
+-  std::unique_ptr<tbb::task_scheduler_init> TBBInitPtr;
+-  if (threadCount_ != -1) {
+-    TBBInitPtr.reset(new tbb::task_scheduler_init(threadCount_));
+-  }
++  tbb::task_arena arena(threadCount_);
+ 
+   // Parallelized iteration through the map.
++  arena.execute([&] {
+   tbb::parallel_for(0, gridMapSize(0) * gridMapSize(1), [&](int range) {
+     // Recover Cell index from range iterator.
+     const Index index(range / gridMapSize(1), range % gridMapSize(1));
+     if (map.isValid(index, inputLayer)) {
+       areaSingleNormalComputation(map, inputLayer, outputLayersPrefix, index);
+     }
++  });
+   });
+ 
+   const double end = ros::Time::now().toSec();
+@@ -284,14 +283,13 @@
+   const Index submapBufferSize(gridMapSize(0) - 2, gridMapSize(1) - 2);
+   if (submapBufferSize(1) != 0) {
+     // Set number of thread to use for parallel programming
+-    std::unique_ptr<tbb::task_scheduler_init> TBBInitPtr;
+-    if (threadCount_ != -1) {
+-      TBBInitPtr.reset(new tbb::task_scheduler_init(threadCount_));
+-    }
++    tbb::task_arena arena(threadCount_);
+     // Parallelized iteration through the map.
++    arena.execute([&] {
+     tbb::parallel_for(0, submapBufferSize(0) * submapBufferSize(1), [&](int range) {
+       const Index index(range / submapBufferSize(1) + submapStartIndex(0), range % submapBufferSize(1) + submapStartIndex(1));
+       rasterSingleNormalComputation(map, outputLayersPrefix, dataMap, index);
++    });
+     });
+   } else {
+     ROS_ERROR("Grid map size is too small for normal raster computation");

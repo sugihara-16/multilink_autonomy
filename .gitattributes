@@ -1,0 +1,2 @@
+# Preserve context whitespace in patches for external source trees.
+*.patch -whitespace
