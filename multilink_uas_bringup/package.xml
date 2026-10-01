@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>multilink_uas_bringup</name>
+  <version>0.1.0</version>
+  <description>UniPilot and DRAGON simulation, MIMOSA mapping and UAS integration.</description>
+  <maintainer email="root@example.invalid">Multilink autonomy developers</maintainer>
+  <license>Proprietary</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>ros_gz_sim</exec_depend>
+  <exec_depend>ros_gz_bridge</exec_depend>
+  <exec_depend>robot_bringup</exec_depend>
+  <exec_depend>rmf_gz</exec_depend>
+  <exec_depend>subt_cave_sim</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>sensor_msgs_py</exec_depend>
+  <exec_depend>python3-numpy</exec_depend>
+  <exec_depend>python3-scipy</exec_depend>
+  <exec_depend>python3-opencv</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>dragon</exec_depend>
+  <exec_depend>aerial_robot_simulation</exec_depend>
+  <export><build_type>ament_cmake</build_type></export>
+</package>
