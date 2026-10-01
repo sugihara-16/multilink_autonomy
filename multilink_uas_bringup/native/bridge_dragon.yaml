@@ -1,0 +1,21 @@
+topics:
+- topic: /clock
+  type: rosgraph_msgs/msg/Clock
+  queue_size: 100
+- topic: /dragon/imu/raw
+  type: sensor_msgs/msg/Imu
+  queue_size: 200
+- topic: /dragon/lidar/points
+  type: sensor_msgs/msg/PointCloud2
+  queue_size: 5
+- topic: /slam/odometry
+  type: nav_msgs/msg/Odometry
+  queue_size: 10
+- topic: /slam/path
+  type: nav_msgs/msg/Path
+  queue_size: 5
+- topic: /slam/map
+  type: sensor_msgs/msg/PointCloud2
+  queue_size: 1
+services_1_to_2: []
+services_2_to_1: []
