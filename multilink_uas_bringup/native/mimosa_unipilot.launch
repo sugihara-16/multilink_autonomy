@@ -1,0 +1,18 @@
+<launch>
+  <arg name="config"/>
+  <arg name="logs"/>
+  <arg name="external_odometry" default="/vio/unused/odometry"/>
+  <param name="use_sim_time" value="true"/>
+  <node pkg="mimosa" type="mimosa_node" name="mimosa" output="screen" required="true">
+    <env name="OMP_NUM_THREADS" value="2"/>
+    <rosparam file="$(find mimosa)/config/os_dummy.json" ns="lidar/sensor"/>
+    <rosparam file="$(arg config)"/>
+    <param name="logs_directory" value="$(arg logs)/"/>
+    <remap from="~imu/manager/imu_in" to="/slam/input/imu"/>
+    <remap from="~lidar/manager/lidar_in" to="/slam/input/points"/>
+    <remap from="~odometry/manager/odometry_in" to="$(arg external_odometry)"/>
+    <remap from="~graph/odometry" to="/slam/odometry"/>
+    <remap from="~graph/path" to="/slam/path"/>
+    <remap from="~lidar/geometric/map" to="/slam/map"/>
+  </node>
+</launch>

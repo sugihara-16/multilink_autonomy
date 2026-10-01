@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+    <set_parameter name="use_sim_time" value="true"/>
+
+    <!-- world parameters -->
+    <arg name="verbosity" default="4"/>
+    <arg name="world" default="darpa_cave_01"/>
+    <arg name="rviz" default="false"/>
+    <arg name="headless" default="true"/>
+    <let name="headless_string" value="-s" if="$(var headless)"/>
+    <let name="headless_string" value="" unless="$(var headless)"/>
+
+    <!-- robot parameters -->
+    <arg name="robot_name" default="rmf_unipilot"/>
+    <arg name="robot_type" default="rmf_unipilot"/>
+    <arg name="model_file" default="$(find-pkg-share rmf_gz)/resources/robots/$(var robot_type)/model.sdf"/>
+    <arg name="allow_renaming" default="true"/>
+    <arg name="x" default="40"/>
+    <arg name="y" default="5"/>
+    <!-- <arg name="x" default="0"/>
+    <arg name="y" default="0"/> -->
+    <arg name="z" default="0.5"/>
+    <arg name="R" default="0.0"/>
+    <arg name="P" default="0.0"/>
+    <arg name="Y" default="0.0"/>
+
+    <!-- spawn world -->
+    <set_env name="GZ_SIM_RESOURCE_PATH" value="$(find-pkg-share subt_cave_sim):$(find-pkg-share subt_cave_sim)/models:$(find-pkg-share rmf_gz)/resources/:$(find-pkg-share subt_cave_sim)/models/Rescue Randy Sitting/materials/textures:$(find-pkg-share subt_cave_sim)/models/Samsung J8 Black/materials/textures:$(find-pkg-share subt_cave_sim)/models/JanSport Backpack Red/materials/textures"/>
+    <include file="$(find-pkg-share ros_gz_sim)/launch/gz_sim.launch.py">
+        <!-- <arg name="gz_args" value="-r $(var headless_string) -v $(var verbosity) $(find-pkg-share subt_cave_sim)/worlds/$(var world).sdf"/> -->
+        <arg name="gz_args" value="-r $(var headless_string) -v $(var verbosity) $(find-pkg-share subt_cave_sim)/worlds/$(var world).sdf"/>
+    </include>
+
+    <!-- spawn robot -->
+    <node pkg="ros_gz_sim" exec="create" name="spawn_model" launch-prefix="bash -c 'sleep 5; $0 $@'" args="
+        -world map
+        -name $(var robot_name)
+        -file $(var model_file)
+        -x $(var x) -y $(var y) -z $(var z)
+        -R $(var R) -P $(var P) -Y $(var Y)
+    "/>
+
+    <!-- pd controller -->
+    <!-- <node pkg="rmf_gz" exec="pd_controller.py" name="pd_controller">
+        <remap from="~/odom" to="/$(var robot_name)/odom"/>
+        <remap from="~/cmd" to="/sdf_nmpc/cmd/acc"/>
+    </node> -->
+
+    <!-- point cloud to range image convertor -->
+    <!-- <node pkg="rmf_gz" exec="pc_to_range.py" name="pc_to_range" args="0 0 0 0 0 0 1 /map /$(var robot_name)/odom" output="screen">
+         <remap from="~/img_out" to="/rmf_unipilot/lidar/range" />
+         <remap from="~/pc_in" to="/rmf_unipilot/lidar/points" />
+    </node> -->
+
+    <node pkg="robot_bringup" exec="pc_sparsify.py" name="pc_sparsify" output="screen">
+        <param name="input_topic" value="/$(var robot_name)/lidar/points"/>
+        <param name="output_topic" value="/$(var robot_name)/lidar/points_downsampled"/>
+    </node>
+
+    <!-- topics -->
+    <include file="$(find-pkg-share robot_bringup)/launch/ros2/uav_topics.launch.xml">
+        <arg name="world" value="$(var world)"/>
+        <arg name="robot_name" value="$(var robot_name)"/>
+        <arg name="robot_type" value="$(var robot_type)"/>
+    </include>
+
+    <!-- tf -->
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="tf_map_odom" args="0 0 0 0 0 0 1 /map /$(var robot_name)/odom"/>
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="tf_base_base_inv" args="0 0 0 3.14 0 0 /$(var robot_name)/base_link /$(var robot_name)/base_link_inv"/>
+    <node pkg="tf2_ros" exec="static_transform_publisher" name="tf_depth_cam_optical" args="0 0 0 0.5 -0.5 0.5 -0.5 rmf_unipilot/base_link/depth_cam rmf_unipilot/base_link/depth_cam/optical"/>
+
+    <!-- rviz -->
+    <node pkg="rviz2" exec="rviz2" args="-d $(find-pkg-share rmf_gz)/rviz/rmf_default.rviz" if="$(var rviz)"/>
+
+</launch>

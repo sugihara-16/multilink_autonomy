@@ -1,0 +1,106 @@
+diff --git a/mimosa/CMakeLists.txt b/mimosa/CMakeLists.txt
+index 5299322..596febe 100644
+--- a/mimosa/CMakeLists.txt
++++ b/mimosa/CMakeLists.txt
+@@ -27,6 +27,7 @@ find_package(catkin REQUIRED COMPONENTS
+ # find_package(Boost REQUIRED COMPONENTS system)
+ 
+ find_package(config_utilities REQUIRED)
++find_package(fmt REQUIRED)
+ 
+ find_package(PCL REQUIRED)
+ message("PCL Version:" ${PCL_VERSION})
+@@ -134,6 +135,7 @@ add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catk
+ add_dependencies(${PROJECT_NAME}_rosbag ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+ 
+ target_link_libraries(${PROJECT_NAME}_lib
++  fmt::fmt
+   ${catkin_LIBRARIES}
+   config_utilities::config_utilities
+   ${PCL_LIBRARIES}
+diff --git a/mimosa/include/mimosa/imu/manager.hpp b/mimosa/include/mimosa/imu/manager.hpp
+index 917198f..10f3d73 100644
+--- a/mimosa/include/mimosa/imu/manager.hpp
++++ b/mimosa/include/mimosa/imu/manager.hpp
+@@ -25,6 +25,8 @@
+ 
+ // C++
+ #include <deque>
++#include <condition_variable>
++#include <chrono>
+ 
+ namespace mimosa
+ {
+@@ -80,6 +82,7 @@ private:
+   // Member variables
+   ImuBuffer buffer_;
+   std::mutex buffer_mutex_;
++  std::condition_variable buffer_updated_;
+   bool has_recieved_first_message_ = false;
+   std::shared_ptr<gtsam::PreintegrationParams> preintegrator_params_;
+   std::unique_ptr<gtsam::PreintegratedImuMeasurements> preintegrator_;
+@@ -120,6 +123,7 @@ public:
+   }
+   inline bool hasRecievedFirstMessage() const { return has_recieved_first_message_; }
+   void callback(const sensor_msgs::Imu::ConstPtr & msg);
++  bool waitForMeasurement(double ts, double timeout_seconds);
+   bool estimateAttitude(gtsam::Rot3 & R_W_B, V3D & estimated_acc_bias, V3D & estimated_gyro_bias);
+   void getInterpolatedMeasurements(
+     const double ts_start, const double ts_end, ImuBuffer & measurements,
+diff --git a/mimosa/include/mimosa/sensor_manager_base.hpp b/mimosa/include/mimosa/sensor_manager_base.hpp
+index 71ad4e4..1ff3e62 100644
+--- a/mimosa/include/mimosa/sensor_manager_base.hpp
++++ b/mimosa/include/mimosa/sensor_manager_base.hpp
+@@ -240,7 +240,7 @@ protected:
+           logger_, fmt::format(
+                      "Unknown declaration result. Maybe the graph::manager::DeclarationResult API "
+                      "has been updated. Received: {}",
+-                     result));
++                     static_cast<int>(result)));
+         return false;
+     }
+   }
+diff --git a/mimosa/src/imu/manager.cpp b/mimosa/src/imu/manager.cpp
+index b46385f..0d59e99 100644
+--- a/mimosa/src/imu/manager.cpp
++++ b/mimosa/src/imu/manager.cpp
+@@ -60,6 +60,13 @@ std::shared_ptr<gtsam::PreintegrationParams> Manager::generatePreintegratorParam
+   return generatePreintegratorParams(V3D(0, 0, -config_.preintegration.gravity_magnitude));
+ }
+ 
++bool Manager::waitForMeasurement(double ts, double timeout_seconds)
++{
++  std::unique_lock<std::mutex> lock(buffer_mutex_);
++  return buffer_updated_.wait_for(lock, std::chrono::duration<double>(timeout_seconds),
++    [&] { return !buffer_.empty() && buffer_.front().first <= ts && buffer_.back().first >= ts; });
++}
++
+ void Manager::callback(const sensor_msgs::Imu::ConstPtr & msg)
+ {
+   const double ts = msg->header.stamp.toSec() + config_.ts_offset;
+@@ -109,6 +116,8 @@ void Manager::callback(const sensor_msgs::Imu::ConstPtr & msg)
+     }
+   }
+ 
++  buffer_updated_.notify_all();
++
+   if (false && propagate) {
+     gtsam::NavState nav_state;
+     {
+diff --git a/mimosa/src/lidar/manager.cpp b/mimosa/src/lidar/manager.cpp
+index d466def..4ef6b19 100644
+--- a/mimosa/src/lidar/manager.cpp
++++ b/mimosa/src/lidar/manager.cpp
+@@ -79,6 +79,12 @@ void Manager::callback(const sensor_msgs::PointCloud2::ConstPtr & msg)
+       throw std::runtime_error("Unsupported point type");
+   }
+ 
++  // Optional live-topic synchronization; offline bag processing must not wait.
++  static double wait_timeout = [] { double value = 0; ros::param::param<double>("~lidar/manager/imu_wait_timeout", value, 0.0); return value; }();
++  if (wait_timeout > 0 && !imu_manager_->waitForMeasurement(corrected_ts_, wait_timeout)) {
++    logger_->warn("Skipping LiDAR scan: IMU buffer does not cover {}", corrected_ts_);
++    return;
++  }
+   graph_manager_->getStateUpto(header_ts_, prev_state_);
+ 
+   logger_->debug("Declaring (ts: {})", corrected_ts_);
