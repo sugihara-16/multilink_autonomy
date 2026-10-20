@@ -1,0 +1,30 @@
+{
+  "source_sha256": "234f4cf495b1055daea46a55d5c3447db631524e10d6edae7a80efd69d4c0209",
+  "initial_gyro_covariance": [
+    1e-10,
+    1e-10,
+    1e-10
+  ],
+  "prediction": {
+    "vel": [
+      4e-05,
+      4e-05,
+      4e-05
+    ],
+    "att": [
+      4e-11,
+      4e-11,
+      4e-11
+    ],
+    "acb": [
+      1e-08,
+      1e-08,
+      1e-08
+    ],
+    "gyb": [
+      1e-16,
+      1e-16,
+      1e-16
+    ]
+  }
+}

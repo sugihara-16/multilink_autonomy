@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sensor_profile name="dragon" processed_width="480" processed_height="360" source_sha256="e32c3e9a862dbdb2706177b25b16c213df05cf4ad4c7be455194ff21a160a3ed">
+  <sensor name="imu">
+    <update_rate>1000.0</update_rate>
+    <imu>
+      <angular_velocity>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>2e-4</stddev>
+            <bias_mean>0.0000075</bias_mean>
+            <bias_stddev>0.0000008</bias_stddev>
+          </noise>
+        </z>
+      </angular_velocity>
+      <linear_acceleration>
+        <x>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </noise>
+        </x>
+        <y>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </noise>
+        </y>
+        <z>
+          <noise type="gaussian">
+            <mean>0.0</mean>
+            <stddev>1.7e-2</stddev>
+            <bias_mean>0.1</bias_mean>
+            <bias_stddev>0.001</bias_stddev>
+          </noise>
+        </z>
+      </linear_acceleration>
+    </imu>
+  </sensor>
+  <sensor name="camera">
+    <update_rate>20</update_rate>
+    <camera>
+      <horizontal_fov>2.0943951023931953</horizontal_fov>
+      <image>
+        <width>720</width>
+        <height>540</height>
+        <format>R8G8B8</format>
+      </image>
+      <clip>
+        <near>.04</near>
+        <far>60</far>
+      </clip>
+    </camera>
+  </sensor>
+  <sensor name="lidar">
+    <update_rate>10</update_rate>
+    <lidar>
+      <scan>
+        <horizontal>
+          <samples>360</samples>
+          <resolution>1</resolution>
+          <min_angle>-3.14159265359</min_angle>
+          <max_angle>3.14159265359</max_angle>
+        </horizontal>
+        <vertical>
+          <samples>32</samples>
+          <resolution>1</resolution>
+          <min_angle>-0.12217304764</min_angle>
+          <max_angle>0.90757121104</max_angle>
+        </vertical>
+      </scan>
+      <range>
+        <min>0.1</min>
+        <max>30</max>
+        <resolution>0.01</resolution>
+      </range>
+      <noise>
+        <type>gaussian</type>
+        <mean>0</mean>
+        <stddev>0.03</stddev>
+      </noise>
+    </lidar>
+  </sensor>
+</sensor_profile>
