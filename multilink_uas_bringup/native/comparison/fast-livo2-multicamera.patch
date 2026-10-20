@@ -1,0 +1,242 @@
+diff --git a/include/LIVMapper.h b/include/LIVMapper.h
+index 46664d2..eb41226 100644
+--- a/include/LIVMapper.h
++++ b/include/LIVMapper.h
+@@ -20,6 +20,7 @@ which is included as part of this source code package.
+ #include <image_transport/image_transport.h>
+ #include <nav_msgs/Path.h>
+ #include <vikit/camera_loader.h>
++#include "synchronized_images.hpp"
+ 
+ class LIVMapper
+ {
+@@ -49,6 +50,19 @@ public:
+   void livox_pcl_cbk(const livox_ros_driver::CustomMsg::ConstPtr &msg_in);
+   void imu_cbk(const sensor_msgs::Imu::ConstPtr &msg_in);
+   void img_cbk(const sensor_msgs::ImageConstPtr &msg_in);
++  void camera_cbk(const sensor_msgs::ImageConstPtr &msg, size_t camera);
++  void readCameraRig(ros::NodeHandle &nh);
++  void initializeCameraRig(ros::NodeHandle &nh);
++  void processCameraRig();
++  std::vector<std::string> camera_names, camera_topics;
++  std::string camera_namespace = "laserMapping";
++  std::vector<VIOManagerPtr> camera_managers;
++  std::vector<ros::Subscriber> camera_subscribers;
++  std::vector<uint64_t> camera_calls, camera_constraints;
++  std::unique_ptr<SynchronizedImages<sensor_msgs::ImageConstPtr>> camera_sync;
++  std::deque<std::vector<cv::Mat>> camera_bundles;
++  ros::Publisher pubRigOdom;
++  uint64_t camera_ready_dropped=0;
+   void publish_img_rgb(const image_transport::Publisher &pubImage, VIOManagerPtr vio_manager);
+   void publish_frame_world(const ros::Publisher &pubLaserCloudFullRes, VIOManagerPtr vio_manager);
+   void publish_visual_sub_map(const ros::Publisher &pubSubVisualMap);
+diff --git a/include/common_lib.h b/include/common_lib.h
+index 9de8a90..ec3a5e4 100755
+--- a/include/common_lib.h
++++ b/include/common_lib.h
+@@ -65,6 +65,7 @@ struct MeasureGroup
+   double lio_time;
+   deque<sensor_msgs::Imu::ConstPtr> imu;
+   cv::Mat img;
++  std::vector<cv::Mat> images;
+   MeasureGroup()
+   {
+     vio_time = 0.0;
+diff --git a/include/vio.h b/include/vio.h
+index d5600b1..27a1ecf 100755
+--- a/include/vio.h
++++ b/include/vio.h
+@@ -108,7 +108,7 @@ public:
+ 
+   double img_point_cov, outlier_threshold, ncc_thre;
+   
+-  SubSparseMap *visual_submap;
++  SubSparseMap *visual_submap = nullptr;
+   std::vector<std::vector<V3D>> rays_with_sample_points;
+ 
+   double compute_jacobian_time, update_ekf_time;
+diff --git a/src/LIVMapper.cpp b/src/LIVMapper.cpp
+index 15af354..f2869a5 100755
+--- a/src/LIVMapper.cpp
++++ b/src/LIVMapper.cpp
+@@ -41,6 +41,7 @@ LIVMapper::LIVMapper(ros::NodeHandle &nh)
+   root_dir = ROOT_DIR;
+   initializeFiles();
+   initializeComponents();
++  initializeCameraRig(nh);
+   path.header.stamp = ros::Time::now();
+   path.header.frame_id = "camera_init";
+ }
+@@ -114,6 +115,7 @@ void LIVMapper::readParameters(ros::NodeHandle &nh)
+   nh.param<bool>("publish/dense_map_en", dense_map_en, false);
+ 
+   p_pre->blind_sqr = p_pre->blind * p_pre->blind;
++  readCameraRig(nh);
+ }
+ 
+ void LIVMapper::initializeComponents() 
+@@ -125,7 +127,7 @@ void LIVMapper::initializeComponents()
+   voxelmap_manager->extT_ << VEC_FROM_ARRAY(extrinT);
+   voxelmap_manager->extR_ << MAT_FROM_ARRAY(extrinR);
+ 
+-  if (!vk::camera_loader::loadFromRosNs("laserMapping", vio_manager->cam)) throw std::runtime_error("Camera model not correctly specified.");
++  if (!vk::camera_loader::loadFromRosNs(camera_namespace, vio_manager->cam)) throw std::runtime_error("Camera model not correctly specified.");
+ 
+   vio_manager->grid_size = grid_size;
+   vio_manager->patch_size = patch_size;
+@@ -195,7 +197,11 @@ void LIVMapper::initializeSubscribersAndPublishers(ros::NodeHandle &nh, image_tr
+             nh.subscribe(lid_topic, 200000, &LIVMapper::livox_pcl_cbk, this): 
+             nh.subscribe(lid_topic, 200000, &LIVMapper::standard_pcl_cbk, this);
+   sub_imu = nh.subscribe(imu_topic, 200000, &LIVMapper::imu_cbk, this);
+-  sub_img = nh.subscribe(img_topic, 200000, &LIVMapper::img_cbk, this);
++  if(camera_names.empty())sub_img = nh.subscribe(img_topic, 200000, &LIVMapper::img_cbk, this);
++  else for(size_t i=0;i<camera_topics.size();++i)
++    camera_subscribers.push_back(nh.subscribe<sensor_msgs::Image>(camera_topics[i],100,
++      [this,i](const sensor_msgs::ImageConstPtr& image){camera_cbk(image,i);}));
++  if(!camera_names.empty())pubRigOdom=nh.advertise<nav_msgs::Odometry>("/multicamera/odometry",10);
+   
+   pubLaserCloudFullRes = nh.advertise<sensor_msgs::PointCloud2>("/cloud_registered", 100);
+   pubNormal = nh.advertise<visualization_msgs::MarkerArray>("visualization_marker", 100);
+@@ -302,7 +308,9 @@ void LIVMapper::handleVIO()
+     vio_manager->plot_flag = false;
+   }
+ 
++  if(camera_names.empty()){
+   vio_manager->processFrame(LidarMeasures.measures.back().img, _pv_list, voxelmap_manager->voxel_map_, LidarMeasures.last_lio_update_time - _first_lidar_time);
++  }else processCameraRig();
+ 
+   if (imu_prop_enable) 
+   {
+@@ -828,6 +836,7 @@ cv::Mat LIVMapper::getImageFromMsg(const sensor_msgs::ImageConstPtr &img_msg)
+ 
+ void LIVMapper::img_cbk(const sensor_msgs::ImageConstPtr &msg_in)
+ {
++  if(!camera_names.empty()){camera_cbk(msg_in,0);return;}
+   if (!img_en) return;
+   sensor_msgs::Image::Ptr msg(new sensor_msgs::Image(*msg_in));
+   // if ((abs(msg->header.stamp.toSec() - last_timestamp_img) > 0.2 && last_timestamp_img > 0) || sync_jump_flag)
+@@ -966,6 +975,7 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
+       {
+         img_buffer.pop_front();
+         img_time_buffer.pop_front();
++        if(!camera_names.empty())camera_bundles.pop_front();
+         ROS_ERROR("[ Data Cut ] Throw one image frame! \n");
+         return false;
+       }
+@@ -1054,6 +1064,7 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
+       m.vio_time = img_capture_time;
+       m.lio_time = meas.last_lio_update_time;
+       m.img = img_buffer.front();
++      if(!camera_names.empty())m.images=camera_bundles.front();
+       mtx_buffer.lock();
+       // while ((!imu_buffer.empty() && (imu_time < img_capture_time)))
+       // {
+@@ -1066,6 +1077,7 @@ bool LIVMapper::sync_packages(LidarMeasureGroup &meas)
+       // }
+       img_buffer.pop_front();
+       img_time_buffer.pop_front();
++      if(!camera_names.empty())camera_bundles.pop_front();
+       mtx_buffer.unlock();
+       sig_buffer.notify_all();
+       meas.measures.push_back(m);
+@@ -1368,4 +1380,98 @@ void LIVMapper::publish_path(const ros::Publisher pubPath)
+   msg_body_pose.header.frame_id = "camera_init";
+   path.poses.push_back(msg_body_pose);
+   pubPath.publish(path);
+-}
+\ No newline at end of file
++}
++
++// Project extension: synchronized, sequential visual updates on ONE inertial state.
++void LIVMapper::readCameraRig(ros::NodeHandle &nh) {
++  nh.getParam("multicamera/cameras",camera_names);
++  if(camera_names.empty())return; // unchanged upstream monocular configuration
++  if(!img_en || !lidar_en || hilti_en)throw std::runtime_error("Camera rig requires LIVO and hilti_en=false");
++  if(camera_names.size()>1 && exposure_estimate_en)
++    throw std::runtime_error("Camera rig requires vio/exposure_estimate_en=false (independent camera exposure states are not implemented)");
++  if(colmap_output_en)throw std::runtime_error("Camera rig COLMAP export is not supported");
++  std::set<std::string> names,topics;
++  for(const auto& name:camera_names){
++    if(name.empty() || name.find('/')!=std::string::npos || !names.insert(name).second)throw std::runtime_error("Invalid or duplicate camera name");
++    const auto ns="multicamera/"+name;std::string topic;std::vector<double> R,t;
++    if(!nh.getParam(ns+"/topic",topic) || topic.empty() || !topics.insert(topic).second ||
++       !nh.getParam(ns+"/Rcl",R) || !nh.getParam(ns+"/Pcl",t) || R.size()!=9 || t.size()!=3)
++      throw std::runtime_error("Missing camera calibration or duplicate image topic: "+name);
++    M3D rotation;rotation<<MAT_FROM_ARRAY(R);V3D translation;translation<<VEC_FROM_ARRAY(t);
++    if(!rotation.allFinite() || !translation.allFinite() || (rotation.transpose()*rotation-M3D::Identity()).norm()>1e-5 || std::abs(rotation.determinant()-1)>1e-5)
++      throw std::runtime_error("Invalid camera extrinsic: "+name);
++    camera_topics.push_back(topic);
++  }
++  int capacity;nh.param<int>("multicamera/max_pending_frames",capacity,100);
++  if(capacity<1 || capacity>1000)throw std::runtime_error("Invalid camera queue capacity");
++  camera_sync.reset(new SynchronizedImages<sensor_msgs::ImageConstPtr>(camera_names.size(),capacity));
++  camera_namespace="multicamera/"+camera_names.front()+"/camera";img_topic=camera_topics.front();
++  nh.getParam("multicamera/"+camera_names.front()+"/Rcl",cameraextrinR);
++  nh.getParam("multicamera/"+camera_names.front()+"/Pcl",cameraextrinT);
++}
++
++void LIVMapper::initializeCameraRig(ros::NodeHandle &nh) {
++  if(camera_names.empty())return;
++  camera_managers.push_back(vio_manager);
++  for(size_t i=1;i<camera_names.size();++i){
++    VIOManagerPtr v(new VIOManager());const auto ns="multicamera/"+camera_names[i];
++    if(!vk::camera_loader::loadFromRosNs(ns+"/camera",v->cam))throw std::runtime_error("Missing camera model: "+ns);
++    std::vector<double> R,t;nh.getParam(ns+"/Rcl",R);nh.getParam(ns+"/Pcl",t);
++    v->grid_size=grid_size;v->patch_size=patch_size;v->outlier_threshold=outlier_threshold;
++    v->setImuToLidarExtrinsic(extT,extR);v->setLidarToCameraExtrinsic(R,t);
++    v->state=&_state;v->state_propagat=&state_propagat;v->max_iterations=max_iterations;
++    v->img_point_cov=IMG_POINT_COV;v->normal_en=normal_en;v->inverse_composition_en=inverse_composition_en;
++    v->raycast_en=raycast_en;v->grid_n_width=0;v->grid_n_height=grid_n_height;
++    v->patch_pyrimid_level=patch_pyrimid_level;v->exposure_estimate_en=exposure_estimate_en;
++    v->colmap_output_en=false;v->plot_flag=false;v->initializeVIO();camera_managers.push_back(v);
++  }
++  camera_calls.assign(camera_names.size(),0);camera_constraints.assign(camera_names.size(),0);
++}
++
++void LIVMapper::camera_cbk(const sensor_msgs::ImageConstPtr &msg,size_t camera) {
++  if(!img_en)return;
++  std::unique_lock<std::mutex> lock(mtx_buffer);
++  auto bundle=camera_sync->push(camera,msg->header.stamp.toNSec(),msg);
++  if(camera_sync->dropped)ROS_WARN_THROTTLE(5,"Incomplete camera sets discarded: %lu",camera_sync->dropped);
++  if(!bundle)return;
++  const double time=bundle->images.front()->header.stamp.toSec()+img_time_offset;
++  if(last_timestamp_lidar<0 || time<=last_timestamp_img || time-last_timestamp_img<0.02)return;
++  if(camera_bundles.size()>=100){++camera_ready_dropped;ROS_WARN_THROTTLE(5,"Camera ready queue full; dropping new synchronized set");return;}
++  std::vector<cv::Mat> images;
++  for(size_t i=0;i<bundle->images.size();++i){
++    auto im=getImageFromMsg(bundle->images[i]);auto v=camera_managers[i];
++    if(im.empty() || std::lround(im.cols*v->image_resize_factor)!=v->width || std::lround(im.rows*v->image_resize_factor)!=v->height)
++      throw std::runtime_error("Image dimensions do not match calibrated camera: "+camera_names[i]);
++    images.push_back(im);
++  }
++  img_buffer.push_back(images.front());img_time_buffer.push_back(time);camera_bundles.push_back(std::move(images));
++  last_timestamp_img=time;lock.unlock();sig_buffer.notify_all();
++}
++
++void LIVMapper::processCameraRig() {
++  auto& m=LidarMeasures.measures.back();
++  if(m.images.size()!=camera_managers.size())throw std::runtime_error("Incomplete image set reached estimator");
++  // The next camera's prior is the preceding camera's POSTERIOR, including covariance.
++  // IMU and LiDAR are never replayed per camera. Each camera retains its own reference patches.
++  for(size_t i=0;i<camera_managers.size();++i){
++    auto v=camera_managers[i];state_propagat=_state;
++    const V3D before=_state.pos_end;const double trace=_state.cov.trace();
++    v->processFrame(m.images[i],_pv_list,voxelmap_manager->voxel_map_,LidarMeasures.last_lio_update_time-_first_lidar_time);
++    ++camera_calls[i];if(v->total_points>0)++camera_constraints[i];
++    std::cout<<"CAMERA_UPDATE "<<std::setprecision(17)<<m.vio_time<<" "<<camera_names[i]<<" "<<v->total_points<<" "<<(_state.pos_end-before).norm()<<" "<<trace<<" "<<_state.cov.trace()<<std::endl;
++  }
++  for(auto& v:camera_managers)v->updateFrameState(_state);
++  // Publish the final shared posterior at acquisition time, not wall time or the pre-visual pose.
++  nav_msgs::Odometry odom;odom.header.frame_id="camera_init";odom.child_frame_id="aft_mapped";
++  odom.header.stamp.fromSec(m.vio_time);
++  odom.pose.pose.position.x=_state.pos_end.x();odom.pose.pose.position.y=_state.pos_end.y();odom.pose.pose.position.z=_state.pos_end.z();
++  const Eigen::Quaterniond q(_state.rot_end);
++  odom.pose.pose.orientation.x=q.x();odom.pose.pose.orientation.y=q.y();odom.pose.pose.orientation.z=q.z();odom.pose.pose.orientation.w=q.w();
++  Eigen::Matrix<double,6,DIM_STATE> J=Eigen::Matrix<double,6,DIM_STATE>::Zero();
++  J.block<3,3>(0,3)=M3D::Identity();J.block<3,3>(3,0)=_state.rot_end;
++  const Eigen::Matrix<double,6,6> covariance=J*_state.cov*J.transpose();
++  for(int r=0;r<6;++r)for(int c=0;c<6;++c)odom.pose.covariance[r*6+c]=covariance(r,c);
++  const V3D velocity=_state.rot_end.transpose()*_state.vel_end;
++  odom.twist.twist.linear.x=velocity.x();odom.twist.twist.linear.y=velocity.y();odom.twist.twist.linear.z=velocity.z();
++  pubRigOdom.publish(odom);
++}

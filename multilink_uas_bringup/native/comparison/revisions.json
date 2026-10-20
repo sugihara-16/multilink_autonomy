@@ -1,0 +1,20 @@
+{
+  "FAST-LIVO2": {
+    "revision": "0d2c0346107b75b59934975adec9a6eeeb913c64"
+  },
+  "rpg_vikit": {
+    "revision": "6c886c8e5d83997806e00294826d528cea3581dd"
+  },
+  "image_common": {
+    "revision": "5559cc5ff15c4e94bef7912eabe5e330de62475c"
+  },
+  "Sophus": {
+    "revision": "a621ff2e56c56c839a6c40418d42c3c254424b5c"
+  },
+  "drpm": {
+    "revision": "b39a540c946f4059f5e3dfde625216c437eaf158"
+  },
+  "mimosa": {
+    "revision": "9df689e01a36f3d138158ed49a8d51c255551d4d"
+  }
+}

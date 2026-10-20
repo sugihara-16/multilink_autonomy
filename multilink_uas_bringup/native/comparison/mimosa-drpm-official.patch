@@ -1,0 +1,57 @@
+--- a/include/mimosa/lidar/geometric_config.hpp
++++ b/include/mimosa/lidar/geometric_config.hpp
+@@ -27,6 +27,8 @@
+   bool use_huber = true;
+   float huber_threshold = 1.345;
+   bool drpm_enabled = false;
++  int drpm_registration_mode = 0;  // 0: old graph factor, 1: official ICP, 2: weighted-cost ICP
++  int drpm_icp_max_iterations = 10;
+   int drpm_noise_model = 0;  // 0: legacy isotropic, 1: propagated isotropic, 2: acquisition radial
+   double drpm_snr_factor = 10.0;
+   bool reg_4_dof = false;
+--- a/src/lidar/geometric_config.cpp
++++ b/src/lidar/geometric_config.cpp
+@@ -25,6 +25,8 @@
+   field(config.use_huber, "use_huber", "bool");
+   field(config.huber_threshold, "huber_threshold", "amount in standard deviations");
+   field(config.drpm_enabled, "drpm_enabled", "bool");
++  field(config.drpm_registration_mode, "drpm_registration_mode", "0 graph, 1 official ICP, 2 weighted ICP");
++  field(config.drpm_icp_max_iterations, "drpm_icp_max_iterations", "iterations");
+   field(config.drpm_noise_model, "drpm_noise_model", "0 legacy, 1 propagated isotropic, 2 radial");
+   field(config.drpm_snr_factor, "drpm_snr_factor", "ratio");
+   field(config.reg_4_dof, "reg_4_dof", "bool");
+--- a/src/lidar/geometric.cpp
++++ b/src/lidar/geometric.cpp
+@@ -5,6 +5,7 @@
+ // LICENSE file in the root directory of this source tree.
+ 
+ #include "mimosa/lidar/geometric.hpp"
++#include "mimosa/lidar/drpm_registration.hpp"
+ 
+ namespace mimosa
+ {
+@@ -168,6 +169,24 @@
+   if (!config.enabled) return;
+ 
+   Stopwatch sw;
++
++  if (config.scan_to_map.drpm_enabled && config.scan_to_map.drpm_registration_mode != 0) {
++    static std::ofstream audit(config.logs_directory + "drpm_registration.csv");
++    static bool first=true;
++    if(first) {
++      audit<<"stamp_ns,update_mode,noise_mode,status,iterations,converged,correspondences,last_translation_m,last_rotation_rad";
++      for(int k=0;k<6;++k)audit<<",p"<<k;
++      for(int k=0;k<6;++k)audit<<",lambda"<<k;
++      for(int k=0;k<6;++k)audit<<",correction"<<k;
++      audit<<'\n';first=false;
++    }
++    auto measurement=drpmRegistration(key,values.at<gtsam::Pose3>(key),config.T_B_L,
++      sm_Be_cloud_ds_,ivox_map_,config.scan_to_map,ts_,audit);
++    if(measurement)graph.add(measurement);
++    eigenvectors_block_matrix.setIdentity();degen_directions.setZero();
++    debug_msg_.t_get_factors=sw.elapsedMs();
++    return;
++  }
+ 
+   // Scan to map
+   factor_ = std::make_shared<ICPFactor>(key, ivox_map_, sm_Be_cloud_ds_, config.scan_to_map, config.T_B_L.translation());

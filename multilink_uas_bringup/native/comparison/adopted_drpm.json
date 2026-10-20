@@ -1,0 +1,16 @@
+{
+  "decision_date": "2026-10-05",
+  "decision": "User selected official DRPM update with radial point-noise model as the comparison baseline.",
+  "reference_results": "logs/zab-offline/drpm_official/official_update",
+  "scope": "MIMOSA + monocular link3 ROVIO; instantaneous simulated LiDAR; retain existing per-flight calibrated ROVIO covariance. This records the selected experiment, not a change to simulation launch defaults.",
+  "scan_to_map": {
+    "drpm_enabled": true,
+    "drpm_registration_mode": 1,
+    "drpm_noise_model": 2,
+    "drpm_icp_max_iterations": 10,
+    "drpm_snr_factor": 10.0,
+    "lidar_point_noise_std_dev": 0.03,
+    "num_corres_points": 5,
+    "project_on_degneneracy": false
+  }
+}

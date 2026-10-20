@@ -1,0 +1,159 @@
+--- a/include/mimosa/lidar/geometric_config.hpp
++++ b/include/mimosa/lidar/geometric_config.hpp
+@@ -26,6 +26,8 @@
+   float lidar_point_noise_std_dev = 0.02;
+   bool use_huber = true;
+   float huber_threshold = 1.345;
++  bool drpm_enabled = false;
++  double drpm_snr_factor = 10.0;
+   bool reg_4_dof = false;
+   bool project_on_degneneracy = true;
+   float degen_thresh_rot = 10;
+--- a/include/mimosa/lidar/geometric_factor.hpp
++++ b/include/mimosa/lidar/geometric_factor.hpp
+@@ -8,6 +8,7 @@
+ 
+ // OpenMP
+ #include <omp.h>
++#include "mimosa/lidar/drpm.hpp"
+ 
+ // GTSAM
+ #include <gtsam/linear/HessianFactor.h>
+@@ -79,6 +80,7 @@
+     transed_point_target_da_;  // Transformed points in target frame when they were used for data association
+   mutable std::vector<V3D> corres_means_target_;    // Mean of the closest points in target frame
+   mutable std::vector<V3D> corres_normals_target_;  // Normal of the plane in target frame
++  mutable std::vector<M33> corres_normal_noise_target_;
+   mutable std::vector<RejectStatus> statuses_;      // Statues of each factor
+ 
+   // QOL Typedefs
+@@ -146,6 +148,7 @@
+     transed_point_target_da_.resize(cloud_source_.size(), Z31);
+     corres_means_target_.resize(cloud_source_.size(), Z31);
+     corres_normals_target_.resize(cloud_source_.size(), Z31);
++    corres_normal_noise_target_.resize(cloud_source_.size(), M33::Zero());
+     statuses_.resize(cloud_source_.size(), RejectStatus::Unprocessed);
+     localizabilities_trans_body_.resize(cloud_source_.size(), Z31);
+     localizabilities_rot_body_.resize(cloud_source_.size(), Z31);
+@@ -206,6 +209,17 @@
+     }
+ 
+     corres_normals_target_[i] = eigensolver.eigenvectors().col(0);
++    if (config_.drpm_enabled) {
++      // DRPM Eq. (35): covariance of the small rotation of the normal.
++      // MIMOSA uses sample covariance, convert to 1/N scatter first.
++      const double sigma2 = std::pow(config_.lidar_point_noise_std_dev, 2);
++      V3D scatter = eigensolver.eigenvalues() * (points.rows()-1.0)/points.rows();
++      V3D inverse;
++      inverse << 0.0, 1.0/std::max(scatter[1]-sigma2, 1e-7),
++                            1.0/std::max(scatter[2]-sigma2, 1e-7);
++      corres_normal_noise_target_[i] = (sigma2/points.rows()) *
++        eigensolver.eigenvectors()*inverse.asDiagonal()*eigensolver.eigenvectors().transpose();
++    }
+ 
+     // The normal should always point towards the robot - this is for visualization
+     if (corres_normals_target_[i].dot(source_origin_in_target - corres_means_target_[i]) < 0) {
+@@ -346,6 +360,9 @@
+ 
+       // Whiten and weight
+       J_source *= sqrt_weight / config_.lidar_point_noise_std_dev;
++      // Required by the existing degeneracy-ON branch; previously left zero.
++      J_source_whitened_weighted_arr[i] = J_source;
++      e_whitened_weigehted_arr[i] = e;
+ 
+ #if USE_OPENMP
+       const int thread_id = omp_get_thread_num();
+@@ -454,6 +471,22 @@
+         keys()[0], keys()[1], J_source_T_J_source, J_source_T_J_target, -J_source_T_b,
+         J_target_T_J_target, -J_target_T_b, f);
+     } else {
++      if (config_.drpm_enabled) {
++        std::vector<V3D> points, normals;
++        std::vector<M33> covariances;
++        std::vector<double> weights;
++        const M33 R = delta_pose.rotation().matrix().transpose();
++        for (size_t i=0; i<cloud_source_.size(); ++i) {
++          if (statuses_[i] != RejectStatus::Valid) continue;
++          points.push_back(cloud_source_.points[i].getVector3fMap().cast<double>());
++          normals.push_back(R*corres_normals_target_[i]);
++          covariances.push_back(R*corres_normal_noise_target_[i]*R.transpose());
++          weights.push_back(J_source_whitened_weighted_arr[i].tail<3>().squaredNorm());
++        }
++        drpmReweight(J_source_T_J_source, J_source_T_b, points, normals,
++                     weights, covariances, config_.lidar_point_noise_std_dev,
++                     config_.drpm_snr_factor);
++      }
+       if (config_.reg_4_dof)
+       {
+         // Project the matrices
+--- a/src/lidar/geometric_config.cpp
++++ b/src/lidar/geometric_config.cpp
+@@ -24,6 +24,8 @@
+   field(config.lidar_point_noise_std_dev, "lidar_point_noise_std_dev", "m");
+   field(config.use_huber, "use_huber", "bool");
+   field(config.huber_threshold, "huber_threshold", "amount in standard deviations");
++  field(config.drpm_enabled, "drpm_enabled", "bool");
++  field(config.drpm_snr_factor, "drpm_snr_factor", "ratio");
+   field(config.reg_4_dof, "reg_4_dof", "bool");
+   field(config.project_on_degneneracy, "project_on_degneneracy", "bool");
+   field(config.degen_thresh_rot, "degen_thresh_rot", "num_virtual_features");
+--- a/src/lidar/manager.cpp
++++ b/src/lidar/manager.cpp
+@@ -350,6 +350,16 @@
+   }
+ 
+   State state = prev_state_;
++  // Synchronized VIO can already provide the state at an instantaneous scan.
++  // No motion or integration interval exists; preserve source timestamps.
++  if (unique_ns_.size() == 1 && unique_ns_.front() == 0 &&
++      std::abs(state.ts() - corrected_ts_) < 1e-12) {
++    propagated_state_ = state.navState();
++    if (photometric_->config.enabled) interpolated_map_T_Le_Lt_[0] = gtsam::Pose3::Identity();
++    debug_msg_.t_deskew = sw.elapsedMs();
++    return;
++  }
++
+ 
+   // if (abs(globalTs(unique_ns_.front()) - state.ts()) > 0.01) {
+   //   logCriticalException<std::runtime_error>(
+--- a/src/mimosa_rosbag.cpp
++++ b/src/mimosa_rosbag.cpp
+@@ -25,6 +25,8 @@
+ #include <unistd.h>
+ 
+ #include <filesystem>
++#include <fstream>
++#include <iomanip>
+ #include <regex>
+ 
+ // Function to set terminal to non-blocking mode
+@@ -64,6 +66,13 @@
+   mimosa::radar::Manager radar_manager(pnh, imu_manager, graph_manager);
+   mimosa::odometry::Manager odometry_manager(pnh, imu_manager, graph_manager);
+ 
++  // Record the latest optimized state after each exteroceptive update.
++  // Standard graph publishing suppresses same-key updates; offline evaluation
++  // must retain the final estimate when synchronized sensors share a timestamp.
++  std::string output_dir; pnh.param<std::string>("logs_directory", output_dir, "/tmp/");
++  std::ofstream trajectory(output_dir + "odometry.csv");
++  trajectory << std::setprecision(17) << "stamp_ns,x,y,z,qx,qy,qz,qw\n";
++
+   // Read the bag name from parameter server
+   std::string bag_name;
+   if (!pnh.getParam("bag_name", bag_name)) {
+@@ -233,6 +242,15 @@
+           odometry_manager.callback(msg);
+         }
+       }
++      if (m.getTopic() != imu_topic) {
++        mimosa::State state; graph_manager->getCurrentState(state);
++        if (state.ts() > 0) {
++          const auto & p = state.navState().pose().translation();
++          const auto q = state.navState().pose().rotation().toQuaternion();
++          trajectory << llround(state.ts()*1e9) << ',' << p.x() << ',' << p.y() << ',' << p.z()
++            << ',' << q.x() << ',' << q.y() << ',' << q.z() << ',' << q.w() << '\n';
++        }
++      }
+       ++it;
+     }
+ 

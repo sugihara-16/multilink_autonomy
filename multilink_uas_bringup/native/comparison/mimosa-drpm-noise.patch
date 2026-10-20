@@ -1,0 +1,141 @@
+--- a/include/mimosa/lidar/geometric_config.hpp
++++ b/include/mimosa/lidar/geometric_config.hpp
+@@ -27,6 +27,7 @@
+   bool use_huber = true;
+   float huber_threshold = 1.345;
+   bool drpm_enabled = false;
++  int drpm_noise_model = 0;  // 0: legacy isotropic, 1: propagated isotropic, 2: acquisition radial
+   double drpm_snr_factor = 10.0;
+   bool reg_4_dof = false;
+   bool project_on_degneneracy = true;
+--- a/src/lidar/geometric_config.cpp
++++ b/src/lidar/geometric_config.cpp
+@@ -25,6 +25,7 @@
+   field(config.use_huber, "use_huber", "bool");
+   field(config.huber_threshold, "huber_threshold", "amount in standard deviations");
+   field(config.drpm_enabled, "drpm_enabled", "bool");
++  field(config.drpm_noise_model, "drpm_noise_model", "0 legacy, 1 propagated isotropic, 2 radial");
+   field(config.drpm_snr_factor, "drpm_snr_factor", "ratio");
+   field(config.reg_4_dof, "reg_4_dof", "bool");
+   field(config.project_on_degneneracy, "project_on_degneneracy", "bool");
+--- a/include/mimosa/lidar/geometric_factor.hpp
++++ b/include/mimosa/lidar/geometric_factor.hpp
+@@ -89,6 +89,7 @@
+   typedef std::shared_ptr<This> shared_ptr;
+ 
+   RegistrationConfig config_;
++  V3D lidar_origin_body_ = V3D::Zero();
+ 
+   // Localizabilities
+   // Note all of these are whitened and weighted
+@@ -118,12 +119,14 @@
+ public:
+   ICPFactor(
+     const gtsam::Key key_source, IncrementalVoxelMapPCL::Ptr ivox_target,
+-    const pcl::PointCloud<Point> & cloud_source, const RegistrationConfig & config)
++    const pcl::PointCloud<Point> & cloud_source, const RegistrationConfig & config,
++    const V3D & lidar_origin_body = V3D::Zero())
+   : Base(std::vector<gtsam::Key>{key_source}),
+     is_binary_(false),
+     ivox_target_(ivox_target),
+     cloud_source_(cloud_source),
+-    config_(config)
++    config_(config),
++    lidar_origin_body_(lidar_origin_body)
+   {
+     commonConstructor();
+   }
+@@ -143,6 +146,10 @@
+ 
+   void commonConstructor()
+   {
++    if (config_.drpm_noise_model < 0 || config_.drpm_noise_model > 2)
++      throw std::runtime_error("Unknown DRPM noise model");
++    if (is_binary_ && config_.drpm_enabled)
++      throw std::runtime_error("DRPM integration supports unary scan-to-map factors only");
+     // These need to be the size of the source since we are iterating over the source
+     transed_point_target_.resize(cloud_source_.size(), Z31);
+     transed_point_target_da_.resize(cloud_source_.size(), Z31);
+@@ -210,6 +217,7 @@
+ 
+     corres_normals_target_[i] = eigensolver.eigenvectors().col(0);
+     if (config_.drpm_enabled) {
++      if (config_.drpm_noise_model == 0) {
+       // DRPM Eq. (35): covariance of the small rotation of the normal.
+       // MIMOSA uses sample covariance, convert to 1/N scatter first.
+       const double sigma2 = std::pow(config_.lidar_point_noise_std_dev, 2);
+@@ -219,6 +227,21 @@
+                             1.0/std::max(scatter[2]-sigma2, 1e-7);
+       corres_normal_noise_target_[i] = (sigma2/points.rows()) *
+         eigensolver.eigenvectors()*inverse.asDiagonal()*eigensolver.eigenvectors().transpose();
++      } else {
++        std::vector<M33> point_covariances(points.rows());
++        for (int j=0;j<points.rows();++j) {
++          if (config_.drpm_noise_model == 2) {
++            // Stored with each accepted map point at acquisition; current
++            // source viewpoint is not the acquisition ray of a map point.
++            if (!ivox_target_->underlying()->has_covs())
++              throw std::runtime_error("Missing DRPM acquisition covariance in map");
++            point_covariances[j]=ivox_target_->underlying()->cov(closest_point_indices[j]).topLeftCorner<3,3>();
++          } else point_covariances[j]=M33::Identity()*std::pow(config_.lidar_point_noise_std_dev,2);
++        }
++        corres_normal_noise_target_[i]=drpmNormalCovariance(
++          centered, eigensolver.eigenvalues()*(points.rows()-1.0)/points.rows(),
++          eigensolver.eigenvectors(), point_covariances);
++      }
+     }
+ 
+     // The normal should always point towards the robot - this is for visualization
+@@ -473,19 +496,21 @@
+     } else {
+       if (config_.drpm_enabled) {
+         std::vector<V3D> points, normals;
+-        std::vector<M33> covariances;
++        std::vector<M33> covariances, point_covariances;
+         std::vector<double> weights;
+         const M33 R = delta_pose.rotation().matrix().transpose();
+         for (size_t i=0; i<cloud_source_.size(); ++i) {
+           if (statuses_[i] != RejectStatus::Valid) continue;
+           points.push_back(cloud_source_.points[i].getVector3fMap().cast<double>());
++          if (config_.drpm_noise_model == 2)
++            point_covariances.push_back(drpmRadialCovariance(points.back()-lidar_origin_body_,config_.lidar_point_noise_std_dev));
+           normals.push_back(R*corres_normals_target_[i]);
+           covariances.push_back(R*corres_normal_noise_target_[i]*R.transpose());
+           weights.push_back(J_source_whitened_weighted_arr[i].tail<3>().squaredNorm());
+         }
+         drpmReweight(J_source_T_J_source, J_source_T_b, points, normals,
+                      weights, covariances, config_.lidar_point_noise_std_dev,
+-                     config_.drpm_snr_factor);
++                     config_.drpm_snr_factor, point_covariances);
+       }
+       if (config_.reg_4_dof)
+       {
+--- a/src/lidar/geometric.cpp
++++ b/src/lidar/geometric.cpp
+@@ -170,7 +170,7 @@
+   Stopwatch sw;
+ 
+   // Scan to map
+-  factor_ = std::make_shared<ICPFactor>(key, ivox_map_, sm_Be_cloud_ds_, config.scan_to_map);
++  factor_ = std::make_shared<ICPFactor>(key, ivox_map_, sm_Be_cloud_ds_, config.scan_to_map, config.T_B_L.translation());
+   // The factor_ is linearized so that localizability can be computed
+   auto tmp = factor_->linearize(values);
+ 
+@@ -455,6 +455,17 @@
+     }
+     gtsam_points::PointCloudCPU::Ptr frame =
+       std::make_shared<gtsam_points::PointCloudCPU>(W_points);
++    if (config.scan_to_map.drpm_enabled && config.scan_to_map.drpm_noise_model == 2) {
++      // Instantaneous simulated scans (all point offsets zero): acquisition
++      // rays expressed in the end-of-scan body frame retain their directions.
++      std::vector<M33> covariances(Be_cloud_->size());
++      const M33 R=T_W_Be.rotation().matrix();
++      for (size_t i=0;i<Be_cloud_->size();++i) {
++        const V3D ray=Be_cloud_->points[i].getVector3fMap().cast<double>()-config.T_B_L.translation();
++        covariances[i]=R*drpmRadialCovariance(ray,config.scan_to_map.lidar_point_noise_std_dev)*R.transpose();
++      }
++      frame->add_covs(covariances);
++    }
+     // Reset the map to a new map
+     ivox_map_ = std::make_shared<IncrementalVoxelMapPCL>(*ivox_map_);
+     ivox_map_->underlying()->insert(*frame);

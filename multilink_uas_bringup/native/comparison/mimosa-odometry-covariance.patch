@@ -1,0 +1,43 @@
+--- a/include/mimosa/odometry/manager.hpp
++++ b/include/mimosa/odometry/manager.hpp
+@@ -31,6 +31,7 @@
+ private:
+   gtsam::Key prev_key_;
+   gtsam::Pose3 T_Ow_Skm1_;
++  gtsam::SharedNoiseModel calibrated_noise_;
+ 
+ public:
+   Manager(
+--- a/src/odometry/manager.cpp
++++ b/src/odometry/manager.cpp
+@@ -16,6 +16,21 @@
+ : SensorManagerBase<ManagerConfig, nav_msgs::Odometry>(
+     config::checkValid(config::fromRos<ManagerConfig>(pnh)), imu_manager, graph_manager, "odometry")
+ {
++  // Optional empirical relative-pose second moment, in GTSAM [rotation, translation]
++  // tangent coordinates (radians/metres), row-major. Legacy weights are unchanged
++  // when absent. This does not claim to model shared-IMU or temporal correlations.
++  std::vector<double> covariance;
++  if (pnh.hasParam("odometry/manager/relative_pose_covariance")) {
++    if (!pnh.getParam("odometry/manager/relative_pose_covariance", covariance) || covariance.size() != 36)
++      throw std::invalid_argument("relative_pose_covariance must contain 36 numbers");
++    Eigen::Matrix<double,6,6> C;
++    for (int i=0;i<6;++i) for(int j=0;j<6;++j) C(i,j)=covariance[6*i+j];
++    Eigen::LLT<Eigen::Matrix<double,6,6>> llt(C);
++    if (!C.allFinite() || !C.isApprox(C.transpose(),1e-10) || llt.info()!=Eigen::Success)
++      throw std::invalid_argument("relative_pose_covariance must be finite symmetric positive definite");
++    calibrated_noise_=gtsam::noiseModel::Gaussian::Covariance(C);
++    logger_->info("Using calibrated full relative-pose covariance; radians/metres, rotation first");
++  }
+   subscribeIfEnabled(pnh);
+ }
+ 
+@@ -46,7 +61,7 @@
+   gtsam::Pose3 T_Ow_Sk = toGtsam(msg->pose.pose);
+   if (initialized_) {
+     gtsam::Pose3 T_Bkm1_Bk = config_.base.T_B_S * T_Ow_Skm1_.inverse() * T_Ow_Sk * config_.base.T_B_S.inverse();
+-    gtsam::noiseModel::Diagonal::shared_ptr noise_model = gtsam::noiseModel::Diagonal::Sigmas(
++    gtsam::SharedNoiseModel noise_model = calibrated_noise_ ? calibrated_noise_ : gtsam::noiseModel::Diagonal::Sigmas(
+       (gtsam::Vector(6) << deg2rad(config_.sigma_rot_deg), deg2rad(config_.sigma_rot_deg),
+        deg2rad(config_.sigma_rot_deg), config_.sigma_trans_m, config_.sigma_trans_m,
+        config_.sigma_trans_m)
