@@ -1,0 +1,96 @@
+[
+  {
+    "file": "IGLOV_2211.06557v2.pdf",
+    "url": "https://arxiv.org/pdf/2211.06557v2",
+    "status": "downloaded",
+    "pages": 11,
+    "sha256": "6bbc586311272af9d62bd5ffdf7981b4a6d0241a48562dd931dfc3e7886d654a"
+  },
+  {
+    "file": "Active_Visual_SLAM_Rotating_Camera_2105.08958.pdf",
+    "url": "https://arxiv.org/pdf/2105.08958",
+    "status": "downloaded",
+    "pages": 8,
+    "sha256": "d14bfc474e74f11a0a954affdf5f482d2cf915b4bdfedea257ff84f3e9534afa"
+  },
+  {
+    "file": "DC_VINS_ICCVW2021.pdf",
+    "url": "https://openaccess.thecvf.com/content/ICCV2021W/TradiCV/papers/Rebello_DC-VINS_Dynamic_Camera_Visual_Inertial_Navigation_System_With_Online_Calibration_ICCVW_2021_paper.pdf",
+    "status": "downloaded",
+    "pages": 10,
+    "sha256": "8703c9837256d597e87106ab1ed85b3b5a64c60e1e7e96dc7aa5717ba38fe424"
+  },
+  {
+    "file": "Mast_Planning_1912.06898.pdf",
+    "url": "https://arxiv.org/pdf/1912.06898",
+    "status": "downloaded",
+    "pages": 26,
+    "sha256": "c07d5ce6a2a12da17b73c18e96fb095f7cf358391585555bc1cbacc3bb7b1b4d"
+  },
+  {
+    "file": "Texture_Aware_SLAM_CRV2016.pdf",
+    "url": "https://cim.mcgill.ca/~mrl/pubs/travism/crv_2016_texture_aware_slam.pdf",
+    "status": "downloaded",
+    "pages": 8,
+    "sha256": "5c727cf3f3706e3a52006b61423893da20e60b3ccff89bf8eee573e4ef14ee99"
+  },
+  {
+    "file": "LVI_Degenerate_Environments_IROS2023.pdf",
+    "url": "https://www.robot.t.u-tokyo.ac.jp/~yamashita/paper/E/E486Final.pdf",
+    "status": "unavailable",
+    "reason": "404 Client Error: Not Found for url: https://www.robot.t.u-tokyo.ac.jp/~yamashita/paper/E/E486Final.pdf"
+  },
+  {
+    "file": "ArUco_Lidar_Aerospace2022.pdf",
+    "url": "https://www.mdpi.com/2226-4310/9/8/456/pdf",
+    "status": "unavailable",
+    "reason": "403 Client Error: Forbidden for url: https://www.mdpi.com/2226-4310/9/8/456/pdf"
+  },
+  {
+    "file": "SKF_Fusion_ISPRS2026.pdf",
+    "url": "https://www.sciencedirect.com/science/article/pii/S0924271626002790/pdfft?isDTMRedir=true&download=true",
+    "status": "unavailable",
+    "reason": "403 Client Error: Forbidden for url: https://www.sciencedirect.com/science/article/pii/S0924271626002790/pdfft?isDTMRedir=true&download=true"
+  },
+  {
+    "file": "AWARE_ISPRS2026.pdf",
+    "url": "https://www.sciencedirect.com/science/article/pii/S0924271626004168/pdfft?isDTMRedir=true&download=true",
+    "status": "unavailable",
+    "reason": "403 Client Error: Forbidden for url: https://www.sciencedirect.com/science/article/pii/S0924271626004168/pdfft?isDTMRedir=true&download=true"
+  },
+  {
+    "file": "Selective_Kalman_Filter_2412.17235.pdf",
+    "url": "https://arxiv.org/pdf/2412.17235",
+    "status": "downloaded",
+    "pages": 8,
+    "sha256": "2422f9533a29b4ede27327dc99587a713a2e88b15983ba8aafd3c5d2e5101df5"
+  },
+  {
+    "file": "AWARE_2604.10598.pdf",
+    "url": "https://arxiv.org/pdf/2604.10598",
+    "status": "downloaded",
+    "pages": 19,
+    "sha256": "f88e49fb3cdcaa0466878da025fad282ef3cfddf93de5aff55fec70219a91c03"
+  },
+  {
+    "file": "ArUco_Lidar_Aerospace2022.pdf",
+    "url": "https://mdpi-res.com/d_attachment/aerospace/aerospace-09-00456/article_deploy/aerospace-09-00456.pdf",
+    "status": "downloaded",
+    "pages": 25,
+    "sha256": "095454eb4cea947c9eba582042328cd3f5c4dd3d4bfc129f5b975fb926ccd406"
+  },
+  {
+    "file": "Fisher_Information_Field_2008.03324.pdf",
+    "url": "https://arxiv.org/pdf/2008.03324",
+    "status": "downloaded",
+    "pages": 18,
+    "sha256": "97b13ee8591c8d6c6b94daf668d59c121a5df69909bf1c10b961ba6ddc29e25f"
+  },
+  {
+    "file": "AEOS_2509.09141.pdf",
+    "url": "https://arxiv.org/pdf/2509.09141",
+    "status": "downloaded",
+    "pages": 18,
+    "sha256": "c18134584d18e4f35fc13bceeebf0f4160ca378762b4d404aae91d7f01e5c036"
+  }
+]

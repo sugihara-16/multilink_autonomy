@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../ros2/aerial_robot_base_ws"
+		},
+		{
+			"path": "../../../../unified_autonomy_stack"
+		},
+		{
+			"path": "../../../../uas_native"
+		}
+	],
+	"settings": {}
+}

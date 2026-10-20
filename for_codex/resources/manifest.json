@@ -1,0 +1,168 @@
+{
+  "review_date": "2026-10-04",
+  "scope": "Literature collection and source review; no estimator execution",
+  "papers": [
+    {
+      "file": "COIN-LIO_arXiv2310.01235v4.pdf",
+      "source_url": "https://arxiv.org/pdf/2310.01235v4",
+      "version": "2310.01235v4",
+      "origin": "downloaded_arxiv",
+      "pages": 8,
+      "bytes": 11723526,
+      "sha256": "8801b57834e6e3b53eb13b23ecee05d19842aa67593988d721ebd24374cfcea8",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "DRPM_Probabilistic_Degeneracy_Detection_arXiv2410.10784v2.pdf",
+      "source_url": "https://arxiv.org/pdf/2410.10784v2",
+      "version": "2410.10784v2",
+      "origin": "downloaded_arxiv",
+      "pages": 8,
+      "bytes": 5121481,
+      "sha256": "700326292127d7e1e1958b689788a7037976bf882a3ff385b20f6cfa8876e007",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "FAST-LIO2_arXiv2107.06829v1.pdf",
+      "source_url": "https://arxiv.org/pdf/2107.06829v1",
+      "version": "2107.06829v1",
+      "origin": "downloaded_arxiv",
+      "pages": 19,
+      "bytes": 13481318,
+      "sha256": "ba5072e06e75dec5222bcb528143f3aa3238d6f6692bac1e22a9fe1bc55a15dd",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "FAST-LIVO2_Fast_Direct_LiDARInertialVisual_Odometry.pdf",
+      "source_url": "https://doi.org/10.1109/TRO.2024.3502198",
+      "version": "IEEE publisher PDF; user-provided; preserved",
+      "origin": "existing_user_file",
+      "pages": 21,
+      "bytes": 13856947,
+      "sha256": "1dd8c10135cc3214a2b06b93cfc00d16a8ff8b5ccaadeb2cb1d42a6d2c131282",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "GenZ-ICP_arXiv2411.06766v1.pdf",
+      "source_url": "https://arxiv.org/pdf/2411.06766v1",
+      "version": "2411.06766v1",
+      "origin": "downloaded_arxiv",
+      "pages": 8,
+      "bytes": 3432158,
+      "sha256": "4adec7e7c1048bb9b0e816f1aef13c5ac0263922cc04975ade10b1bff0553a83",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "GenZ-LIO_arXiv2603.16273v2.pdf",
+      "source_url": "https://arxiv.org/pdf/2603.16273v2",
+      "version": "2603.16273v2",
+      "origin": "downloaded_arxiv",
+      "pages": 21,
+      "bytes": 10612395,
+      "sha256": "2baddb750009987785c4d41918447f3c56a5ff69937ea9d1c175495c4b1d3a61",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "Informed_Constrained_Aligned_arXiv2408.11809v3.pdf",
+      "source_url": "https://arxiv.org/pdf/2408.11809v3",
+      "version": "2408.11809v3",
+      "origin": "downloaded_arxiv",
+      "pages": 32,
+      "bytes": 38809096,
+      "sha256": "5991181399891a2191bb9f7bd0b524e3f5dfd5e1bf32f3738e3432324d62e71d",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "LVI-SAM_arXiv2104.10831v2.pdf",
+      "source_url": "https://arxiv.org/pdf/2104.10831v2",
+      "version": "2104.10831v2",
+      "origin": "downloaded_arxiv",
+      "pages": 7,
+      "bytes": 2474140,
+      "sha256": "b7ad99e61d5be37be4f64a2047c25443cb7feeccdc22993652d48e55f5288a9f",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "R3LIVE_arXiv2109.07982v1.pdf",
+      "source_url": "https://arxiv.org/pdf/2109.07982v1",
+      "version": "2109.07982v1",
+      "origin": "downloaded_arxiv",
+      "pages": 8,
+      "bytes": 10339417,
+      "sha256": "2beb7830c3c6a4ddabad2c64d9ad34fad97c9d357ac84431e1fbc776699fa94a",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "RELEAD_arXiv2402.18934v2.pdf",
+      "source_url": "https://arxiv.org/pdf/2402.18934v2",
+      "version": "2402.18934v2",
+      "origin": "downloaded_arxiv",
+      "pages": 7,
+      "bytes": 6303033,
+      "sha256": "4644a6a91a2ae0b05e76e55c19d35ce497514634ddc67ce4aaa81ed693d7a8a8",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "SA-LIVO_Subspace-Aware_Degeneracy_Handling_arXiv2606.25699v2.pdf",
+      "source_url": "https://arxiv.org/pdf/2606.25699v2",
+      "version": "2606.25699v2",
+      "origin": "downloaded_arxiv",
+      "pages": 18,
+      "bytes": 8985509,
+      "sha256": "22324d43c0b93c84c4e97d03285f249e0bd8f714a65217297fdea7b2ca1e2c67",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "Switch-SLAM_Switching-Based_LiDAR-Inertial-Visual_SLAM_for_Degenerate_Environments.pdf",
+      "source_url": "https://doi.org/10.1109/LRA.2024.3421792",
+      "version": "IEEE publisher PDF; user-provided; preserved",
+      "origin": "existing_user_file",
+      "pages": 8,
+      "bytes": 7991120,
+      "sha256": "fa8e97e46b52f6f70b00c9a11e5106bc6e32581fc630fe8b00ba610e2256336a",
+      "checked_on": "2026-10-04"
+    },
+    {
+      "file": "X-ICP_arXiv2211.16335v4.pdf",
+      "source_url": "https://arxiv.org/pdf/2211.16335v4",
+      "version": "2211.16335v4",
+      "origin": "downloaded_arxiv",
+      "pages": 20,
+      "bytes": 16744087,
+      "sha256": "30149456c4eb7c1437a7544218dc0ef2665055dd22a6f4235d5bac82d7b7d034",
+      "checked_on": "2026-10-04"
+    }
+  ],
+  "inspected_public_repository_heads": [
+    {
+      "repo": "TixiaoShan/LVI-SAM",
+      "sha": "0d822f6dcac3378312f6703b4f45829e049f221a",
+      "date": "2022-12-17T15:34:36Z"
+    },
+    {
+      "repo": "ethz-asl/COIN-LIO",
+      "sha": "76729cc4feb3649cbd79d28f82d9f62a2c82889b",
+      "date": "2026-06-23T07:31:25Z"
+    },
+    {
+      "repo": "ntnu-arl/drpm",
+      "sha": "b39a540c946f4059f5e3dfde625216c437eaf158",
+      "date": "2024-10-15T06:13:18Z"
+    },
+    {
+      "repo": "hku-mars/FAST-LIVO2",
+      "sha": "0d2c0346107b75b59934975adec9a6eeeb913c64",
+      "date": "2026-03-08T15:40:28Z"
+    },
+    {
+      "repo": "leggedrobotics/perfectlyconstrained",
+      "sha": "0fbe4175ea205a271f85287abfd8048e5f7dd32a",
+      "date": "2025-05-14T05:51:42Z"
+    },
+    {
+      "repo": "cocel-postech/genz-icp",
+      "sha": "b19b2455e9b1272a68990969271685af54126b0d",
+      "date": "2026-06-16T08:26:51Z"
+    }
+  ]
+}
