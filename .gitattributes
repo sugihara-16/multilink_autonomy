@@ -1,2 +1,4 @@
 # Preserve context whitespace in patches for external source trees.
 *.patch -whitespace
+# Keep the upstream DRPM snapshot byte-identical, including its formatting.
+multilink_uas_bringup/native/comparison/official_drpm/** -whitespace

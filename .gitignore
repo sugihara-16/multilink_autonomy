@@ -34,3 +34,23 @@ __pycache__/
 
 # Windows download metadata
 *:Zone.Identifier
+
+# Recorded sensor data (even if saved outside logs/)
+*.db3
+*.db3-wal
+*.db3-shm
+*.bag
+*.mcap
+# Experiment ownership locks (no data or source content).
+multilink_uas_bringup/native/.unipilot-*.lock
+
+# Downloaded papers and PDF text extraction; retain source manifests and notes.
+/for_codex/resources/**/*.pdf
+/for_codex/resources/active_gimbal_20261008/*.txt
+
+# Reproducible route previews, planning caches, and local capture state.
+# Keep the selected route/segment definitions and their validation metadata.
+/multilink_uas_bringup/native/routes/**/*.png
+/multilink_uas_bringup/native/routes/**/*.gpickle
+/multilink_uas_bringup/native/routes/**/*.log
+/multilink_uas_bringup/native/routes/zab_full/capture_runs.json
