@@ -1,0 +1,6 @@
+# Null experiment: both physically colocated cameras stay at yaw/pitch zero.
+# This measures camera-noise / initialization variability without gimbal motion.
+max_speed: 0.0
+scan_speed: 0.0
+tracking_aware: true
+log_candidates: false

@@ -1,0 +1,29 @@
+# V8c: asynchronous planning map and equivalent batched triangulation.
+# Development: image corners + LiDAR depth for planning, causal gyro alignment.
+tracking_aware: true
+pitch_samples: 13
+max_speed: 0.3490658503988659
+scan_speed: 0.08726646259971647
+rate_compensation: true
+gaze_pitch_limit: 0.5235987755982988
+forward_weight: 0.5
+map_max_age: 8.0
+min_observations: 3
+current_track_age: 0.15
+evidence_decay_s: 2.0
+border_fraction: 0.2
+feature_budget: 25
+retain_fraction: 0.9
+min_cost_improvement: 0.03
+prediction_horizon_s: 0.8
+future_retention_weight: 0.5
+recovery_delay_s: 1.0
+log_candidates: false
+separate_image_tracks: true
+transition_aware: true
+image_geometry_map: true
+image_map_features: 180
+motion_average_s: 0.3
+allow_map_recovery: true
+
+geometry_async: true

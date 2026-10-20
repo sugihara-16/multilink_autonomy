@@ -2,3 +2,5 @@
 *.patch -whitespace
 # Keep the upstream DRPM snapshot byte-identical, including its formatting.
 multilink_uas_bringup/native/comparison/official_drpm/** -whitespace
+# Preserve the adopted ROVIO template's frozen hash, including final blank lines.
+multilink_uas_bringup/native/active_perception/rovio_template.info whitespace=-blank-at-eof

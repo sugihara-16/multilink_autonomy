@@ -1,0 +1,21 @@
+# Scoring parameters, not estimator tuning. SI units, radians and seconds.
+mode: active
+planning_rate: 5.0
+max_dt: 0.5
+max_speed: 0.34906585  # 20 degrees/s, Euclidean norm of the two joint rates
+limits_min: [-2.0943951, -0.5235987]
+limits_max: [2.0943951, 0.5235987]
+prior_std: [0.1745329, 0.1745329, 0.1745329, 10.0, 10.0, 10.0]
+bearing_sigma: 0.00721688  # 1 pixel / fx=138.564 at the processed resolution
+tan_half_hfov: 1.7320508075688772
+tan_half_vfov: 1.299038105676658
+range_max: 30.0
+min_features: 4
+min_view_cos: 0.5
+occlusion_cos: 0.9998476951563913  # one degree ray neighbourhood
+occlusion_margin: 0.5
+forward_weight: 0.05
+motion_weight: 0.002
+max_sensor_age: 0.5
+map_max_age: 60.0
+map_max_points: 3000

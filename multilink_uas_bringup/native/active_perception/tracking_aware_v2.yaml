@@ -1,0 +1,15 @@
+# v1 plus short-horizon track retention using estimated body motion only.
+tracking_aware: true
+pitch_samples: 13
+max_speed: 0.3490658503988659
+map_max_age: 8.0
+min_observations: 10
+current_track_age: 0.15
+evidence_decay_s: 2.0
+border_fraction: 0.2
+feature_budget: 25
+retain_fraction: 0.8
+min_cost_improvement: 0.03
+prediction_horizon_s: 0.8
+future_retention_weight: 0.5
+log_candidates: false
