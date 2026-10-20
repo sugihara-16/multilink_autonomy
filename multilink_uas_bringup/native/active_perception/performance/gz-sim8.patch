@@ -1,0 +1,31 @@
+diff --git a/src/systems/sensors/Sensors.cc b/src/systems/sensors/Sensors.cc
+index defd28c..8816393 100644
+--- a/src/systems/sensors/Sensors.cc
++++ b/src/systems/sensors/Sensors.cc
+@@ -66,6 +66,7 @@
+ #include "gz/sim/rendering/RenderUtil.hh"
+ #include "gz/rendering/GlobalIlluminationVct.hh"
+ 
++extern "C" void uasPrepareSensorRender(gz::sensors::RenderingSensor *sensor);
+ using namespace gz;
+ using namespace sim;
+ using namespace systems;
+@@ -492,6 +493,18 @@ void SensorsPrivate::RunOnce()
+     {
+       // publish data
+       GZ_PROFILE("RunOnce");
++      if (std::getenv("UAS_BATCH_SENSOR_RENDER"))
++      {
++        for (auto id : this->sensorIds)
++        {
++          auto sensor=this->sensorManager.Sensor(id);
++          auto renderingSensor=dynamic_cast<sensors::RenderingSensor *>(sensor);
++          if (renderingSensor && sensor->IsActive() && !sensor->IsTriggered() &&
++              renderingSensor->HasConnections() && renderingSensor->ManualSceneUpdate() &&
++              sensor->NextDataUpdateTime() <= this->updateTimeApplied)
++            uasPrepareSensorRender(renderingSensor);
++        }
++      }
+       this->sensorManager.RunOnce(this->updateTimeApplied);
+       this->eventManager->Emit<events::Render>();
+     }

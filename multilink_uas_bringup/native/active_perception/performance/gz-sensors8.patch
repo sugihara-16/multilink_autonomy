@@ -1,0 +1,60 @@
+diff --git a/include/gz/sensors/RenderingSensor.hh b/include/gz/sensors/RenderingSensor.hh
+index 7443ff8..e36a45c 100644
+--- a/include/gz/sensors/RenderingSensor.hh
++++ b/include/gz/sensors/RenderingSensor.hh
+@@ -68,6 +68,7 @@ namespace gz
+ 
+       /// \brief Render update. This performs the actual render operation.
+       public: void Render();
++      public: void PrepareRender();
+ 
+       /// \brief Set whether to update the scene graph manually. If set to true,
+       /// it is expected that rendering::Scene::PreRender is called manually
+diff --git a/src/RenderingSensor.cc b/src/RenderingSensor.cc
+index 0678e39..dbf3216 100644
+--- a/src/RenderingSensor.cc
++++ b/src/RenderingSensor.cc
+@@ -29,6 +29,7 @@ class gz::sensors::RenderingSensorPrivate
+ 
+   /// \brief Manually update the rendering scene graph
+   public: bool manualSceneUpdate = false;
++  public: bool prepared = false;
+ 
+   /// \brief Pointer to the internal rendering sensors used for generating
+   /// sensor data
+@@ -107,11 +108,13 @@ void RenderingSensor::Render()
+         std::dynamic_pointer_cast<rendering::Camera>(s);
+     if (rc)
+     {
+-      rc->Render();
++      if (!this->dataPtr->prepared) rc->Render();
+       rc->PostRender();
+     }
+   }
+ 
++  this->dataPtr->prepared = false;
++
+   if (!this->dataPtr->manualSceneUpdate &&
+       !this->dataPtr->scene->LegacyAutoGpuFlush())
+   {
+@@ -120,3 +123,20 @@ void RenderingSensor::Render()
+     this->dataPtr->scene->PostRender();
+   }
+ }
++
++// Submit all due sensor rendering before the first synchronous readback.
++void RenderingSensor::PrepareRender()
++{
++  if (!this->dataPtr->manualSceneUpdate || this->dataPtr->prepared) return;
++  for (auto rs : this->dataPtr->sensors)
++  {
++    auto s=rs.lock();
++    auto camera=std::dynamic_pointer_cast<rendering::Camera>(s);
++    if (camera) camera->Render();
++  }
++  this->dataPtr->prepared=true;
++}
++extern "C" void uasPrepareSensorRender(gz::sensors::RenderingSensor *sensor)
++{
++  sensor->PrepareRender();
++}
