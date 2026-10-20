@@ -1,0 +1,35 @@
+/clock:
+  depth: 10
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+/dragon/cam_link1/image:
+  depth: 10
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+/dragon/cam_link3/image:
+  depth: 10
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+/dragon/cam_link4/image:
+  depth: 10
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+/dragon/imu/raw:
+  depth: 2000
+  durability: volatile
+  history: keep_last
+  reliability: reliable
+/dragon/joint_states:
+  depth: 10
+  durability: volatile
+  history: keep_last
+  reliability: best_effort
+/dragon/lidar/points:
+  depth: 50
+  durability: volatile
+  history: keep_last
+  reliability: reliable
