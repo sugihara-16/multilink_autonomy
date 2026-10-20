@@ -1,0 +1,8 @@
+{
+  "clean_voxel_rebuild_identical": true,
+  "finite_monotonic_csv": true,
+  "samples_on_certified_polyline": 3260,
+  "continuous_segment_joins": true,
+  "analytic_linear_and_yaw_limits_pass": true,
+  "simulation_flight_tested": false
+}

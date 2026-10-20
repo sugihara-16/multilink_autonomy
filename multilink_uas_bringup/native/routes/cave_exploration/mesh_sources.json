@@ -1,0 +1,590 @@
+{
+  "pitch": 0.5,
+  "shape": [
+    381,
+    621,
+    111
+  ],
+  "lower": [
+    15.0,
+    -245.0,
+    -5.0
+  ],
+  "parts": [
+    {
+      "name": "staging_area",
+      "kind": "model://Cave Starting Area",
+      "bounds": [
+        [
+          -52.992842737470525,
+          -55.964144477013896,
+          -7.154674072265625
+        ],
+        [
+          23.727803371889372,
+          64.03608375086903,
+          44.24926757812499
+        ]
+      ],
+      "triangles": 29757
+    },
+    {
+      "name": "tile_16",
+      "kind": "model://Cave Corner 02",
+      "bounds": [
+        [
+          167.53823921622364,
+          37.43413465685154,
+          -0.7205878448486328
+        ],
+        [
+          187.56586470660002,
+          57.46174568595185,
+          10.532593994140624
+        ]
+      ],
+      "triangles": 11616
+    },
+    {
+      "name": "tile_17",
+      "kind": "model://Cave Straight 03",
+      "bounds": [
+        [
+          187.43413449055186,
+          40.59347742915174,
+          -0.7935295104980469
+        ],
+        [
+          213.11413814030215,
+          58.69075470463842,
+          12.39973388671875
+        ]
+      ],
+      "triangles": 16033
+    },
+    {
+      "name": "tile_24",
+      "kind": "model://Cave Straight 02",
+      "bounds": [
+        [
+          166.76980224609375,
+          12.434134521484374,
+          -0.8758316040039062
+        ],
+        [
+          182.75350463867187,
+          37.565865478515626,
+          14.254366455078125
+        ]
+      ],
+      "triangles": 11081
+    },
+    {
+      "name": "tile_30",
+      "kind": "model://Cave Straight 05",
+      "bounds": [
+        [
+          12.43413449055165,
+          -9.267051189355415,
+          -0.8390135192871094
+        ],
+        [
+          37.565864986019974,
+          7.461760698257187,
+          12.85475341796875
+        ]
+      ],
+      "triangles": 13612
+    },
+    {
+      "name": "tile_31",
+      "kind": "model://Cave Straight 01",
+      "bounds": [
+        [
+          37.43413330372759,
+          -12.029577667754568,
+          -0.9674191284179687
+        ],
+        [
+          62.925471472948374,
+          14.597323713546778,
+          12.12728271484375
+        ]
+      ],
+      "triangles": 29597
+    },
+    {
+      "name": "tile_32",
+      "kind": "model://Cave Straight 03",
+      "bounds": [
+        [
+          62.43413449055185,
+          -9.406522570848262,
+          -0.7935295104980469
+        ],
+        [
+          88.11413814030215,
+          8.690754704638419,
+          12.39973388671875
+        ]
+      ],
+      "triangles": 16033
+    },
+    {
+      "name": "backpack_3",
+      "kind": "model://JanSport Backpack Red",
+      "bounds": [
+        [
+          79.99577729921832,
+          -5.141937834220706,
+          0.06647181987762452
+        ],
+        [
+          80.32422269564164,
+          -4.855407284891307,
+          0.5408154678344727
+        ]
+      ],
+      "triangles": 1700
+    },
+    {
+      "name": "tile_33",
+      "kind": "model://Cave 3 Way 01",
+      "bounds": [
+        [
+          86.8024171023881,
+          -12.762151524476776,
+          -0.3468972396850586
+        ],
+        [
+          112.56586684264082,
+          11.532401996515599,
+          9.222308349609376
+        ]
+      ],
+      "triangles": 25967
+    },
+    {
+      "name": "tile_34",
+      "kind": "model://Cave Straight 02",
+      "bounds": [
+        [
+          112.43413449055176,
+          -7.753507937149941,
+          -0.8758316040039062
+        ],
+        [
+          137.56586550944786,
+          8.23020148021055,
+          14.254366455078125
+        ]
+      ],
+      "triangles": 11081
+    },
+    {
+      "name": "tile_35",
+      "kind": "model://Cave Straight 01",
+      "bounds": [
+        [
+          137.43413330372758,
+          -12.029577667754568,
+          -0.9674191284179687
+        ],
+        [
+          162.92547147294837,
+          14.597323713546778,
+          12.12728271484375
+        ]
+      ],
+      "triangles": 29597
+    },
+    {
+      "name": "phone_3",
+      "kind": "model://Samsung J8 Black",
+      "bounds": [
+        [
+          149.87706274612395,
+          -2.0761707370860405,
+          0.40317665217367554
+        ],
+        [
+          150.0421956255786,
+          -1.9837414620504141,
+          0.4249374888410325
+        ]
+      ],
+      "triangles": 716
+    },
+    {
+      "name": "tile_36",
+      "kind": "model://Cave Corner 01",
+      "bounds": [
+        [
+          160.32978393554689,
+          -8.544903564453126,
+          -0.7987503814697265
+        ],
+        [
+          184.71127014160157,
+          12.565869140625,
+          12.6519140625
+        ]
+      ],
+      "triangles": 17234
+    },
+    {
+      "name": "tile_37",
+      "kind": "model://Cave Straight 03",
+      "bounds": [
+        [
+          90.59347961425782,
+          -38.114140625000005,
+          -0.7935295104980469
+        ],
+        [
+          108.69075378417969,
+          -12.434134521484374,
+          12.39973388671875
+        ]
+      ],
+      "triangles": 16033
+    },
+    {
+      "name": "tile_38",
+      "kind": "model://Cave Straight 01",
+      "bounds": [
+        [
+          85.40267524572451,
+          -62.56586562193811,
+          -0.9674191284179687
+        ],
+        [
+          112.02958011849555,
+          -37.07453413639024,
+          12.12728271484375
+        ]
+      ],
+      "triangles": 29597
+    },
+    {
+      "name": "tile_39",
+      "kind": "model://Cave Straight 03",
+      "bounds": [
+        [
+          91.30924719152904,
+          -87.56586806334373,
+          -0.7935295104980469
+        ],
+        [
+          109.40651806947773,
+          -61.88585674116389,
+          12.39973388671875
+        ]
+      ],
+      "triangles": 16033
+    },
+    {
+      "name": "tile_40",
+      "kind": "model://Cave Corner 02",
+      "bounds": [
+        [
+          92.53825456053147,
+          -107.46176103025964,
+          -0.7205878448486328
+        ],
+        [
+          112.56586548905705,
+          -87.4341352496906,
+          10.532593994140624
+        ]
+      ],
+      "triangles": 11616
+    },
+    {
+      "name": "tile_41",
+      "kind": "model://Cave Corner 01",
+      "bounds": [
+        [
+          112.43412842091769,
+          -114.67021415021034,
+          -0.7987503814697265
+        ],
+        [
+          133.54490184395374,
+          -90.28872850699534,
+          12.6519140625
+        ]
+      ],
+      "triangles": 17234
+    },
+    {
+      "name": "tile_42",
+      "kind": "model://Cave Straight 05",
+      "bounds": [
+        [
+          115.73294982910156,
+          -137.56586669921876,
+          -0.8390135192871094
+        ],
+        [
+          132.46175659179687,
+          -112.43413452148437,
+          12.85475341796875
+        ]
+      ],
+      "triangles": 13612
+    },
+    {
+      "name": "phone_4",
+      "kind": "model://Samsung J8 Black",
+      "bounds": [
+        [
+          124.96200000047683,
+          -121.75957461404012,
+          0.2047094857047726
+        ],
+        [
+          125.03799999952317,
+          -121.59986678238533,
+          0.22338456748784025
+        ]
+      ],
+      "triangles": 716
+    },
+    {
+      "name": "tile_43",
+      "kind": "model://Cave Corner 01",
+      "bounds": [
+        [
+          90.28873129091834,
+          -162.5658665638522,
+          -0.7987503814697265
+        ],
+        [
+          114.67021809359338,
+          -141.4550946117784,
+          12.6519140625
+        ]
+      ],
+      "triangles": 17234
+    },
+    {
+      "name": "tile_44",
+      "kind": "model://Cave 3 Way 01",
+      "bounds": [
+        [
+          112.4341357421875,
+          -161.53239990234374,
+          -0.3468972396850586
+        ],
+        [
+          138.19758056640626,
+          -137.23785034179687,
+          9.222308349609376
+        ]
+      ],
+      "triangles": 25967
+    },
+    {
+      "name": "tile_45",
+      "kind": "model://Cave Corner 02",
+      "bounds": [
+        [
+          137.43412964162022,
+          -162.56586913767705,
+          -0.7205878448486328
+        ],
+        [
+          157.4617372265463,
+          -142.53823075682294,
+          10.532593994140624
+        ]
+      ],
+      "triangles": 11616
+    },
+    {
+      "name": "tile_46",
+      "kind": "model://Cave Straight 04",
+      "bounds": [
+        [
+          90.37236389160157,
+          -187.5861767578125,
+          -0.6372490310668946
+        ],
+        [
+          107.80901550292968,
+          -162.43413452148437,
+          13.027589111328126
+        ]
+      ],
+      "triangles": 18880
+    },
+    {
+      "name": "tile_47",
+      "kind": "model://Cave Vertical Shaft",
+      "bounds": [
+        [
+          132.1788607828003,
+          -190.00915207727132,
+          -0.7401206970214844
+        ],
+        [
+          165.64740384334542,
+          -161.04242726911602,
+          33.0275927734375
+        ]
+      ],
+      "triangles": 17528
+    },
+    {
+      "name": "tile_48",
+      "kind": "model://Cave Corner 02",
+      "bounds": [
+        [
+          92.53825456053147,
+          -207.46176103025962,
+          -0.7205878448486328
+        ],
+        [
+          112.56586548905705,
+          -187.4341352496906,
+          10.532593994140624
+        ]
+      ],
+      "triangles": 11616
+    },
+    {
+      "name": "tile_49",
+      "kind": "model://Cave Vertical Shaft",
+      "bounds": [
+        [
+          111.04242730928539,
+          -217.8211391310236,
+          -0.7401206970214844
+        ],
+        [
+          140.00915232737444,
+          -184.35259637981184,
+          33.0275927734375
+        ]
+      ],
+      "triangles": 17528
+    },
+    {
+      "name": "backpack_4",
+      "kind": "model://JanSport Backpack Red",
+      "bounds": [
+        [
+          129.95519727544988,
+          -200.16077173250684,
+          0.026471819877624512
+        ],
+        [
+          130.26580293996938,
+          -199.82438531051037,
+          0.5008154678344726
+        ]
+      ],
+      "triangles": 1700
+    },
+    {
+      "name": "tile_50",
+      "kind": "model://Cave 3 Way 01",
+      "bounds": [
+        [
+          137.2378521023951,
+          -212.56586550944814,
+          19.65310276031494
+        ],
+        [
+          161.53239792675208,
+          -186.80242163279746,
+          29.222308349609378
+        ]
+      ],
+      "triangles": 25967
+    },
+    {
+      "name": "tile_51",
+      "kind": "model://Cave Straight 02",
+      "bounds": [
+        [
+          141.76980224609375,
+          -237.56586547851563,
+          19.124168395996094
+        ],
+        [
+          157.75350463867187,
+          -212.43413452148437,
+          34.25436645507813
+        ]
+      ],
+      "triangles": 11081
+    },
+    {
+      "name": "rescue_randy_4",
+      "kind": "model://Rescue Randy Sitting",
+      "bounds": [
+        [
+          149.72523812377304,
+          -237.5652785357368,
+          19.993663912109376
+        ],
+        [
+          150.4725406764154,
+          -236.5781720852675,
+          20.7235170859375
+        ]
+      ],
+      "triangles": 5266
+    },
+    {
+      "name": "cave_cap_4",
+      "kind": "model://Cave Cap",
+      "bounds": [
+        [
+          142.53825317382814,
+          -244.09932373046874,
+          19.400385856628418
+        ],
+        [
+          157.46175842285157,
+          -237.4341357421875,
+          29.222308959960937
+        ]
+      ],
+      "triangles": 4350
+    }
+  ],
+  "sha256": {
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/worlds/darpa_cave_01.sdf": "0f92c099f179e1da125ed38ffa5aa168a0f201aaef39e70c03c4e8d64a0d3e45",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Starting Area/model.sdf": "15f14b30a71560f94ae4556929e4ad31dea831314e4e30aca8b2308f67366297",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Corner 02/model.sdf": "f0ab11f388a97ba5c3d84b4ebfa57cdb274888ec3e788c334e562234467c7d4c",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 03/model.sdf": "614c9a8088932a21c472cdddf3035a614bbd58019d5c20497d7b81861097464e",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 02/model.sdf": "ff6aa5ece2124532f507f3e6ff67ac3ec527f97d0d0c83e2fbe553bb32e0d24a",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/JanSport Backpack Red/model.sdf": "6dd7ead0f5246ef9e9dd78b012b92ff495fb7e25636cb2133f1bea1507a66222",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 01/model.sdf": "372418aa72718493570c8d128b5f6fadfaca48610ffbe6271621cded36582f77",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 05/model.sdf": "897b66fe21ef57bede2030462c5ec85d1fec0032113b839b89af86fdcf273105",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave 3 Way 01/model.sdf": "b173312d90a3265e9fe93799e3da2345ef13533eab0f5f564ee293b6613fe66f",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Samsung J8 Black/model.sdf": "8e2b8362eab06b9331101e30a2538108001651971139fb5fb04360ad09f038ba",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Corner 01/model.sdf": "b1b16bdaa4271b05e84af1ac3caed48611076c693ded48fd4f23e777feac862c",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 04/model.sdf": "1dc0ccb87f30efef5371293d7e20172d549cbfb2cb0137c05a8b1439c7643366",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Vertical Shaft/model.sdf": "421cbc1928a1954c963d77a368f9c56b66919d019225502a5f58d395e2214bcb",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Rescue Randy Sitting/model.sdf": "1a700f2d98137ccf51752db536823ebd4b2a0b300ae198d31a958dddccc31f88",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Cap/model.sdf": "573e961fc09f7d842dea19f73b181e67a4c8392f48d456423ea4233e3a9a374b",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Starting Area/meshes/cavestartingarea.dae": "0f90db485d0ea2c129b7b3c74c2e33a0f3d0c8d1ea84b2fd52f9b2649babfcbe",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Corner 02/meshes/cavecorner02.dae": "590a76e7ae3220c1b0292cbb9933201566554a4bb27cb150100d769ae46170c5",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 03/meshes/cavestraight03.dae": "b129ef3fe7e328c104a1bdbb92f9d1e47dfc8fdeee0ff7524249ef235c127c3d",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 02/meshes/cavestraight02.dae": "6a6923bd86c6436c7d916acfeca02e86ea72cfca07ae4067b7e52cf6832466f7",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/JanSport Backpack Red/meshes/backpack.dae": "8ae7bacafe01e2bff9626281a6cf53daf9b276a6c8b4ee30abf617f58da6d8b0",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 01/meshes/cavestraight01.dae": "cb04a0038265389c6b353b961961cd2c335f6731b3b6e2c1a7e6cfd983bbf3fb",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 05/meshes/cavestraight05.dae": "5e7421b0f2343a17997bb619960a228ad0842f1bc2c898361821e40e5050976c",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave 3 Way 01/meshes/cave3way.dae": "11f6a5a9a2e36c7485023062cf3c9912d499b50d67906acc34e1f7cf68ea8607",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Samsung J8 Black/meshes/phone.dae": "9691ce096a90adca73e2d40511074d7f3abe74a43bb26bda0fb7199792e67840",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Corner 01/meshes/cavecorner01.dae": "6f5a33c34f4639067e818476a109f4481e4d51fbe2a0797973fee69211599a54",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Straight 04/meshes/cavestraight04.dae": "c651230cdef28ec8f90d57f61391dc03812669dbe0ae28b590631164d4209d87",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Vertical Shaft/meshes/caveverticalshaft.dae": "9ef3b6f6cd11de905e500769beb90ec3eb5239a2a74efe565108f4cfd88e1ab5",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Rescue Randy Sitting/meshes/rescue_randy.dae": "a9726c4ea54023b61f7cdec45641d79d1cc0b55a1cdb44cacf0710fe1e85ab9b",
+    "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/models/Cave Cap/meshes/cavecap.dae": "ba23d7cadcdee6a8a9f08f0bc31b36a3bd81c840ffd3bcf4e026cb432149fc34"
+  }
+}

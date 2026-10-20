@@ -1,0 +1,60 @@
+diff --git a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp
+index eefebc9..7e17a8d 100644
+--- a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp
++++ b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp
+@@ -567,6 +567,7 @@ float AttitudeController::deltaTime_()
+ uint32_t AttitudeController::nowMillis_() const
+ {
+ #ifdef SIMULATION
++  if (simulation_clock_) return simulation_clock_();
+   using Clock = std::chrono::steady_clock;
+   const auto now = Clock::now().time_since_epoch();
+   return static_cast<uint32_t>(
+diff --git a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h
+index e2f6027..95c67c0 100644
+--- a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h
++++ b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h
+@@ -2,6 +2,9 @@
+ 
+ #include <cstddef>
+ #include <cstdint>
++#ifdef SIMULATION
++#include <functional>
++#endif
+ 
+ #include "flight_control/flight_control_types.h"
+ #include "math/AP_Math.h"
+@@ -14,6 +17,9 @@ public:
+   ~AttitudeController() = default;
+ 
+   void init(StateEstimate* estimator);
++#ifdef SIMULATION
++  void setSimulationClock(std::function<uint32_t()> clock) { simulation_clock_ = clock; }
++#endif
+   void reset();
+   bool update();
+ 
+@@ -59,6 +65,9 @@ public:
+ 
+ private:
+   StateEstimate* estimator_{nullptr};
++#ifdef SIMULATION
++  std::function<uint32_t()> simulation_clock_;
++#endif
+ 
+   int8_t uav_model_{-1};
+   uint16_t motor_number_{0};
+diff --git a/spinal/mcu_project/lib/My_Lib/flight_control/simulation/flight_control_ros_module.cpp b/spinal/mcu_project/lib/My_Lib/flight_control/simulation/flight_control_ros_module.cpp
+index 3a69ecc..838e369 100644
+--- a/spinal/mcu_project/lib/My_Lib/flight_control/simulation/flight_control_ros_module.cpp
++++ b/spinal/mcu_project/lib/My_Lib/flight_control/simulation/flight_control_ros_module.cpp
+@@ -12,6 +12,9 @@ void FlightControlRosModule::init(
+ {
+   node_ = node;
+   thruster_ = thruster;
++  flight_control_.getAttitudeController().setSimulationClock([clock = node_->get_clock()] {
++    return static_cast<uint32_t>(clock->now().nanoseconds() / 1000000);
++  });
+   flight_control_.init(estimator, thruster, nullptr);
+ 
+   if (!initialized_) {

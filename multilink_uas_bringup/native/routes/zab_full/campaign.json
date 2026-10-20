@@ -1,0 +1,55 @@
+{
+  "runs": [
+    {
+      "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/routes/zab_full/run1",
+      "length_m": 1664.6995262916755,
+      "sim_duration_s": 3778.5875713299492,
+      "unique_length_m": 1206.6309454088705,
+      "duplicate_length_m": 458.06858088280524,
+      "spawn": [
+        116.70669795918367,
+        -401.991887755102,
+        -7.166581753238389
+      ]
+    },
+    {
+      "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/routes/zab_full/run2",
+      "length_m": 261.51870417518984,
+      "sim_duration_s": 597.1632009753764,
+      "unique_length_m": 218.89934507245175,
+      "duplicate_length_m": 42.61935910273772,
+      "spawn": [
+        134.0862114890977,
+        -425.2564220533612,
+        -7.003337166708997
+      ]
+    },
+    {
+      "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/routes/zab_full/run3",
+      "length_m": 16.96580707866461,
+      "sim_duration_s": 35.93161415732922,
+      "unique_length_m": 16.96580707866454,
+      "duplicate_length_m": 0,
+      "spawn": [
+        229.4618,
+        -329.1225,
+        -5.764355829802751
+      ]
+    },
+    {
+      "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/routes/zab_full/run4",
+      "length_m": 15.349267083479967,
+      "sim_duration_s": 32.69853416695993,
+      "unique_length_m": 15.349267083479916,
+      "duplicate_length_m": 0,
+      "spawn": [
+        115.6618,
+        -68.1225,
+        -1.7640327541574905
+      ]
+    }
+  ],
+  "total_length_m": 1958.53330462901,
+  "total_sim_duration_s": 4444.380920629615,
+  "note": "Four collision-disconnected accessible components; blocked joining surfaces excluded, interior connectors covered by separate takeoffs"
+}

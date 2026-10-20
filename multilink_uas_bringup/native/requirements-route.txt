@@ -1,0 +1,5 @@
+# Offline cave route generation; existing distro NumPy/SciPy/Matplotlib are used.
+# trimesh 5 requires a newer NumPy than the current ROS environment provides.
+trimesh==4.4.9
+pycollada==0.9.3
+rtree==1.4.1

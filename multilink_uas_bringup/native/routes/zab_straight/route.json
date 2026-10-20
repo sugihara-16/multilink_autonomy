@@ -1,0 +1,35 @@
+{
+  "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+  "world_sha256": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612",
+  "frame": "world",
+  "reference": "FC IMU",
+  "length_m": 100.0,
+  "waypoints": [
+    [
+      210.0,
+      -60.0,
+      -0.5
+    ],
+    [
+      309.9800059980007,
+      -61.999600119960014,
+      -0.5
+    ]
+  ],
+  "spawn_xyz": [
+    209.4618,
+    -60.3225,
+    -2.474765456789912
+  ],
+  "enclosing_radius_m": 1.0,
+  "conservative_center_surface_distance_m": 2.460951197991899,
+  "validation": "Collision triangle distances every 0.05 m minus 0.025 m; vertical floor/ceiling rays every 1 m",
+  "floor_at_spawn_and_finish": [
+    -2.974765456789912,
+    -4.308088856059205
+  ],
+  "cruise_speed_mps": 1.0,
+  "ramp_s": 2.0,
+  "duration_s": 102.0,
+  "note": "Ascent and descent are not covered by the 1 m sphere clearance; ground contact expected"
+}

@@ -12,10 +12,11 @@ from cv_bridge import CvBridge
 from sensor_msgs.msg import Image
 
 parser=argparse.ArgumentParser();parser.add_argument('--calibration',type=Path,required=True)
+parser.add_argument('--topics', nargs=3, default=[f'/rmf_unipilot/cam_{name}/image' for name in ('front','left','right')])
 args=parser.parse_args(rospy.myargv()[1:])
 cv2.setNumThreads(1)
 rospy.init_node('vio_images');bridge=CvBridge();publishers=[];maps=[];subscribers=[]
-for i,name in enumerate(['front','left','right']):
+for i,topic in enumerate(args.topics):
     raw=yaml.safe_load((args.calibration/f'raw_cam{i}.yaml').read_text())
     rect=yaml.safe_load((args.calibration/f'cam{i}.yaml').read_text())
     K=np.array(raw['camera_matrix']['data']).reshape(3,3)
@@ -32,5 +33,5 @@ for i,name in enumerate(['front','left','right']):
             out=bridge.cv2_to_imgmsg(rect_img,'mono8');out.header=msg.header
             publishers[i].publish(out)
         except Exception as exc:rospy.logerr_throttle(5,str(exc))
-    subscribers.append(rospy.Subscriber(f'/rmf_unipilot/cam_{name}/image',Image,receive,queue_size=2,buff_size=4*1024*1024))
+    subscribers.append(rospy.Subscriber(topic,Image,receive,queue_size=2,buff_size=4*1024*1024))
 rospy.spin()

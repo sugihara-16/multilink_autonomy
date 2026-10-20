@@ -17,8 +17,11 @@ from launch_ros.actions import Node
 def setup(context):
     share = Path(get_package_share_directory('dragon'))
     cave = Path(get_package_share_directory('subt_cave_sim'))
-    world = cave/'worlds/darpa_cave_01.sdf'
-    resources = [str(cave), str(cave/'models'), get_package_share_directory('rmf_gz')+'/resources']
+    override = LaunchConfiguration('world_file').perform(context)
+    world = Path(override) if override else cave/'worlds/darpa_cave_01.sdf'
+    world_name = ET.parse(world).getroot().find('world').get('name')
+    spawn = [float(LaunchConfiguration('spawn_'+a).perform(context)) for a in 'xyz']
+    resources = [str(world.parent/'models'), str(cave), str(cave/'models'), get_package_share_directory('rmf_gz')+'/resources']
     resources += [str(cave/'models'/name/'materials/textures') for name in
                   ['Rescue Randy Sitting', 'Samsung J8 Black', 'JanSport Backpack Red']]
     resources.append(os.environ.get('GZ_SIM_RESOURCE_PATH', ''))
@@ -26,8 +29,8 @@ def setup(context):
     output.mkdir(parents=True, exist_ok=True)
     (output/'world.json').write_text(json.dumps({
         'world_file': str(world), 'sha256': hashlib.sha256(world.read_bytes()).hexdigest(),
-        'world_name': 'map', 'model_name': 'dragon', 'spawn_xyz': [40, 5, 0.5],
-        'source': 'Unmodified UAS subt_cave_sim/darpa_cave_01.sdf'}, indent=2)+'\n')
+        'world_name': world_name, 'model_name': 'dragon', 'spawn_xyz': spawn,
+        'source': 'Explicit world override' if override else 'Unmodified UAS subt_cave_sim/darpa_cave_01.sdf'}, indent=2)+'\n')
     root = ET.fromstring(xacro.process_file(str(share/'robots/quad/dragon.gazebo.xacro'),
         mappings={'robot_name': 'dragon', 'visual_detail': 'balanced', 'body_joint_velocity': '1.0'}).toxml())
     imu = root.find("./gazebo/sensor[@type='imu']")
@@ -52,6 +55,15 @@ def setup(context):
       <range><min>0.1</min><max>30</max><resolution>0.01</resolution></range>
       <noise><type>gaussian</type><mean>0</mean><stddev>0.03</stddev></noise></lidar></sensor>''')
     ET.SubElement(root,'gazebo',reference='link2').append(sensor)
+    vio = LaunchConfiguration('vio').perform(context) == 'true'
+    gimbal = LaunchConfiguration('gimbal').perform(context) == 'true'
+    if gimbal and not vio:
+        raise ValueError('gimbal requires vio:=true')
+    if vio:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from dragon_cameras import add_cameras
+        add_cameras(root, output, gimbal=gimbal)
     ET.indent(root)
     ET.ElementTree(root).write(output/'dragon_slam.urdf', encoding='unicode')
     cfg = yaml.safe_load((share/'config/Simulation.yaml').read_text())
@@ -65,14 +77,24 @@ def setup(context):
         launch_arguments={'headless': LaunchConfiguration('headless'), 'rviz': 'false',
             'robot_description_file': str(output/'dragon_slam.urdf'),
             'sim_param_path': str(output/'Simulation.yaml'), 'world_sdf_file': str(world),
-            'spawn_x': '40', 'spawn_y': '5', 'spawn_z': '0.5', 'render_engine': 'ogre2'}.items()),
+            'takeoff_height': LaunchConfiguration('takeoff_height'),
+            **{'spawn_'+a: str(v) for a,v in zip('xyz',spawn)}, 'render_engine': 'ogre2'}.items()),
         Node(package='ros_gz_bridge', executable='parameter_bridge', name='dragon_sensors',
             arguments=['/dragon/imu/raw@sensor_msgs/msg/Imu[gz.msgs.IMU',
-                       '/dragon/lidar/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked'],
+                       '/dragon/lidar/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked'] +
+                      ([f'/dragon/cam_link{i}/image@sensor_msgs/msg/Image[gz.msgs.Image' for i in ((3,) if gimbal else (1,3,4))] if vio else []) +
+                      (['/active/gimbal/states@sensor_msgs/msg/JointState[gz.msgs.Model',
+                        '/active/gimbal/yaw@std_msgs/msg/Float64]gz.msgs.Double',
+                        '/active/gimbal/pitch@std_msgs/msg/Float64]gz.msgs.Double'] if gimbal else []),
             remappings=[('/dragon/lidar/scan/points','/dragon/lidar/points')],
             parameters=[{'use_sim_time': True}], output='screen')]
 
 
 def generate_launch_description():
     return LaunchDescription([DeclareLaunchArgument('headless', default_value='true'),
-        DeclareLaunchArgument('output'), OpaqueFunction(function=setup)])
+        DeclareLaunchArgument('world_file', default_value=''),
+        DeclareLaunchArgument('spawn_x', default_value='40'), DeclareLaunchArgument('spawn_y', default_value='5'),
+        DeclareLaunchArgument('takeoff_height', default_value='1.5'),
+        DeclareLaunchArgument('spawn_z', default_value='0.5'),
+        DeclareLaunchArgument('gimbal', default_value='false'),
+        DeclareLaunchArgument('vio', default_value='false'), DeclareLaunchArgument('output'), OpaqueFunction(function=setup)])

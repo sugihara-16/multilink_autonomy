@@ -1,0 +1,16 @@
+diff --git a/gz_ros2_control/src/gz_ros2_control_plugin.cpp b/gz_ros2_control/src/gz_ros2_control_plugin.cpp
+index 4bc5d44..3b48ab0 100644
+--- a/gz_ros2_control/src/gz_ros2_control_plugin.cpp
++++ b/gz_ros2_control/src/gz_ros2_control_plugin.cpp
+@@ -530,6 +530,11 @@ void GazeboSimROS2ControlPlugin::PreUpdate(
+   const sim::UpdateInfo & _info,
+   sim::EntityComponentManager & /*_ecm*/)
+ {
++  // AddWorldWrench commands accumulate until a physics step consumes them.
++  // Writing during paused iterations would produce an impulse on resume.
++  if (_info.paused) {
++    return;
++  }
+   if (!this->dataPtr->controller_manager_) {
+     return;
+   }

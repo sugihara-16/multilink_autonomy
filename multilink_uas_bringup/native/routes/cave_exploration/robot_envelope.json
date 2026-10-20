@@ -1,0 +1,37 @@
+{
+  "maximum_radius_m": 0.7253021140797162,
+  "reference": "fc",
+  "joints": {
+    "rotor1": 0.0,
+    "rotor2": 0.0,
+    "rotor3": 0.0,
+    "rotor4": 0.0,
+    "joint1_pitch": 0.0,
+    "joint1_yaw": 1.56,
+    "joint2_pitch": 0.0,
+    "joint2_yaw": 1.56,
+    "joint3_pitch": 0.0,
+    "joint3_yaw": 1.56,
+    "gimbal1_roll": 0.0,
+    "gimbal1_pitch": 0.0,
+    "gimbal2_roll": 0.0,
+    "gimbal2_pitch": 0.0,
+    "gimbal3_roll": 0.0,
+    "gimbal3_pitch": 0.0,
+    "gimbal4_roll": 0.0,
+    "gimbal4_pitch": 0.0
+  },
+  "sha256": {
+    "/root/uas_native/logs/20261001-133612-302229/dragon_slam.urdf": "220f6add89692e7f2cdb379837d9b276bf5d592aaf7459a643f3e0f2f4a8ecb0",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/head_link.stl": "7a2b84367201287af001705a3bfe1808516e0579233fd034e25a8d7b9c00efcd",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/gimbal_roll.stl": "89f727048364a3903cb666922003ea6d450a568f8382824c7eec90060cb61be9",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/gimbal_pitch.stl": "13c10c0a4dd5463ea934e168011772b0429ab6346ce0194519f7f91f4b173ade",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/inter_joint_junction.stl": "7c8a2ed66547ff873099cc9f3a24f8c4d93c028d3c25aa10a65e90e7f2cd5207",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/battery.stl": "407a0f1e7831eaa7fe1b85318558ef0672ebf86a8f940cb58a1e0af59f37657e",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/base_link.stl": "5d1d2d9318b704adca3e935ca22fea5ac305203a77c0cc4925ffd860f5eb5406",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/general_link.stl": "cda5771af3ce3f1e88c2b25eb1d7d09dc59c26c586c3d9de2824fa78d09a41b0",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/end_link.stl": "8f8af1994968424da2caa403a2998d48c4ef20426df37c75960acb95d93c0631",
+    "/root/ros2/aerial_robot_base_ws/install/dragon/share/dragon/urdf/v1_5/mesh/visual/sensor/livox_mid360_v1_5.stl": "f95997d1ce2b0f381d9e5ff6ca4a2ea9b23e2729397057c723cb455aee1f6ef5"
+  },
+  "method": "All visual/collision mesh vertices and primitive bounding boxes; nominal square and zero gimbals"
+}

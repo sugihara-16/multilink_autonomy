@@ -1,0 +1,19 @@
+{
+  "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns1/model.sdf": "bec3ce79f7b4015d14e5a9d23f5075548c0d6d39385f0a6aa6911e715eb4ffc5",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns10/model.sdf": "6650e3047dc1225b6ed1ff2c3ad5f348ed0f1b4feaf0ed6241a781f994d14219",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns2/model.sdf": "9688413b45363daf94e3d5f76399fa1a5818fd3b2d6d134cbd8a17cff62c819d",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns3/model.sdf": "54e168c9b0e7ffce7384eaeb275cd74bd2f0e96d91e2b9423179a7fc561ad848",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns4/model.sdf": "fe9f71ab1407d5b019d27f26b5b6dd57868c75aa89d28c2fbdfae2625e6ece5f",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns8/model.sdf": "f1e473f6e99f7b109775fd4ad921fc544cdb0e09fb1e8f64aca33da22e554977",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns9/model.sdf": "4fbefe6fb70c29dc633dff9950f2b9939114a30e4ed1704f7ec499a1651e1cff",
+  "/root/multilink_autonomy_ws/assets/zab/models/connection1/model.sdf": "a01aa78275cda6d1ffffdff9901855176c5a9ec48407479b4f33099db366c630",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns1/meshes/ns1.dae": "b9287e4f6d3d71cd37a89ca7b9571f4939afaf229f59f51d35c5c5366c09cf5f",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns10/meshes/ns10.dae": "f8e2696f9c83c8d657e550b01141d934cbef17b118293b4a73fdd91db2ccf6d9",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns2/meshes/ns2.dae": "6dea6b9d29a5fd2d90b00579a73ec5e66be9904ff73ecace285cf0964dbf5a4e",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns3/meshes/ns3.dae": "a5d9a89010971ecff499b0059952d357ba963953ff1c2ac6d49d7af483585c30",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns4/meshes/ns4.dae": "1418a429f89d5681bd11b41c711f4cc1a544a7dbfa6d9bbb75d313a6b04672e7",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns8/meshes/ns8.dae": "de228e1492bb84ef41653ba8ace58ada1eeed71105f8a2d8af8c88b3439a54b1",
+  "/root/multilink_autonomy_ws/assets/zab/models/ns9/meshes/ns9.dae": "f7eb2e467ddb7f05720e46bab173e67e5e2cc0e8020ba10b2aa2c8d3c897219f",
+  "/root/multilink_autonomy_ws/assets/zab/models/connection1/meshes/connection1.dae": "e7eb39c6e16f3df2b8332330a161e6f8dc2e1eef896e2d8ff450fd4bbdd43cc5"
+}

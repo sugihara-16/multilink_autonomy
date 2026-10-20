@@ -1,0 +1,339 @@
+{
+  "world": "/root/unified_autonomy_stack/workspaces/ws_sim/src/subt_cave_sim/worlds/darpa_cave_01.sdf",
+  "world_sha256": "0f92c099f179e1da125ed38ffa5aa168a0f201aaef39e70c03c4e8d64a0d3e45",
+  "frame": "world",
+  "reference": "FC IMU",
+  "start_note": "Post-takeoff route; ascent from ground is not covered by this clearance certificate",
+  "voxel_pitch_m": 0.5,
+  "validation": "Exact collision-triangle distance at <=0.1m spacing, minus 0.05m Lipschitz margin; includes ground plane",
+  "enclosing_radius_m": 1.0,
+  "voxel_clearance_threshold_m": 1.95,
+  "conservative_center_surface_distance_m": 1.95,
+  "length_m": 596.3178745152444,
+  "waypoints": [
+    [
+      40.0,
+      5.0,
+      2.0
+    ],
+    [
+      49.5,
+      2.5,
+      5.0
+    ],
+    [
+      75.0,
+      1.0,
+      5.0
+    ],
+    [
+      79.5,
+      -2.0,
+      5.0
+    ],
+    [
+      93.5,
+      -2.0,
+      4.5
+    ],
+    [
+      94.0,
+      -3.0,
+      4.5
+    ],
+    [
+      99.5,
+      -3.0,
+      4.5
+    ],
+    [
+      101.0,
+      -1.0,
+      4.0
+    ],
+    [
+      102.5,
+      0.5,
+      5.0
+    ],
+    [
+      106.0,
+      0.5,
+      5.5
+    ],
+    [
+      135.5,
+      -0.5,
+      5.0
+    ],
+    [
+      174.5,
+      -1.5,
+      5.0
+    ],
+    [
+      175.5,
+      -0.5,
+      3.0
+    ],
+    [
+      175.5,
+      0.0,
+      4.5
+    ],
+    [
+      175.0,
+      29.0,
+      4.5
+    ],
+    [
+      175.0,
+      40.0,
+      3.5
+    ],
+    [
+      175.0,
+      22.5,
+      4.5
+    ],
+    [
+      175.0,
+      -1.5,
+      5.0
+    ],
+    [
+      128.0,
+      -0.5,
+      5.0
+    ],
+    [
+      124.5,
+      0.0,
+      5.0
+    ],
+    [
+      103.5,
+      0.5,
+      5.5
+    ],
+    [
+      101.0,
+      -1.0,
+      4.0
+    ],
+    [
+      101.0,
+      -25.0,
+      4.5
+    ],
+    [
+      98.5,
+      -29.5,
+      5.5
+    ],
+    [
+      100.5,
+      -64.0,
+      5.5
+    ],
+    [
+      101.5,
+      -67.0,
+      5.5
+    ],
+    [
+      101.0,
+      -73.5,
+      5.5
+    ],
+    [
+      100.0,
+      -75.0,
+      3.0
+    ],
+    [
+      99.5,
+      -80.5,
+      4.0
+    ],
+    [
+      100.5,
+      -90.5,
+      4.0
+    ],
+    [
+      107.5,
+      -96.5,
+      4.0
+    ],
+    [
+      125.5,
+      -99.0,
+      3.0
+    ],
+    [
+      125.5,
+      -99.5,
+      3.0
+    ],
+    [
+      124.5,
+      -98.5,
+      4.0
+    ],
+    [
+      105.5,
+      -96.0,
+      4.0
+    ],
+    [
+      99.5,
+      -83.0,
+      4.0
+    ],
+    [
+      99.5,
+      -75.0,
+      4.0
+    ],
+    [
+      101.5,
+      -71.0,
+      5.5
+    ],
+    [
+      100.0,
+      -41.0,
+      5.5
+    ],
+    [
+      98.5,
+      -32.5,
+      5.5
+    ],
+    [
+      99.0,
+      -26.5,
+      5.5
+    ],
+    [
+      101.0,
+      -22.0,
+      4.5
+    ],
+    [
+      100.5,
+      -12.5,
+      4.5
+    ],
+    [
+      97.5,
+      -3.5,
+      4.5
+    ],
+    [
+      94.0,
+      -3.0,
+      4.5
+    ],
+    [
+      93.0,
+      -2.0,
+      4.5
+    ],
+    [
+      77.5,
+      -2.0,
+      5.0
+    ],
+    [
+      71.0,
+      2.0,
+      5.0
+    ],
+    [
+      46.0,
+      2.5,
+      5.0
+    ],
+    [
+      40.0,
+      5.0,
+      2.0
+    ]
+  ],
+  "stages": [
+    {
+      "name": "junction",
+      "index": 7,
+      "position": [
+        101.0,
+        -1.0,
+        4.0
+      ]
+    },
+    {
+      "name": "east_corner",
+      "index": 12,
+      "position": [
+        175.5,
+        -0.5,
+        3.0
+      ]
+    },
+    {
+      "name": "north_corridor",
+      "index": 15,
+      "position": [
+        175.0,
+        40.0,
+        3.5
+      ]
+    },
+    {
+      "name": "junction_return",
+      "index": 21,
+      "position": [
+        101.0,
+        -1.0,
+        4.0
+      ]
+    },
+    {
+      "name": "south_straight",
+      "index": 27,
+      "position": [
+        100.0,
+        -75.0,
+        3.0
+      ]
+    },
+    {
+      "name": "dogleg",
+      "index": 32,
+      "position": [
+        125.5,
+        -99.5,
+        3.0
+      ]
+    },
+    {
+      "name": "home",
+      "index": 49,
+      "position": [
+        40.0,
+        5.0,
+        2.0
+      ]
+    }
+  ],
+  "caveat": "Offline geometry validation; tracking error, dynamic objects and actual flight not validated",
+  "duration_s": 1604.9749287704424,
+  "max_speed_m_s": 0.8,
+  "max_acceleration_m_s2": 0.4,
+  "max_yaw_rate_rad_s": 0.3,
+  "sample_period_s": 0.5,
+  "interpolation": "Use segments.json quintic polynomial; do not apply unconstrained cubic splines",
+  "robot_envelope_m": 0.7253021140797162,
+  "tracking_allowance_with_1m_envelope_m": 0.95
+}

@@ -1,0 +1,15 @@
+diff --git a/aerial_robot_model/src/utils/rotor_tf_publisher.cpp b/aerial_robot_model/src/utils/rotor_tf_publisher.cpp
+index d0e800a..7a3593d 100644
+--- a/aerial_robot_model/src/utils/rotor_tf_publisher.cpp
++++ b/aerial_robot_model/src/utils/rotor_tf_publisher.cpp
+@@ -56,8 +56,8 @@ public:
+   {
+     node_ = node;
+     // Parameters
+-    // node_->declare_parameter<string>("rotor_joint_name", "rotor");
+-    // node_->declare_parameter<string>("tf_prefix", "");
++    node_->declare_parameter<string>("rotor_joint_name", "rotor");
++    node_->declare_parameter<string>("tf_prefix", "");
+     node_->get_parameter("rotor_joint_name", rotor_joint_name_);
+     node_->get_parameter("tf_prefix", tf_prefix_);
+ 
