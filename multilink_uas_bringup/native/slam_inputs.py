@@ -3,11 +3,22 @@
 import numpy as np
 import rospy
 from sensor_msgs.msg import Imu, PointCloud2, PointField
+from std_msgs.msg import Bool
 
 rospy.init_node('slam_inputs')
 imu_pub = rospy.Publisher('/slam/input/imu', Imu, queue_size=200)
 cloud_pub = rospy.Publisher('/slam/input/points', PointCloud2, queue_size=5)
 first_imu_stamp = None
+gate_slam = rospy.get_param('~gate_slam', False)
+enabled = False
+
+def gate_cb(msg):
+    global enabled
+    if msg.data and not enabled:
+        enabled = True
+        rospy.loginfo('Stationary hover gate opened')
+
+rospy.Subscriber('/active/initialize_vio', Bool, gate_cb, queue_size=1)
 
 
 def imu_cb(msg):
@@ -22,10 +33,13 @@ def imu_cb(msg):
     msg.orientation.x = msg.orientation.y = msg.orientation.z = 0.0
     msg.orientation.w = 1.0
     msg.orientation_covariance = [-1.0] + [0.0] * 8
-    imu_pub.publish(msg)
+    if not gate_slam or enabled:
+        imu_pub.publish(msg)
 
 
 def cloud_cb(msg):
+    if gate_slam and not enabled:
+        return
     if msg.is_bigendian:
         rospy.logerr_throttle(5, 'Big-endian input is unsupported')
         return
