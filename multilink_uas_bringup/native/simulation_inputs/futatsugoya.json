@@ -1,0 +1,42 @@
+{
+  "asset_root": "/root/multilink_autonomy_ws/assets/futatsugoya",
+  "world": "/root/multilink_autonomy_ws/assets/futatsugoya/futatsugoya.sdf",
+  "readme": "/root/multilink_autonomy_ws/assets/futatsugoya/README.md",
+  "attribution": "/root/multilink_autonomy_ws/assets/futatsugoya/attribution.json",
+  "routes": {
+    "smoke": {
+      "route": "/root/multilink_autonomy_ws/assets/futatsugoya/routes/smoke",
+      "world": "/root/multilink_autonomy_ws/assets/futatsugoya/futatsugoya.sdf",
+      "spawn": [
+        140.0,
+        0.5793339654229289,
+        4.595380914157481
+      ],
+      "route_end_s": 42.00307562806788,
+      "length_m": 20.00153781403394,
+      "minimum_center_clearance_m": 1.7603409325535424,
+      "ceiling_height_range_m": [
+        4.663824251925458,
+        5.187363313676265
+      ],
+      "validation": "Mesh clearance at 0.25 m spacing; center margin includes vehicle, not a full swept-body collision proof."
+    },
+    "interior": {
+      "route": "/root/multilink_autonomy_ws/assets/futatsugoya/routes/interior",
+      "world": "/root/multilink_autonomy_ws/assets/futatsugoya/futatsugoya.sdf",
+      "spawn": [
+        60.0,
+        0.6112078254973561,
+        3.7194851338057866
+      ],
+      "route_end_s": 582.176733466451,
+      "length_m": 290.0883667332255,
+      "minimum_center_clearance_m": 1.218768336329275,
+      "ceiling_height_range_m": [
+        4.576359463068977,
+        5.788357001297615
+      ],
+      "validation": "Mesh clearance at 0.25 m spacing; center margin includes vehicle, not a full swept-body collision proof."
+    }
+  }
+}
