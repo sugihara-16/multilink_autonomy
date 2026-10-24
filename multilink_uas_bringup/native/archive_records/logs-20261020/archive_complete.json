@@ -1,0 +1,455 @@
+{
+  "remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020",
+  "parts": [
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00000",
+      "size": 268435456,
+      "md5": "7b0eb39b9371d66af93cae99f752e7f1",
+      "verified_at": 1792506440.0973616
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00001",
+      "size": 268435456,
+      "md5": "910f98661571404944c951191fabdac5",
+      "verified_at": 1792506456.2071843
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00002",
+      "size": 268435456,
+      "md5": "d39a0abf1c67c22195771f19cc481d38",
+      "verified_at": 1792506455.976764
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00003",
+      "size": 268435456,
+      "md5": "b2dfc530db8d1e256cc24f46c316b4b0",
+      "verified_at": 1792506483.3359325
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00004",
+      "size": 268435456,
+      "md5": "8c18d7936e6887013dedcfef4c26047a",
+      "verified_at": 1792506542.9269414
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00005",
+      "size": 268435456,
+      "md5": "3169f6e90f782ebb8f0b5422990353f9",
+      "verified_at": 1792506533.4970977
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00006",
+      "size": 268435456,
+      "md5": "1b983840586b5b44d12439512b6b1294",
+      "verified_at": 1792506548.6956575
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00007",
+      "size": 268435456,
+      "md5": "e6fcb1f4a9b0768696f9e7dc7b0b70de",
+      "verified_at": 1792506612.9624183
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00008",
+      "size": 268435456,
+      "md5": "f7932553dc3e12cead0708c28a9af9d4",
+      "verified_at": 1792506617.4856088
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00009",
+      "size": 268435456,
+      "md5": "514f4f68fe8886996b2ce8c1003469ce",
+      "verified_at": 1792506621.6102123
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00010",
+      "size": 268435456,
+      "md5": "ece66cde00ed625eca2a0d31ad555dd8",
+      "verified_at": 1792506692.4300747
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00011",
+      "size": 268435456,
+      "md5": "4e7cc3554296f9974d462e540a3a414d",
+      "verified_at": 1792506678.7257602
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00012",
+      "size": 268435456,
+      "md5": "ce4da284727c067e366273ecacbc9335",
+      "verified_at": 1792506690.719788
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00013",
+      "size": 268435456,
+      "md5": "ddf592b779d9f9d6848ebda0478478f0",
+      "verified_at": 1792506744.925542
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00014",
+      "size": 268435456,
+      "md5": "460df3a8cc510339b60b2db57fda478b",
+      "verified_at": 1792506772.3350565
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00015",
+      "size": 268435456,
+      "md5": "7ebc1b828c80a0e6ae37089268ac6fe3",
+      "verified_at": 1792506769.640509
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00016",
+      "size": 268435456,
+      "md5": "63f296ace311e63981a43225ed364a8a",
+      "verified_at": 1792506798.6606092
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00017",
+      "size": 268435456,
+      "md5": "0e31964aaecfc0fabdf598ecf6110439",
+      "verified_at": 1792506851.362964
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00018",
+      "size": 268435456,
+      "md5": "1713e5440b1177d574cc3005251cdd11",
+      "verified_at": 1792506847.6662807
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00019",
+      "size": 268435456,
+      "md5": "ee09796523df892d4fdb90c95fb01f96",
+      "verified_at": 1792506864.9168975
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00020",
+      "size": 268435456,
+      "md5": "de3bdff905c7d645055b7a3af26dec67",
+      "verified_at": 1792506916.2123594
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00021",
+      "size": 268435456,
+      "md5": "057c5a2ce91cfb833a0727d13e9cce34",
+      "verified_at": 1792506914.5328631
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00022",
+      "size": 268435456,
+      "md5": "ba909fe0a187ab38ee6bfda614c57abc",
+      "verified_at": 1792506937.3215618
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00023",
+      "size": 268435456,
+      "md5": "547ac608f62f126d3e57a257c1f306cd",
+      "verified_at": 1792506994.744986
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00024",
+      "size": 268435456,
+      "md5": "1f28e161acba1b73d9d2100b06a9fbc9",
+      "verified_at": 1792506985.6840584
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00025",
+      "size": 268435456,
+      "md5": "d794a0facf728b0269b104bc8f35a86e",
+      "verified_at": 1792507005.3243058
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00026",
+      "size": 268435456,
+      "md5": "7789faca0f106b0b7db4cc6506e6a5a8",
+      "verified_at": 1792507050.257248
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00027",
+      "size": 268435456,
+      "md5": "c17f2349f7196abfc82f5166a2d88b1a",
+      "verified_at": 1792507077.0260518
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00028",
+      "size": 268435456,
+      "md5": "7054ae3dd279d52a6b2af1b0272ce635",
+      "verified_at": 1792507077.69366
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00029",
+      "size": 268435456,
+      "md5": "4ede0c4a134c7c493f645708f074c8b4",
+      "verified_at": 1792507105.9578004
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00030",
+      "size": 268435456,
+      "md5": "a3a62322d235cd61ceabbbda37a29cf2",
+      "verified_at": 1792507145.2029502
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00031",
+      "size": 268435456,
+      "md5": "4bb172dbef12212ac9baa60b1d438228",
+      "verified_at": 1792507158.4278204
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00032",
+      "size": 268435456,
+      "md5": "54e08bd67de6aba12eeec9f8f961bfa8",
+      "verified_at": 1792507172.776897
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00033",
+      "size": 268435456,
+      "md5": "c6111c647b736f63489a7fa515336f44",
+      "verified_at": 1792507215.2221918
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00034",
+      "size": 268435456,
+      "md5": "ae7e8946249d517bde2a2b53396541c9",
+      "verified_at": 1792507227.6176202
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00035",
+      "size": 268435456,
+      "md5": "742152fc785d3d9e75e54c80fce0ad2e",
+      "verified_at": 1792507238.9103086
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00036",
+      "size": 268435456,
+      "md5": "09be480b9f7e9506e8b7cff428f7fe7d",
+      "verified_at": 1792507294.7187192
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00037",
+      "size": 268435456,
+      "md5": "488f96c3e6d61ceab6a1cdb033d1695d",
+      "verified_at": 1792507306.111079
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00038",
+      "size": 268435456,
+      "md5": "374151f0d8b5bc90833d91d59452a953",
+      "verified_at": 1792507307.6833823
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00039",
+      "size": 268435456,
+      "md5": "b73fc4627276d16bd346355aecc4161a",
+      "verified_at": 1792507358.33811
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00040",
+      "size": 268435456,
+      "md5": "92dc220470bc28e3a2614540b041a257",
+      "verified_at": 1792507373.6914132
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00041",
+      "size": 268435456,
+      "md5": "e5781726ca12d58fed693668c9d075c7",
+      "verified_at": 1792507378.478684
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00042",
+      "size": 268435456,
+      "md5": "9dd0633d7983b695100b6e2d2a0904e7",
+      "verified_at": 1792507410.352884
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00043",
+      "size": 268435456,
+      "md5": "6440f1e62bb52e817fdd43ec1fc4d3dd",
+      "verified_at": 1792507453.7602212
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00044",
+      "size": 268435456,
+      "md5": "92c9cd39b15f00dbd3464c011ed4efe8",
+      "verified_at": 1792507469.3010793
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00045",
+      "size": 268435456,
+      "md5": "bff3ea842c8ab7661bab7329446926f0",
+      "verified_at": 1792507471.4491184
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00046",
+      "size": 268435456,
+      "md5": "40fd597c85bbc2b13fb3dd569e8475b3",
+      "verified_at": 1792507502.4312198
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00047",
+      "size": 268435456,
+      "md5": "4eb357d236d46f490aa3733300372b97",
+      "verified_at": 1792507542.4580865
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00048",
+      "size": 268435456,
+      "md5": "86d16e1ed290b752dc8ff88018d79b76",
+      "verified_at": 1792507558.8523052
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00049",
+      "size": 268435456,
+      "md5": "6e2f3317dcd3dd8981cac2725cdda284",
+      "verified_at": 1792507566.1239226
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00050",
+      "size": 268435456,
+      "md5": "5ae67539e1017dd2ecc7aea21bc59ebc",
+      "verified_at": 1792507612.1187792
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00051",
+      "size": 268435456,
+      "md5": "b1b0f86c5a5b7fe07cdf31907b70fbff",
+      "verified_at": 1792507626.9088805
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00052",
+      "size": 268435456,
+      "md5": "5ffb6e6b4894cb60355f35e014940d05",
+      "verified_at": 1792507636.8900774
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00053",
+      "size": 268435456,
+      "md5": "a42c245b3890fbf2e478d3e3147f3171",
+      "verified_at": 1792507670.1101267
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00054",
+      "size": 268435456,
+      "md5": "4cdee42f8cfd1bb89732fb08aa578a3d",
+      "verified_at": 1792507699.9084177
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00055",
+      "size": 268435456,
+      "md5": "1c4cfa1423d1300ff6ce921c8dfbdc19",
+      "verified_at": 1792507709.7173178
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00056",
+      "size": 268435456,
+      "md5": "4f5444793fdbcb419a483481e05d9fb6",
+      "verified_at": 1792507758.3887954
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00057",
+      "size": 268435456,
+      "md5": "b9f06af05f57943b851db409797def88",
+      "verified_at": 1792507757.8429072
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00058",
+      "size": 268435456,
+      "md5": "8e12b4d72d13eb0351ae07249804326c",
+      "verified_at": 1792507773.987361
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00059",
+      "size": 268435456,
+      "md5": "de37300301fa1502a753ee550e07a374",
+      "verified_at": 1792507842.2735145
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00060",
+      "size": 268435456,
+      "md5": "d1218aaa7250324f2e6464685bef0b59",
+      "verified_at": 1792507842.9670339
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00061",
+      "size": 268435456,
+      "md5": "c5640f4bb08710d50020e5699d84cd62",
+      "verified_at": 1792507836.3189945
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00062",
+      "size": 268435456,
+      "md5": "1039afd61eb36e6a6e05614d96a682ec",
+      "verified_at": 1792507896.4275713
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00063",
+      "size": 268435456,
+      "md5": "54d38626b16986f01e16f231332aaf0b",
+      "verified_at": 1792507918.6578012
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00064",
+      "size": 268435456,
+      "md5": "966b2c23102654b230dab0155dcc168b",
+      "verified_at": 1792507922.96519
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00065",
+      "size": 268435456,
+      "md5": "0bfe07e54e8edb895967b1aedb9a2662",
+      "verified_at": 1792507979.9761562
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00066",
+      "size": 268435456,
+      "md5": "ef6edf15fe314578abd761ea7d95e4f0",
+      "verified_at": 1792507982.460838
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00067",
+      "size": 268435456,
+      "md5": "3d87c0368b1a39c7e857966fe45bd20b",
+      "verified_at": 1792508021.905212
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00068",
+      "size": 268435456,
+      "md5": "543e11116de25ff56791da5a64a3e2bb",
+      "verified_at": 1792508035.0396488
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00069",
+      "size": 268435456,
+      "md5": "ddc6615ff1311ba023b7c2916d065aeb",
+      "verified_at": 1792508044.718743
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00070",
+      "size": 268435456,
+      "md5": "1cca5a9fdb417a548afe2288cdf9bf6a",
+      "verified_at": 1792508090.3676212
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00071",
+      "size": 268435456,
+      "md5": "6352780184c514fd140d0b0d6291cb40",
+      "verified_at": 1792508095.4443266
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00072",
+      "size": 268435456,
+      "md5": "3255a61276e98433bf5b2ece9fcdcd30",
+      "verified_at": 1792508109.0405307
+    },
+    {
+      "name": "logs-without-duplicated-bags.tar.zst.part00073",
+      "size": 229773001,
+      "md5": "a51c7d0ad563ba9f12081d3c52b925d7",
+      "verified_at": 1792508128.125448
+    }
+  ],
+  "compressed_bytes": 19825561289,
+  "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs",
+  "tar_exit": 0,
+  "zstd_exit": 0,
+  "elapsed_s": 1750.192122220993,
+  "restore": "Download all parts, concatenate in lexical order, zstd -dc, then tar -xf - in native directory. Tar retains symlinks, hard links, permissions and timestamps."
+}

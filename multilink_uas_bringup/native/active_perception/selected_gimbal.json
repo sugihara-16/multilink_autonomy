@@ -23,7 +23,7 @@
     "/root/uas_native/active_perception/unipilot_route.py": "4347aaee56e1194d209644d0cb0284d75d88cc80d674b3574a4c9efcdc705040",
     "/root/uas_native/active_perception/paired_initialization.py": "c1ffb053dde63b6e43903590a96b2fac767d27afd4a11ca703e1d99f8fc8ae28",
     "/root/uas_native/active_perception/unipilot_run.py": "cb2c130db53d5902069801f9b573b3ba0f581ce68cec17d53c73877d470826ed",
-    "/root/uas_native/active_perception/unipilot_campaign.py": "b36c74fc9b7d64c5a03a3b7485c5a8cf56f7e668f9f47e26e26a7e0d6c471098",
+    "/root/uas_native/active_perception/unipilot_campaign.py": "832a0daabb036fd5654ed4f90b01d7a37ac53adac55f18feb9c3a9bb21eafe9c",
     "/root/uas_native/active_perception/unipilot_calibration.py": "588b0577c9aa2b092ca338c7c831e5f753a8aa679295641a7fa4907801ef552d",
     "/root/uas_native/active_perception/rovio_template.info": "2178672efeb868d93c912d2cf4e86366631d2c8b1e42f12a00b65b226000ecc8",
     "/root/uas_native/active_perception/rovio_gimbal.cpp": "93c02790e87c86abec4852019783bbfb9abd2fff1642eedccc33ec361dca95e6",
@@ -38,7 +38,6 @@
     "/root/uas_native/active_perception/pacing_limits.py": "40148068ad09c0b96c30ef9f720c2b04c3279bdcbce7c8fe8434150f80fd7137",
     "/root/uas_native/active_perception/bearing_motion.py": "90b2bb368d7ebb7e323023e827881cf08d711418d6266e9a68443e89f622193c",
     "/root/uas_native/active_perception/retention.py": "e16e3c3ad8e1262cf11b2a102b6b323283b009197d8bb691c2d1821ed48434fb",
-    "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/gimbal-improvement-20261017/native_fusion_velocity_gravity_calibration.json": "0257ac36b1fdacd3e0f8f127f59925bcf8d8788e57c615b87419cdad9f47b83b",
     "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/calibrate_unipilot_fusion.py": "15c620912a40e30546df1cb65e0515e9d26dbe467a7a99b97b24940ce4c68b60",
     "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/tracking_aware_v57.yaml": "e869ea6dabe9e7282a5339f811978e6861e1d8d9b23a8844d70c953bd4a56bbb",
     "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/actuator_reachability.py": "53af980cb3770422db6c6d635f109f0c50a02571beef284d10b60bae9d0c0a94",
@@ -93,13 +92,14 @@
     "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/test_predictive_bearing_covariance.py": "cb70fe43990e3691967855bd02419874a2cfda16276451936ba63a0554c631f4",
     "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/predictive_tracking_view.py": "6e2450c78310db880e2c4299705dd553d0c0da434f622a39072dd4ae496081c9",
     "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/test_predictive_tracking_view.py": "58987893f1392c07db99568b3eaa385b958f0af320b643d69380c9409428114b",
-    "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/simulation_shutdown.py": "6d6fb71050bc774e76ed3ace552add276044cc7f7f2dbb5b775574499a91580a"
+    "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/active_perception/simulation_shutdown.py": "6d6fb71050bc774e76ed3ace552add276044cc7f7f2dbb5b775574499a91580a",
+    "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/calibration/native_fusion_velocity_gravity_calibration.json": "0257ac36b1fdacd3e0f8f127f59925bcf8d8788e57c615b87419cdad9f47b83b"
   },
   "command": [
     "/usr/bin/python3",
     "/root/uas_native/active_perception/unipilot_campaign.py",
     "--output",
-    "/root/uas_native/logs/gimbal-improvement-20261017/validation-v57-seed26",
+    "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/new-selected-experiment",
     "--labels",
     "run1_tail_a1",
     "run1_tail_b1",
@@ -137,7 +137,7 @@
     "--seed",
     "20261026",
     "--fusion-calibration",
-    "/root/uas_native/logs/gimbal-improvement-20261017/native_fusion_velocity_gravity_calibration.json",
+    "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/calibration/native_fusion_velocity_gravity_calibration.json",
     "--corner-speed-limit",
     "--camera-far",
     "1000",
@@ -153,6 +153,15 @@
     "--joint-rovio-information",
     "--geometry-rovio-information"
   ],
-  "evidence": "/root/uas_native/logs/gimbal-improvement-20261017/validation_summary_v57.json",
-  "frozen_archive": "/root/uas_native/logs/gimbal-improvement-20261017/frozen_v57_sources.zip"
+  "evidence": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020 (logs/gimbal-improvement-20261017/validation_summary_v57.json)",
+  "frozen_archive": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020 (logs/gimbal-improvement-20261017/frozen_v57_sources.zip)",
+  "input_relocation": {
+    "date": "2026-10-20",
+    "algorithm_changed": false,
+    "changed_source_files": [
+      "/root/uas_native/active_perception/unipilot_campaign.py"
+    ],
+    "prior_manifest": "simulation_inputs/selected_gimbal_before_relocation.json",
+    "reason": "Read archived flight inputs from simulation_inputs, not experiment logs."
+  }
 }

@@ -20,8 +20,8 @@ import time
 
 HERE=Path(__file__).resolve().parent
 NATIVE=HERE.parent
-REFERENCE=NATIVE/'logs/prefix-pure-lio-20261019'
-ORDER=['run2a_end','run1_tail_a2_prefix','run1_tail_a1','run1_tail_b1',
+INPUTS=NATIVE/'simulation_inputs'
+ORDER=['run1_prefix','run2a_end','run1_tail_a2_prefix','run1_tail_a1','run1_tail_b1',
        'run2a_prefix','run1_tail_b2','run2b','run1_middle']
 
 
@@ -53,7 +53,7 @@ def compress_completed(out):
     (out/'observer_compression.json').write_text(json.dumps(records,indent=2)+'\n')
 
 
-def run_one(root,label,entry,template,seed):
+def run_one(root,label,entry,template,seed,record_geometry=False):
     out=root/label
     out.mkdir(exist_ok=False)
     campaign=out/'campaign';campaign.mkdir()
@@ -68,6 +68,7 @@ def run_one(root,label,entry,template,seed):
     replace('--duration',[duration])
     sidecar=[sys.executable,str(HERE/'observe_pure_lio.py'),'--flight',str(flight),
              '--output',str(out/'observers'),'--port','11485']
+    if record_geometry:sidecar.append('--record-geometry')
     gpu=[sys.executable,str(HERE/'gpu_keepalive.py'),'--duration',str(duration+30),
          '--blocks','32','--interval','.001','--cycles','1000000']
     (out/'commands.json').write_text(json.dumps(dict(flight=command,observers=sidecar,gpu=gpu),indent=2)+'\n')
@@ -115,23 +116,17 @@ def main():
     path=root/'campaign.json'
     if path.exists():manifest=read(path)
     else:
-        legacy=read(NATIVE/'logs/zab-offline/error_plots/evaluation.json')
-        original=read(NATIVE/'logs/zab-full-campaign/results.json')
+        catalog=read(INPUTS/'zab_catalog.json')
         selection={}
-        for label,item in legacy.items():
-            error=math.sqrt(sum(x*x for x in item['estimators']['lio']['rmse'][:3]))
-            p=Path(original[label]['path']);plan=read(p/'route/route.json');segments=read(p/'route/segments.json')['segments'];world=read(p/'world.json')
-            route_end=1070. if label=='run1_prefix' else original[label]['flight']['route_time_s']
-            route_end=min(route_end,segments[-1]['t0']+segments[-1]['duration'])
-            selection[label]=dict(selected=error>1.,legacy_lio_rmse_m=error,route=str(p/'route'),route_end_s=route_end,
-                world=world['world_file'],spawn=[*plan['waypoints'][0][:2],world['spawn_xyz'][2]],
+        for label,item in catalog.items():
+            error=item['legacy_lio_rmse_m']
+            selection[label]=dict(selected=error>1.,legacy_lio_rmse_m=error,route=item['route'],route_end_s=item['route_end_s'],
+                world=item['world'],spawn=item['spawn'],
                 selection_platform='DRAGON',new_comparison_platform='UniPilot')
-        if {k for k,v in selection.items() if v['selected']}!=set(ORDER+['run1_prefix']):
+        if {k for k,v in selection.items() if v['selected']}!=set(ORDER):
             raise RuntimeError('Legacy selection changed; review before execution')
-        prefix=read(REFERENCE/'comparison.json')
-        if not prefix['valid']:raise RuntimeError('Reusable prefix result is invalid')
         manifest=dict(scope=__doc__,seed=20261026,threshold_m=1.,selection=selection,order=ORDER,
-            status='prepared',runs={'run1_prefix':dict(status='reused',valid=True,path=str(REFERENCE),metrics=prefix['metrics'])})
+            status='prepared',runs={})
         impl=root/'implementation';impl.mkdir(exist_ok=True)
         for name in ['run_lio_failure_comparisons.py','observe_pure_lio.py','report_pure_lio.py']:
             shutil.copy2(HERE/name,impl/name)
@@ -145,7 +140,7 @@ def main():
     def interrupt(*unused):raise KeyboardInterrupt
     signal.signal(signal.SIGINT,interrupt);signal.signal(signal.SIGTERM,interrupt)
     manifest['status']='running';save()
-    template=read(REFERENCE/'campaign/campaign.json')['runs']['run1_prefix_active']['command']
+    template=read(INPUTS/'templates/paired_flight.json')
     try:
         for label in manifest['order']:
             if label in manifest['runs']:

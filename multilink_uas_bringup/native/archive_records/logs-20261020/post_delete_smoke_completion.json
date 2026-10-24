@@ -1,0 +1,9 @@
+{
+  "stopped": true,
+  "wall_s": 76.361328745028,
+  "processes": {
+    "observers": 0,
+    "gpu": 0,
+    "flight": 0
+  }
+}

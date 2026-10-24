@@ -34,8 +34,8 @@ def main():
               for p, sha in selected['files'].items()}
     assert all(checks.values())
     (out/'selected_source_checks.json').write_text(json.dumps(checks, indent=2)+'\n')
-    reference = NATIVE/'logs/lio-failure-comparison-20261019/run2a_prefix/commands.json'
-    command = json.loads(reference.read_text())['flight']
+    reference = NATIVE/'simulation_inputs/templates/directional_diagnosis.json'
+    command = json.loads(reference.read_text())
     def replace(flag, value):
         command[command.index(flag)+1] = str(value)
     replace('--route-end', a.end)

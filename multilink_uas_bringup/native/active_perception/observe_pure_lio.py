@@ -26,6 +26,7 @@ def main():
     parser.add_argument('--flight', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--port', type=int, required=True)
+    parser.add_argument('--record-geometry', action='store_true')
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=False)
     impl = args.output/'implementation'
@@ -72,6 +73,8 @@ def main():
         if sha(library) != protocol['binary_sha256']['libmimosa_lib.so']:
             raise ValueError('Library differs from reference')
         package = Path(subprocess.check_output(['rospack', 'find', 'mimosa'], env=env, text=True).strip())
+        if args.record_geometry:
+            subprocess.run(['rosparam','set','/lio_ablation/pure_lio/active_lidar_diagnostics','true'],env=env,check=True)
         for name in ['duplicate_active', 'pure_lio']:
             directory = args.output/name
             logdir = directory/'mimosa'
@@ -126,6 +129,10 @@ def main():
             if set(libraries[name].values()) != {sha(library)}:
                 raise RuntimeError('Unexpected loaded library')
         (args.output/'loaded_libraries.json').write_text(json.dumps(libraries, indent=2)+'\n')
+        if args.record_geometry:
+            with (args.output/'geometry_recorder.log').open('w') as log:
+                processes['geometry_recorder']=subprocess.Popen(['/usr/bin/python3',str(HERE/'record_common_lidar.py'),'--output',str(args.output/'common_lidar.jsonl.gz')],env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+            manifest['geometry_diagnostic_only']=True
         manifest['status'] = 'running'
         save()
         while not (args.flight/'runtime.json').exists():

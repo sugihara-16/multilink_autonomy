@@ -1,0 +1,59 @@
+{
+  "status": "route_complete",
+  "stopped": true,
+  "wall_s": 75.70409588201437,
+  "processes": {
+    "master": 0,
+    "parameters": 0,
+    "bridge": 0,
+    "clock_bridge": 0,
+    "simulation": 0,
+    "imu_parameters": 0,
+    "image_encoder": 0,
+    "paired_initialization": 0,
+    "slam_inputs": 0,
+    "rovio": 0,
+    "mimosa": 0,
+    "planner": 0,
+    "monitor": 0,
+    "fixed_image_encoder": 0,
+    "fixed_rovio": 0,
+    "fixed_mimosa": 0,
+    "fixed_monitor": 0,
+    "gravity_state": 0,
+    "route": 0,
+    "pacing": 0,
+    "unpause": 0,
+    "factor": 0
+  },
+  "launch_shutdown": {
+    "children": [
+      {
+        "name": "gz-1",
+        "pid": 1750147,
+        "exit_code": 0
+      },
+      {
+        "name": "create-2",
+        "pid": 1750149,
+        "exit_code": 0
+      },
+      {
+        "name": "parameter_bridge-3",
+        "pid": 1750151,
+        "exit_code": 0
+      }
+    ],
+    "all_clean": true
+  },
+  "gazebo_shutdown": {
+    "children": [
+      {
+        "name": "gz-1",
+        "pid": 1750147,
+        "exit_code": 0
+      }
+    ],
+    "all_clean": true
+  }
+}

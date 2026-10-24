@@ -1,0 +1,315 @@
+{
+  "copies": [
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-191713-56332/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run3/segments.json",
+      "sha256": "4431b567679f10d8526ec55e1273975328d2c5b262b398d6a54deba80b79dad5"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-191713-56332/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run3/route.json",
+      "sha256": "bae1215cc688d9dcaca2e3fa847cfa9a9402c6d59fc935233f7abd1527b7bbec"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-191713-56332/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run3/world.json",
+      "sha256": "49b9f2c6e9ee6cfb0cc86102b8ab0a8560153fe078fe25c2ae03d6fa525694ce"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-192439-57607/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_prefix/segments.json",
+      "sha256": "2f696bcb9c8adca6801b428c40bc4185cd35e89fa00dfa3f7cc7ada919038384"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-192439-57607/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_prefix/route.json",
+      "sha256": "ae72b3a94438eb53c6b047d419360452f7c05c9c19386180a6a805ccdff7d871"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-192439-57607/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_prefix/world.json",
+      "sha256": "e33982e88a125f47ecedfe0d118c169249e58d77a5335ff665c616d24c998e7d"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_prefix_fixed/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_prefix/segments.json",
+      "sha256": "2f696bcb9c8adca6801b428c40bc4185cd35e89fa00dfa3f7cc7ada919038384"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_prefix_fixed/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_prefix/route.json",
+      "sha256": "ae72b3a94438eb53c6b047d419360452f7c05c9c19386180a6a805ccdff7d871"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204212-68410/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run4/segments.json",
+      "sha256": "26d36cf7adac0a430b9167bfcea570d8dc2b01b6104c3dbbcf14331f362a6e41"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204212-68410/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run4/route.json",
+      "sha256": "e01f5d873299886151e233c268423d4fd933b0e061a2d344ace88a988b8c9e60"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204212-68410/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run4/world.json",
+      "sha256": "2745b4944ac34188d19c3ebd6551ec90fb18736fa00d1a8692df759ebd17ed9d"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204911-70345/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle/segments.json",
+      "sha256": "1e9186e490bc3c953977e5fe3de1d1c862413f7b28739fc62fd7bb2635bf515d"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204911-70345/route/spawn_floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle/spawn_floor_validation.json",
+      "sha256": "620b38463cb634cdc91ac46d488ae5119ac59cd80d64777d9339877cf8d32cb1"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204911-70345/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle/route.json",
+      "sha256": "8c16d8c13ad15f083304a913841bcb349aa7d1c26c4f4a3d9c7247ca49303fe9"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204911-70345/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle/world.json",
+      "sha256": "a586350d58019aab610c03d32d578a86dfd3197bb4946eb563f15e945e3a8571"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-223932-85182/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch/segments.json",
+      "sha256": "2fe1a4043c14fe8e9e3d0bc9de47dc30152af9d167c5dbadf3121a42dc528c41"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-223932-85182/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch/route.json",
+      "sha256": "f8a5c43f75c09b579297f4c3f61ca52a69a97a253e6e04557c98d6c98a88fc09"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-223932-85182/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch/floor_validation.json",
+      "sha256": "d3986cd6c130f62ee6ca1d984b35b559c7c3b33bfe187a7683e3070980ee0a84"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-223932-85182/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch/world.json",
+      "sha256": "442869e49202f867fbb5aa85843a74a585bea62b035bc9b83b88e4712e35b22b"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-224627-86650/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link/segments.json",
+      "sha256": "4579f5825075699081506733d98fc42437b3a2acaa260a6ccb8dcb0c5ecb0c2c"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-224627-86650/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link/route.json",
+      "sha256": "fa77df6ffecded2fffde01f170de6e8a206243878e68b743f10e8dde32fb11b0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-224627-86650/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link/floor_validation.json",
+      "sha256": "2c699ccc7bdbda7cb8aeb0a435ef9ee89cea1e33211ec444fdf5838328629ec6"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-224627-86650/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link/world.json",
+      "sha256": "a586350d58019aab610c03d32d578a86dfd3197bb4946eb563f15e945e3a8571"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-225325-88141/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1/segments.json",
+      "sha256": "91c1547f96f4988745096e64dd94f43a46eebc3110a96e3ba7846024f7a8dee0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-225325-88141/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1/route.json",
+      "sha256": "0186995120dbfccb4528aad224d231efd34445e74da75e2ffd2c572f1200e776"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-225325-88141/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1/floor_validation.json",
+      "sha256": "df67685a05571b41e230957884da39c88cee994bbe3129026f7c368746718665"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-225325-88141/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1/world.json",
+      "sha256": "ba3aedb7135e5ef47aa4e6f08f7cdf009c6e93477e4e84b66cef111fec63350e"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_tail_a1_fixed/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_a1/segments.json",
+      "sha256": "91c1547f96f4988745096e64dd94f43a46eebc3110a96e3ba7846024f7a8dee0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_tail_a1_fixed/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_a1/route.json",
+      "sha256": "0186995120dbfccb4528aad224d231efd34445e74da75e2ffd2c572f1200e776"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_tail_a1_fixed/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_a1/floor_validation.json",
+      "sha256": "df67685a05571b41e230957884da39c88cee994bbe3129026f7c368746718665"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-230519-90350/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix/segments.json",
+      "sha256": "5fef105afe6c2f8b7f6c643645634ce8db7c91785f78d2d14f9eb3ab099d71d0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-230519-90350/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix/route.json",
+      "sha256": "f5ae25a1dabbaba45f7950b2dda4a47b68855a71614a73c1153f0b33b241681e"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-230519-90350/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix/floor_validation.json",
+      "sha256": "e6ffadae247a8ddf1cecc9bb65740bed656db2aca9829b2af2b8870f80f1d525"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-230519-90350/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix/world.json",
+      "sha256": "ba3aedb7135e5ef47aa4e6f08f7cdf009c6e93477e4e84b66cef111fec63350e"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-232622-93466/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end/segments.json",
+      "sha256": "3ff8fba8368b5c20e147f498ca976a1483a5871e48de45f2f673a4a51ceef7ea"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-232622-93466/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end/route.json",
+      "sha256": "cd127dd26623ac982f4b879679c494a4ad1ada14b3b253bd8031f50617a961b5"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-232622-93466/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end/floor_validation.json",
+      "sha256": "2918f95a4af62e03e79a353478878117abe2fa7baddfad9afcc27c9b64fa39b0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-232622-93466/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end/world.json",
+      "sha256": "1e6deccf05e4417626ef0d943386495eff0788e6ba056e07a26522c1af85a3c9"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-233545-95177/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1/segments.json",
+      "sha256": "46a33739228cd0690469b60b51d050db20215fcd2ab524f55ac27380f8153bdf"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-233545-95177/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1/route.json",
+      "sha256": "bc9223cf701fb531dda00077f312b50f3e7543e82e01435fd3a4589e5a99b487"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-233545-95177/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1/floor_validation.json",
+      "sha256": "7db3391c20459d8648ec0aba7e9b036e625791ea85ec02745309a737ad113762"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-233545-95177/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1/world.json",
+      "sha256": "91f29a396c10df9342c332bd07236e75b3f4a99888f01219900094eb05b29c27"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_tail_b1_fixed/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_b1/segments.json",
+      "sha256": "46a33739228cd0690469b60b51d050db20215fcd2ab524f55ac27380f8153bdf"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_tail_b1_fixed/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_b1/route.json",
+      "sha256": "bc9223cf701fb531dda00077f312b50f3e7543e82e01435fd3a4589e5a99b487"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/active-fixed-three-20261013/run1_tail_b1_fixed/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_b1/floor_validation.json",
+      "sha256": "7db3391c20459d8648ec0aba7e9b036e625791ea85ec02745309a737ad113762"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-235937-98707/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2/segments.json",
+      "sha256": "3430b1df801e2237ccc4665a0b3c623fb30f80b2b15a0f67f5158a06db53498d"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-235937-98707/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2/route.json",
+      "sha256": "d688bd1b150397a5f03930cb3a68b7c882bc6e57e0ec47d5c703de56ef9ebbee"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-235937-98707/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2/floor_validation.json",
+      "sha256": "4a8a4abd2e33340e6a32a3ca50e223165742aeda9652e5251ee7ba32a86ca5c1"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-235937-98707/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2/world.json",
+      "sha256": "1e681012818a530b256a8e32d50d4003775c131cc5d3864e70a5a47cfd745c8c"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-005320-106610/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b/segments.json",
+      "sha256": "fb3d319a7c99a0d168f5dbf509a09916a38b54d8c8fa4ade6430c349eeabd2bb"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-005320-106610/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b/route.json",
+      "sha256": "12fa027cee925faaa3bac596929ba3c1aaa95af31a411ec0f2611b390a122dd0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-005320-106610/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b/floor_validation.json",
+      "sha256": "975e481187cee313a52eb18ebb7fbff86353d8df8a9237d0b5ab33065d56e3a7"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-005320-106610/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b/world.json",
+      "sha256": "780b989adfbb67c0e5d2c2d4604afab01f6c5273f46b2de2126084d4752567b6"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-011702-110549/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end/segments.json",
+      "sha256": "0e876e446eed0190bf777e54de4bd5f070795709da795400c0119cb3293ad5e5"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-011702-110549/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end/route.json",
+      "sha256": "77d403087b4f5775b05b92110055dc47ca7d69a63695b7f29b1d9c78e23f4978"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-011702-110549/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end/floor_validation.json",
+      "sha256": "510eb6b37faa4ffe66ac8d8a57e7e4d0fdd1f31cf38ff6cc80d2f49dd63b1a6f"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-011702-110549/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end/world.json",
+      "sha256": "e593401e96c16ffc57533f6c447881d7a924d56e3afa040a4df176bb15e62ff8"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-002709-102783/route/segments.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix/segments.json",
+      "sha256": "6ffb82e1a61346d7258cf824ebf38773b0cbfb939ef73f74dc95653f0d1d05f0"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-002709-102783/route/route.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix/route.json",
+      "sha256": "38c47f01b9e69c5eb989071c46f09154271987076fe09148928edc2618d1e08d"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-002709-102783/route/floor_validation.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix/floor_validation.json",
+      "sha256": "6754d957e8f2a9809269384eb7e30d5ba3edc8ab71978cdf1de2a55dced04230"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-002709-102783/world.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix/world.json",
+      "sha256": "75cd64111b30ec6a9c759b807bfe21c50420c30fabfd325fc41b32ec34dd0937"
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/gimbal-improvement-20261017/native_fusion_velocity_gravity_calibration.json",
+      "destination": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/calibration/native_fusion_velocity_gravity_calibration.json",
+      "sha256": "0257ac36b1fdacd3e0f8f127f59925bcf8d8788e57c615b87419cdad9f47b83b"
+    }
+  ],
+  "purpose": "Online simulation inputs, copied byte-for-byte; no sensor recordings."
+}

@@ -6,6 +6,7 @@ HERE=Path(__file__).resolve().parent;NATIVE=HERE.parent
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--prepare-only',action='store_true',help='Validate flight inputs without starting simulation')
     p.add_argument('--labels',nargs='+',default=['run1_prefix','run1_tail_a1','run1_tail_b1'])
     p.add_argument('--modes',nargs='+',default=['fixed','active']);p.add_argument('--jobs',type=int,default=3)
     p.add_argument('--fixed-angles-deg',nargs=2,type=float,metavar=('YAW','PITCH'))
@@ -68,7 +69,7 @@ def main():
     if a.shared_initialization and not a.paired:p.error('--shared-initialization requires --paired')
     if a.fixed_angles_deg is not None and a.modes!=['fixed']:p.error('Fixed-angle campaign requires --modes fixed')
     a.output.mkdir(parents=True,exist_ok=True)
-    refs=NATIVE/'logs/active-fixed-three-20261013';original=json.loads((NATIVE/'logs/zab-full-campaign/results.json').read_text())
+    catalog=json.loads((NATIVE/'simulation_inputs/zab_catalog.json').read_text())
     if a.tilt_fusion and not a.fixed_gravity_imu:p.error('--tilt-fusion requires --fixed-gravity-imu')
     if a.sensor_bias_model and not a.fixed_gravity_imu:p.error('--sensor-bias-model requires --fixed-gravity-imu')
     if a.batched_fusion and (not a.velocity_fusion or not a.sensor_bias_model):p.error('Batched fusion requires body velocity and sensor bias model')
@@ -107,10 +108,11 @@ def main():
         raise KeyboardInterrupt
     signal.signal(signal.SIGINT,stop);signal.signal(signal.SIGTERM,stop)
     for label in a.labels:
-        route=refs/(label+'_fixed')/'route';data=json.loads((route/'segments.json').read_text())['segments']
+        entry=catalog[label]
+        route=Path(entry.get('paired_route',entry['route']));data=json.loads((route/'segments.json').read_text())['segments']
         end=1070. if label=='run1_prefix' else data[-1]['t0']+data[-1]['duration']
         if a.end:end=min(end,a.end)
-        world=json.loads((Path(original[label]['path'])/'world.json').read_text())
+        world=json.loads((Path(entry['route'])/'world.json').read_text())
         first=json.loads((route/'route.json').read_text())['waypoints'][0]
         spawn=[first[0],first[1],world['spawn_xyz'][2]]
         world['spawn']=spawn
@@ -122,6 +124,12 @@ def main():
             if (out/'runtime.json').exists() and json.loads((out/'runtime.json').read_text())['status']=='route_complete':continue
             if out.exists():raise RuntimeError(f'Incomplete output retained; use a new output directory: {out}')
             queue.append((key,mode,route,world,end,out))
+    if a.prepare_only:
+        manifest['status']='prepared'
+        manifest['planned_flights']=[dict(key=k,mode=m,route=str(r),world=w,route_end_s=e,output=str(o))
+                                    for k,m,r,w,e,o in queue]
+        save()
+        return
     try:
         if a.gpu_keepalive:
             with (a.output/'gpu_keepalive.log').open('w') as log:

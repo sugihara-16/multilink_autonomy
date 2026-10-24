@@ -1,0 +1,359 @@
+{
+  "protocol": "Body-frame displacement error over the existing 1 s smoother horizon, divided by the number of 50 ms factors. Equal weight of original fixed calibration flights. No fusion-outcome fitting.",
+  "sources": [
+    {
+      "path": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_a1_active/fixed",
+      "rovio_sha256": "7954d5f9a9ca94beae08ac0072095b9208a31acef8ae172ca467ccd031a81826",
+      "truth_sha256": "22a314fa4c7a41d1efcec8f4171f0857dd95319ff85e9f0600e5461ef14c4927",
+      "statistics": {
+        "samples": 4566,
+        "bias": [
+          7.3015652917826475e-06,
+          -1.587579247191506e-05,
+          -0.00016410545395090698,
+          -0.10106097815927964,
+          0.008683417555429363,
+          0.001474040535099008
+        ],
+        "std": [
+          0.0007041645841341854,
+          0.0007588702191861958,
+          0.00274931512296723,
+          0.30075488606299683,
+          0.05293679221160547,
+          0.032054563724081005
+        ],
+        "rmse": [
+          0.0007041253288651131,
+          0.0007589531777089423,
+          0.0027539079154129714,
+          0.3172491332835748,
+          0.053638530715294334,
+          0.03208493134279187
+        ],
+        "p95_abs": [
+          0.0014041853273085412,
+          0.0014233829790664108,
+          0.005808957888366239,
+          0.6206625876527929,
+          0.10869695019265334,
+          0.0706567249470873
+        ],
+        "lag1_correlation": [
+          0.9578811169325971,
+          0.9639869889403738,
+          0.9907272447464469,
+          0.9961907748936625,
+          0.9927669408812321,
+          0.9969731724352896
+        ]
+      }
+    },
+    {
+      "path": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_b1_active/fixed",
+      "rovio_sha256": "a841b810f914938d0d2431ccff291413a04bacb9e42401d7bd22478528a1a0a5",
+      "truth_sha256": "a5f479211767681b18a15ff7d9b570bfdc8ea6ad3930d26fc381c5284c315584",
+      "statistics": {
+        "samples": 5280,
+        "bias": [
+          3.6069941154831394e-06,
+          -7.421665132777393e-07,
+          -0.00034727389266375,
+          0.07625410832382107,
+          -0.00402544326582968,
+          0.0013440195956486091
+        ],
+        "std": [
+          0.0008044377437435309,
+          0.0007466989274677628,
+          0.003023249173920339,
+          0.11758352940448388,
+          0.04455364402839357,
+          0.011160268915622199
+        ],
+        "rmse": [
+          0.0008043696496908908,
+          0.0007466285828593683,
+          0.0030428446652422877,
+          0.14013549473415943,
+          0.04473092261036798,
+          0.011239857722581669
+        ],
+        "p95_abs": [
+          0.0015044736181279584,
+          0.0014891639672404543,
+          0.006873928470191654,
+          0.26282177080482716,
+          0.08604349216605585,
+          0.015972451432300385
+        ],
+        "lag1_correlation": [
+          0.9676008311515572,
+          0.962837227002494,
+          0.9935214783835506,
+          0.9989726863660805,
+          0.996700905963516,
+          0.9942688028190501
+        ]
+      }
+    }
+  ],
+  "covariance": [
+    [
+      2.8570075302331263e-08,
+      1.7037265739373188e-09,
+      -1.907904109153612e-08,
+      1.611151451149342e-07,
+      -2.1024265365143708e-07,
+      1.734274747379516e-08
+    ],
+    [
+      1.7037265739373163e-09,
+      2.8336604167427223e-08,
+      7.701354249035599e-09,
+      1.567807962672804e-06,
+      -4.816666222094603e-08,
+      1.5423838187225234e-09
+    ],
+    [
+      -1.9079041091536122e-08,
+      7.701354249035597e-09,
+      4.2107281158419145e-07,
+      -1.1887004302537484e-06,
+      2.468680127675085e-06,
+      2.518314511635275e-07
+    ],
+    [
+      1.611151451149342e-07,
+      1.5678079626728043e-06,
+      -1.1887004302537463e-06,
+      0.003007124236339173,
+      -0.00011299162379844349,
+      -0.00010529332088038922
+    ],
+    [
+      -2.1024265365143718e-07,
+      -4.8166662220946005e-08,
+      2.468680127675086e-06,
+      -0.00011299162379844349,
+      0.00012194868537175748,
+      6.223966510220465e-06
+    ],
+    [
+      1.7342747473795132e-08,
+      1.5423838187225737e-09,
+      2.518314511635276e-07,
+      -0.00010529332088038922,
+      6.223966510220465e-06,
+      2.8894430522388682e-05
+    ]
+  ],
+  "sigma_rotation_deg": [
+    0.009684525007598813,
+    0.009644873462031493,
+    0.03717930203333412
+  ],
+  "sigma_translation_m": [
+    0.05483725226831823,
+    0.011043037868800301,
+    0.005375353990425997
+  ],
+  "limitations": [
+    "Visual orientation still defines the coordinates of the measured displacement",
+    "Temporal and shared-IMU correlations are not explicitly modelled",
+    "Fixed-view calibration is an approximate nominal model for moving views",
+    "Horizon-matched diffusion approximation, not exact temporal covariance"
+  ],
+  "calibration_window_s": 1.0,
+  "factor_interval_s": 0.05,
+  "equivalent_steps": 20,
+  "measured_window_second_moment": [
+    [
+      5.71401506046625e-07,
+      3.4074531478746435e-08,
+      -3.8158082183072287e-07,
+      3.2223029022987652e-06,
+      -4.204853073028752e-06,
+      3.4685494947589674e-07
+    ],
+    [
+      3.4074531478746435e-08,
+      5.66732083348545e-07,
+      1.5402708498071012e-07,
+      3.13561592534562e-05,
+      -9.633332444189188e-07,
+      3.084767637444402e-08
+    ],
+    [
+      -3.8158082183072287e-07,
+      1.5402708498071012e-07,
+      8.421456231683833e-06,
+      -2.377400860507525e-05,
+      4.937360255350173e-05,
+      5.036629023270576e-06
+    ],
+    [
+      3.2223029022987652e-06,
+      3.13561592534562e-05,
+      -2.377400860507525e-05,
+      0.060142484726783504,
+      -0.0022598324759688657,
+      -0.0021058664176077835
+    ],
+    [
+      -4.204853073028752e-06,
+      -9.633332444189188e-07,
+      4.937360255350173e-05,
+      -0.0022598324759688657,
+      0.002438973707435152,
+      0.00012447933020440916
+    ],
+    [
+      3.4685494947589674e-07,
+      3.084767637444402e-08,
+      5.036629023270576e-06,
+      -0.0021058664176077835,
+      0.00012447933020440916,
+      0.0005778886104477734
+    ]
+  ],
+  "translation_covariance": [
+    [
+      0.003006088547022614,
+      -0.0001155147087521771,
+      -0.00010921050938603705
+    ],
+    [
+      -0.0001155147087521771,
+      0.00012216038166971456,
+      6.203039988994616e-06
+    ],
+    [
+      -0.00010921050938603705,
+      6.203039988994616e-06,
+      2.9715430692098565e-05
+    ]
+  ],
+  "translation_calibration": [
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_a1_active/fixed",
+      "samples": 4566,
+      "bias": [
+        -0.1011437762999294,
+        0.00921755063775903,
+        0.0014701270080835572
+      ],
+      "rmse": [
+        0.31724266712917665,
+        0.05342412226394241,
+        0.032502388665514095
+      ]
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_b1_active/fixed",
+      "samples": 5280,
+      "bias": [
+        0.07697688183403173,
+        -0.004289362951358974,
+        0.001254531165706676
+      ],
+      "rmse": [
+        0.1400022572449137,
+        0.045080798873976445,
+        0.011498345912339015
+      ]
+    }
+  ],
+  "translation_window_s": 1.0,
+  "gravity_sigma_rad": 0.002068768591397083,
+  "gravity_calibration": [
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_a1_active/fixed",
+      "samples": 4586,
+      "rmse_deg": 0.20669711354794662
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_b1_active/fixed",
+      "samples": 5300,
+      "rmse_deg": 0.11608345048765603
+    }
+  ],
+  "gravity_protocol": "Isotropic tangent variance is half the absolute gravity-direction squared error, equally weighted original calibration flights; no pose alignment, no bias removal; applied sparsely at 1 Hz.",
+  "velocity_covariance_scale": 7.908699224909816,
+  "velocity_period_s": 1.0,
+  "velocity_calibration": [
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_a1_active/fixed",
+      "replay_sha256": "b0e4611c0ae24555ce6b56c6dfd891847a25368319f2d5ef02440614011edee0",
+      "samples": 4586,
+      "rmse_m_s": [
+        0.23564448326025245,
+        0.03159576139879128,
+        0.021928289882338466
+      ],
+      "bias_m_s": [
+        0.17389379941610716,
+        -0.01574797671749538,
+        -0.0031535670750726394
+      ],
+      "normalized_second_moment": [
+        [
+          2.4741888935399174,
+          -0.6827917334249886,
+          -0.7918841461802396
+        ],
+        [
+          -0.6827917334249886,
+          0.9917627891677115,
+          0.20818578595510626
+        ],
+        [
+          -0.7918841461802396,
+          0.20818578595510626,
+          2.4021446093459486
+        ]
+      ],
+      "normalized_error_per_dof": 1.9560320973511924,
+      "derivative_resolution_rmse_change": 4.247636906076221e-05
+    },
+    {
+      "source": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/unipilot-validation-paired-20261016/run1_tail_b1_active/fixed",
+      "replay_sha256": "b026ea1c7cf5f3df103aa1916eee76fbf5d8783415d059da7ce995964cb021da",
+      "samples": 5300,
+      "rmse_m_s": [
+        0.1354679095337921,
+        0.01630163386781005,
+        0.007407228299397657
+      ],
+      "bias_m_s": [
+        -0.07671028015213627,
+        -0.0016966476853862902,
+        -0.002062018740569876
+      ],
+      "normalized_second_moment": [
+        [
+          13.11376379319333,
+          0.2887101815148665,
+          -0.8396871107983495
+        ],
+        [
+          0.2887101815148665,
+          0.868295719832997,
+          0.05841485279753191
+        ],
+        [
+          -0.8396871107983495,
+          0.05841485279753191,
+          1.104111100124405
+        ]
+      ],
+      "normalized_error_per_dof": 5.02872353771691,
+      "derivative_resolution_rmse_change": 8.515043092115e-05
+    }
+  ],
+  "velocity_protocol": "Direct body-frame velocity, with published covariance multiplied by one conservative scalar. Scalar is max(1, maximum eigenvalue of equal-flight mean whitened-error second moment), old fixed calibration flights only; no bias subtraction or performance search. One factor per second, matching existing smoother horizon.",
+  "velocity_limitations": [
+    "Published velocity and gravity direction share IMU and feature information; their cross covariance is not supplied by nav_msgs/Odometry.",
+    "One-second spacing reduces repeated information; it does not eliminate all temporal or shared-IMU correlation."
+  ]
+}

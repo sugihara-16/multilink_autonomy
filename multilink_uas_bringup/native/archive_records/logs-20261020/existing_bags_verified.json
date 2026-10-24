@@ -1,0 +1,331 @@
+[
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_24.mcap",
+    "size": 219406529,
+    "md5": "bfd051f09db7522b071216216be3a63d",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_24.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/bfd051f09db7522b071216216be3a63d.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_5.mcap",
+    "size": 518071155,
+    "md5": "acc2b1acb34cf81ccb24dda25a5502d0",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_5.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/acc2b1acb34cf81ccb24dda25a5502d0.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_18.mcap",
+    "size": 851016436,
+    "md5": "9005d6699c60303b266c1399db20d55f",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_18.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/9005d6699c60303b266c1399db20d55f.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_11.mcap",
+    "size": 794106974,
+    "md5": "44f5d6b2d8e0cb001968ad9736814f67",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_11.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/44f5d6b2d8e0cb001968ad9736814f67.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_1.mcap",
+    "size": 478859946,
+    "md5": "a70acc24b6623894c9d8f664aff50227",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_1.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/a70acc24b6623894c9d8f664aff50227.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_12.mcap",
+    "size": 816907493,
+    "md5": "0238f2d49c8b4f2ae4533152926322c1",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_12.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/0238f2d49c8b4f2ae4533152926322c1.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_17.mcap",
+    "size": 830464447,
+    "md5": "c2b82f47f71366539987a964e32f8a68",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_17.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/c2b82f47f71366539987a964e32f8a68.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_21.mcap",
+    "size": 721589133,
+    "md5": "3ca508000e347bc0cd9c4372ffe6aea2",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_21.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/3ca508000e347bc0cd9c4372ffe6aea2.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_15.mcap",
+    "size": 779003421,
+    "md5": "31bd966d51306bff15dd4701ca354075",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_15.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/31bd966d51306bff15dd4701ca354075.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_6.mcap",
+    "size": 534463619,
+    "md5": "cac57fa692adfd21b7ef77388cb65fd3",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_6.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/cac57fa692adfd21b7ef77388cb65fd3.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_3.mcap",
+    "size": 705993580,
+    "md5": "eb83486e4da365d603badf731af9daed",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_3.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/eb83486e4da365d603badf731af9daed.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_23.mcap",
+    "size": 875864310,
+    "md5": "c5ae5285c7ea47f7a9212c8756753561",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_23.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/c5ae5285c7ea47f7a9212c8756753561.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_4.mcap",
+    "size": 700219904,
+    "md5": "6ada8be45b083ba188fabb802311c992",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_4.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/6ada8be45b083ba188fabb802311c992.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_13.mcap",
+    "size": 771628670,
+    "md5": "99c304d9a5ad318bfeefde676312e177",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_13.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/99c304d9a5ad318bfeefde676312e177.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_8.mcap",
+    "size": 736287863,
+    "md5": "0b0234cb38196f540e435375c5b8f16d",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_8.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/0b0234cb38196f540e435375c5b8f16d.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_22.mcap",
+    "size": 737842348,
+    "md5": "ce89b538913cc37c914c9f88b711c2a1",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_22.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/ce89b538913cc37c914c9f88b711c2a1.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_20.mcap",
+    "size": 742351227,
+    "md5": "22e603eb1f9e9515b88e873210385e0f",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_20.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/22e603eb1f9e9515b88e873210385e0f.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_19.mcap",
+    "size": 880850590,
+    "md5": "61f17834f0cb4285d85fe4399a8cf7fc",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_19.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/61f17834f0cb4285d85fe4399a8cf7fc.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_7.mcap",
+    "size": 689606439,
+    "md5": "d012d26b44cee682bdb7921af7c118aa",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_7.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/d012d26b44cee682bdb7921af7c118aa.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_0.mcap",
+    "size": 480587502,
+    "md5": "b45ce33b0a705e7429976d591a95136f",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_0.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/b45ce33b0a705e7429976d591a95136f.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_9.mcap",
+    "size": 712886592,
+    "md5": "434ebe547f1a036c26b37918ed1c8d8b",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_9.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/434ebe547f1a036c26b37918ed1c8d8b.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_14.mcap",
+    "size": 739617346,
+    "md5": "1e8574d4b910236b19cf1f511b7ecbae",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_14.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/1e8574d4b910236b19cf1f511b7ecbae.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_10.mcap",
+    "size": 728412659,
+    "md5": "a00ba6dac3d18df42a1259f141333e5d",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_10.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/a00ba6dac3d18df42a1259f141333e5d.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_2.mcap",
+    "size": 624539032,
+    "md5": "c46b16ee1207f8239f3d3d6ebaffe67e",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_2.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/c46b16ee1207f8239f3d3d6ebaffe67e.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_b1/rosbag/rosbag_16.mcap",
+    "size": 813352891,
+    "md5": "8cc2049593802d4d690de556bffea19c",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-233545-95177/rosbag/rosbag_16.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/8cc2049593802d4d690de556bffea19c.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_5.mcap",
+    "size": 729862018,
+    "md5": "481a5ad235d95c1388b6a6b04a3b0bcb",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_5.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/481a5ad235d95c1388b6a6b04a3b0bcb.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_18.mcap",
+    "size": 667272094,
+    "md5": "c178bea9d0601fa847301de94f9b8b6d",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_18.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/c178bea9d0601fa847301de94f9b8b6d.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_11.mcap",
+    "size": 184453247,
+    "md5": "eba6c3db80f208e7d1fe4e7fe6c3d990",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_11.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/eba6c3db80f208e7d1fe4e7fe6c3d990.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_1.mcap",
+    "size": 477649235,
+    "md5": "0392beeed31b0e8191e748a5e009349c",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_1.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/0392beeed31b0e8191e748a5e009349c.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_12.mcap",
+    "size": 183079341,
+    "md5": "fabfd056da2f9cff3030b146ad7ee957",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_12.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/fabfd056da2f9cff3030b146ad7ee957.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_17.mcap",
+    "size": 419353838,
+    "md5": "66b07dc44fdb42639fe19d19d7ca344a",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_17.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/66b07dc44fdb42639fe19d19d7ca344a.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_21.mcap",
+    "size": 646675535,
+    "md5": "826c37bf603a04e72f2f26c7acf76265",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_21.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/826c37bf603a04e72f2f26c7acf76265.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_15.mcap",
+    "size": 262947841,
+    "md5": "d0ccb6cf672e33297b66a1141736ee67",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_15.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/d0ccb6cf672e33297b66a1141736ee67.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_6.mcap",
+    "size": 656021342,
+    "md5": "cc4c3bd64463b18a6dd243a554bc75f9",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_6.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/cc4c3bd64463b18a6dd243a554bc75f9.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_3.mcap",
+    "size": 712225810,
+    "md5": "1c2be269e102f850a0368f924583da2f",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_3.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/1c2be269e102f850a0368f924583da2f.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_4.mcap",
+    "size": 730644189,
+    "md5": "e8178f69d9403cf453c9075453ee3243",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_4.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/e8178f69d9403cf453c9075453ee3243.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_13.mcap",
+    "size": 193756350,
+    "md5": "17760b47c46704ba0c27f968e0c034c3",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_13.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/17760b47c46704ba0c27f968e0c034c3.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_8.mcap",
+    "size": 285043686,
+    "md5": "374042f189e974553ce6466265174d46",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_8.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/374042f189e974553ce6466265174d46.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_20.mcap",
+    "size": 763999693,
+    "md5": "d73355d9ee2731f498f52a143e03a277",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_20.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/d73355d9ee2731f498f52a143e03a277.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_19.mcap",
+    "size": 732441369,
+    "md5": "310fffac3145b098a9fdf902424e129d",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_19.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/310fffac3145b098a9fdf902424e129d.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_7.mcap",
+    "size": 388078835,
+    "md5": "6af66c0f7f98438c131f1789ca4dec7d",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_7.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/6af66c0f7f98438c131f1789ca4dec7d.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_0.mcap",
+    "size": 479442290,
+    "md5": "a123995e6afa743a2dd05cdb6a9bbe1e",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_0.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/a123995e6afa743a2dd05cdb6a9bbe1e.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_9.mcap",
+    "size": 254048861,
+    "md5": "4a99260dfc25d177b169cb75d06b917b",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_9.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/4a99260dfc25d177b169cb75d06b917b.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_14.mcap",
+    "size": 231378959,
+    "md5": "9fb2dd110dd586e700d6cc20eb97d6cc",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_14.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/9fb2dd110dd586e700d6cc20eb97d6cc.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_10.mcap",
+    "size": 228423465,
+    "md5": "1f3b35b6767184b2a5932c2853868e65",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_10.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/1f3b35b6767184b2a5932c2853868e65.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_2.mcap",
+    "size": 603263089,
+    "md5": "73713759ae3a70c757aff153980f2e41",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_2.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/73713759ae3a70c757aff153980f2e41.mcap"
+  },
+  {
+    "path": "zab-local-bags/run1_tail_a1/rosbag/rosbag_16.mcap",
+    "size": 298499671,
+    "md5": "52e2e8cf670afd3d98949242866a84cb",
+    "remote": "uas_gdrive_private:multilink_autonomy_zab_20261002-190350/20261002-225325-88141/rosbag/rosbag_16.mcap",
+    "archive_remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020/existing_bags/52e2e8cf670afd3d98949242866a84cb.mcap"
+  }
+]

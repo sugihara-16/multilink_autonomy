@@ -1,0 +1,565 @@
+{
+  "run3": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run3",
+    "route_end_s": 35.93161415732922,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      230.0,
+      -328.8,
+      -5.764355829802751
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-191713-56332",
+    "xyz_min": [
+      217.8,
+      -328.8,
+      -4.6
+    ],
+    "xyz_max": [
+      230.0,
+      -317.2,
+      -4.6
+    ],
+    "polyline_length_m": 16.965807078664536,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run3/route.json": "bae1215cc688d9dcaca2e3fa847cfa9a9402c6d59fc935233f7abd1527b7bbec",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run3/segments.json": "4431b567679f10d8526ec55e1273975328d2c5b262b398d6a54deba80b79dad5",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 0.011802582291046389
+  },
+  "run1_prefix": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_prefix",
+    "route_end_s": 1070.0,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      117.24489795918367,
+      -401.66938775510204,
+      -7.166581753238389
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-192439-57607",
+    "xyz_min": [
+      -22.75,
+      -401.66938775510204,
+      -5.089795918367346
+    ],
+    "xyz_max": [
+      355.0,
+      10.653328987564821,
+      3.589596116481717
+    ],
+    "polyline_length_m": 1659.9650560156726,
+    "segment_kinds": [
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_prefix/route.json": "ae72b3a94438eb53c6b047d419360452f7c05c9c19386180a6a805ccdff7d871",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_prefix/segments.json": "2f696bcb9c8adca6801b428c40bc4185cd35e89fa00dfa3f7cc7ada919038384",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 221.6094833276145,
+    "paired_route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_prefix"
+  },
+  "run4": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run4",
+    "route_end_s": 32.69853416695993,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      116.2,
+      -67.8,
+      -1.7640327541574905
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204212-68410",
+    "xyz_min": [
+      116.2,
+      -67.8,
+      -0.5999999999999996
+    ],
+    "xyz_max": [
+      119.4,
+      -52.8,
+      0.0
+    ],
+    "polyline_length_m": 15.349267083479916,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run4/route.json": "e01f5d873299886151e233c268423d4fd933b0e061a2d344ace88a988b8c9e60",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run4/segments.json": "26d36cf7adac0a430b9167bfcea570d8dc2b01b6104c3dbbcf14331f362a6e41",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 0.01408236628232149
+  },
+  "run1_middle": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle",
+    "route_end_s": 1240.9000000000005,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      304.5,
+      -92.0,
+      -4.57389154402172
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-204911-70345",
+    "xyz_min": [
+      -22.75,
+      -92.04404659161753,
+      -2.6923898076934574
+    ],
+    "xyz_max": [
+      355.0,
+      10.653328987564821,
+      3.589872318773438
+    ],
+    "polyline_length_m": 1230.0022677375366,
+    "segment_kinds": [
+      "polyline",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle/route.json": "8c16d8c13ad15f083304a913841bcb349aa7d1c26c4f4a3d9c7247ca49303fe9",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_middle/segments.json": "1e9186e490bc3c953977e5fe3de1d1c862413f7b28739fc62fd7bb2635bf515d",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 71.01364413795945
+  },
+  "run1_tail_branch": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch",
+    "route_end_s": 51.837472347225,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      150.0,
+      -82.5,
+      -2.284493372564473
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-223932-85182",
+    "xyz_min": [
+      150.0,
+      -82.5,
+      -0.9969622225727122
+    ],
+    "xyz_max": [
+      152.41471486545828,
+      -79.50903117650506,
+      1.0
+    ],
+    "polyline_length_m": 12.137763722650785,
+    "segment_kinds": [
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch/route.json": "f8a5c43f75c09b579297f4c3f61ca52a69a97a253e6e04557c98d6c98a88fc09",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_branch/segments.json": "2fe1a4043c14fe8e9e3d0bc9de47dc30152af9d167c5dbadf3121a42dc528c41",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 0.08118289612355432
+  },
+  "run1_tail_link": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link",
+    "route_end_s": 62.15327510895803,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      304.5,
+      -92.0,
+      -4.57389154402172
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-224627-86650",
+    "xyz_min": [
+      304.42998122193217,
+      -92.0,
+      -1.5263746799172582
+    ],
+    "xyz_max": [
+      305.0298694578823,
+      -62.0,
+      -0.5
+    ],
+    "polyline_length_m": 30.076637554479017,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link/route.json": "fa77df6ffecded2fffde01f170de6e8a206243878e68b743f10e8dde32fb11b0",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_link/segments.json": "4579f5825075699081506733d98fc42437b3a2acaa260a6ccb8dcb0c5ecb0c2c",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 0.05740761488403899
+  },
+  "run1_tail_a1": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1",
+    "route_end_s": 228.49281198075158,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      305.0,
+      -62.0,
+      -3.712395811673751
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-225325-88141",
+    "xyz_min": [
+      305.0,
+      -63.5,
+      -2.0517453125455587
+    ],
+    "xyz_max": [
+      355.0,
+      -61.90446178642681,
+      -0.38672415193636167
+    ],
+    "polyline_length_m": 100.46543353941398,
+    "segment_kinds": [
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1/route.json": "0186995120dbfccb4528aad224d231efd34445e74da75e2ffd2c572f1200e776",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a1/segments.json": "91c1547f96f4988745096e64dd94f43a46eebc3110a96e3ba7846024f7a8dee0",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 10.261240379959387,
+    "paired_route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_a1"
+  },
+  "run1_tail_a2_prefix": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix",
+    "route_end_s": 199.76000000000002,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      305.0,
+      -62.0,
+      -3.712395811673751
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-230519-90350",
+    "xyz_min": [
+      190.5,
+      -62.06397689885526,
+      -0.6309635218030862
+    ],
+    "xyz_max": [
+      305.0,
+      -57.5,
+      1.0845620320644287
+    ],
+    "polyline_length_m": 114.88213515292378,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix/route.json": "f5ae25a1dabbaba45f7950b2dda4a47b68855a71614a73c1153f0b33b241681e",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_prefix/segments.json": "5fef105afe6c2f8b7f6c643645634ce8db7c91785f78d2d14f9eb3ab099d71d0",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 3.3727747275510396
+  },
+  "run1_tail_a2_end": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end",
+    "route_end_s": 43.87806023205607,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      211.1795928538236,
+      -59.704771069531056,
+      -2.494864085601204
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-232622-93466",
+    "xyz_min": [
+      190.5,
+      -59.704771069531056,
+      0.9482690101409574
+    ],
+    "xyz_max": [
+      211.1795928538236,
+      -57.5,
+      1.0845620320644287
+    ],
+    "polyline_length_m": 20.93903011602795,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end/route.json": "cd127dd26623ac982f4b879679c494a4ad1ada14b3b253bd8031f50617a961b5",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_a2_end/segments.json": "3ff8fba8368b5c20e147f498ca976a1483a5871e48de45f2f673a4a51ceef7ea",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 0.11972258426197654
+  },
+  "run1_tail_b1": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1",
+    "route_end_s": 263.38475382863356,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      190.5,
+      -57.5,
+      -2.2197486720370545
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-233545-95177",
+    "xyz_min": [
+      119.6,
+      -57.55461145788943,
+      -1.146866919283906
+    ],
+    "xyz_max": [
+      193.47430833972953,
+      -46.904100864620744,
+      2.102803322693041
+    ],
+    "polyline_length_m": 94.12907879774079,
+    "segment_kinds": [
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1/route.json": "bc9223cf701fb531dda00077f312b50f3e7543e82e01435fd3a4589e5a99b487",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b1/segments.json": "46a33739228cd0690469b60b51d050db20215fcd2ab524f55ac27380f8153bdf",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 2.7261852624816227,
+    "paired_route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/paired_routes/run1_tail_b1"
+  },
+  "run1_tail_b2": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2",
+    "route_end_s": 322.11748001386053,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      122.5,
+      -47.0,
+      -1.251940547051431
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261002-235937-98707",
+    "xyz_min": [
+      -22.75,
+      -47.0,
+      0.5
+    ],
+    "xyz_max": [
+      122.5478032537064,
+      10.653328987564821,
+      2.560734478658308
+    ],
+    "polyline_length_m": 158.09096710969823,
+    "segment_kinds": [
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2/route.json": "d688bd1b150397a5f03930cb3a68b7c882bc6e57e0ec47d5c703de56ef9ebbee",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run1_tail_b2/segments.json": "3430b1df801e2237ccc4665a0b3c623fb30f80b2b15a0f67f5158a06db53498d",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 88.62081273094843
+  },
+  "run2b": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b",
+    "route_end_s": 318.7620171408737,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      235.5,
+      -333.0,
+      -5.735662575933265
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-005320-106610",
+    "xyz_min": [
+      231.6,
+      -352.0286585365854,
+      -4.8
+    ],
+    "xyz_max": [
+      268.7603658536585,
+      -302.4559929568747,
+      -2.434475930020824
+    ],
+    "polyline_length_m": 124.19836474995417,
+    "segment_kinds": [
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline",
+      "rotate",
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b/route.json": "12fa027cee925faaa3bac596929ba3c1aaa95af31a411ec0f2611b390a122dd0",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2b/segments.json": "fb3d319a7c99a0d168f5dbf509a09916a38b54d8c8fa4ade6430c349eeabd2bb",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 4504.03165388025
+  },
+  "run2a_end": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end",
+    "route_end_s": 47.46897403793358,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      220.5074042482401,
+      -349.634948070362,
+      -6.268402517211821
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-011702-110549",
+    "xyz_min": [
+      220.5074042482401,
+      -349.634948070362,
+      -3.494585636291201
+    ],
+    "xyz_max": [
+      235.5,
+      -332.7939572706527,
+      -3.0
+    ],
+    "polyline_length_m": 22.734487018966853,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end/route.json": "77d403087b4f5775b05b92110055dc47ca7d69a63695b7f29b1d9c78e23f4978",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_end/segments.json": "0e876e446eed0190bf777e54de4bd5f070795709da795400c0119cb3293ad5e5",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 13.599138784882388
+  },
+  "run2a_prefix": {
+    "route": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix",
+    "route_end_s": 240.0,
+    "world": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+    "spawn": [
+      134.6244114890977,
+      -424.9339220533612,
+      -7.003337166708997
+    ],
+    "original_capture": "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/logs/20261003-002709-102783",
+    "xyz_min": [
+      134.6244114890977,
+      -424.9339220533612,
+      -4.607553150633169
+    ],
+    "xyz_max": [
+      235.5,
+      -332.7939572706527,
+      -3.0
+    ],
+    "polyline_length_m": 137.32033942523532,
+    "segment_kinds": [
+      "polyline"
+    ],
+    "inputs_sha256": {
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix/route.json": "38c47f01b9e69c5eb989071c46f09154271987076fe09148928edc2618d1e08d",
+      "/root/multilink_autonomy_ws/src/multilink_autonomy/multilink_uas_bringup/native/simulation_inputs/routes/run2a_prefix/segments.json": "6ffb82e1a61346d7258cf824ebf38773b0cbfb939ef73f74dc95653f0d1d05f0",
+      "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612"
+    },
+    "legacy_lio_rmse_m": 47.05153761131527
+  }
+}

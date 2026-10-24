@@ -1,0 +1,32 @@
+{
+  "remote": "uas_gdrive_private:multilink_autonomy_archives/logs-20261020",
+  "folder_id": "1SNkp_XT7AsO2UyedbRQ1FqM1qJKQNiId",
+  "verified_parts": 74,
+  "verified_separate_bags": 47,
+  "original_entries": 122533,
+  "original_unique_file_bytes": 65284512431,
+  "compressed_archive_bytes": 19825561289,
+  "separate_bag_bytes": 27612490864,
+  "original_files_unchanged_except_verified_bag_removal": true,
+  "windows_free_bytes_before": 12906258432,
+  "linux_free_bytes_before": 954372861952,
+  "authorized_action": "User requested all old logs moved to Drive and local removal",
+  "timestamp": 1792508172.6312165,
+  "local_logs_empty": true,
+  "linux_free_bytes_after": 992332513280,
+  "windows_free_bytes_after": 12906258432,
+  "post_delete_validation": {
+    "input_tests_passed": 2,
+    "fixed_view_array_tests_passed": 2,
+    "online_route": "run3",
+    "online_tracking_s": 3.0,
+    "online_comparison_valid": true,
+    "owned_processes_stopped": true,
+    "process_exit_codes": {
+      "observers": 0,
+      "gpu": 0,
+      "flight": 0
+    },
+    "windows_free_bytes_final": 12905639936
+  }
+}

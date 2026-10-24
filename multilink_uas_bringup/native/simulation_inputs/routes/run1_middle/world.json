@@ -1,0 +1,12 @@
+{
+  "world_file": "/root/multilink_autonomy_ws/assets/zab/zab_harmonic.sdf",
+  "sha256": "1b40f60b01a46189ec4ae2c08dba382bbbf8d1bb235dc84b2f4410918b525612",
+  "world_name": "zab",
+  "model_name": "dragon",
+  "spawn_xyz": [
+    303.9618,
+    -92.3225,
+    -4.57389154402172
+  ],
+  "source": "Explicit world override"
+}
