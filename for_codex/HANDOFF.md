@@ -1,3 +1,162 @@
+## 2026-10-24 最新：人工トンネル6/9本完了、最後の3本を実行中
+- ROOT=/root/uas_native/logs/switching-tunnel-20261024。owner session68566、/tmp/switching-tunnel-resume.log。現在alternating_seed20262403。先頭6本有効完了。最終3条件が終わるまで新設定・新実験なし。待機/追加observerは全て終了。
+- 偏在4本はVIO10秒移動/融合全位置で全固定より良好。全周rich対照2本は上固定が融合全位置で良好。速度RMSだけだとreversed/402は偏向 .280389と最良固定 .280929m/sでほぼ同等。全失敗値保持。
+- 完了後の元の報告器例外は既知（固定上/下の受理速度factor欠落）。取得status=completeと9本の各validを確認してから `report_switching_tunnel_sparse.py ROOT/validation` と `audit_switching_tunnel.py ROOT/validation` を実行。元のfrozen.jsonと追加評価evaluation_amendment.jsonを維持。report_sparse/index.htmlが正しい最終入口。
+- 途中集計更新sessionは現在起動したreportのみ（/tmp/switching-second-round-report.log）。旧session14721は停止、61808/98322の読取診断も正常終了。snapshot初回保持、共分散probe threshold_check.jsonで未受理と閾値超過の対応確認済。
+- 最終結果/WORKLOG保存、全所有sim停止、Windows容量確認まで完遂。以下は履歴。
+
+## 2026-10-24 最新：人工トンネル2本完了、一様配置の再試行中
+- ROOT=/root/uas_native/logs/switching-tunnel-20261024。owner session68566、/tmp/switching-tunnel-resume.log。validationでalternating/reversedのseed20262401は有効完了。uniform同seedはpacerの時計停止待ちタイムアウトで未完了をinvalid_trialsへ保持し同条件再試行中。旧14721終了。設定/凍結SHAは不変。
+- 追加読取observer session61808（飛行画像少数）、次のalternating/402共分散probe待機session98322。停止時は待機含め停止。live_state参照。
+- 重要：固定の上/下で不確かなVIO速度factorを渡さない区間が生じ、旧報告器は完全factor前提のため失敗する。取得は全画像/odometry連続で正常。9本取得後の旧報告エラーは既知。評価は別のreport_switching_tunnel_sparse.py validation、監査はaudit_switching_tunnel.py validationを使用。evaluation_amendment.jsonに追加評価のSHA/理由を記録。初期主指標を欠落補間で偽装しない。
+- 1本目2配置とも偏向は固定全方向よりVIO10秒移動/融合位置が良好。ただし各1回で再現性確認中。全9本完了まで設定を変えず継続。以下は履歴。
+
+## 2026-10-24 最新：特徴偏在の人工トンネルで9飛行を検証中
+- 新ユーザー依頼で再開。ROOT=/root/uas_native/logs/switching-tunnel-20261024。owner session14721、/tmp/switching-tunnel-validation.log、validation/campaign.json。待機ownerなし、現在runnerが3配置×3seedを順次実行。同時sim1、GUI/rawbagなし。
+- assets/switching_tunnel_20261024：幅6m/高さ5mアーチの一定断面、模様だけ左壁→天井→右壁→床/逆順/全周一様。実Gazebo静止画像60枚で偏在確認済。初回DAE法線欠落による停止を修正後成功。
+- 最新候補v10、推定器/センサ/融合条件は固定。73入力SHAをROOT/frozen.jsonへ保存。130m、0.5m/s。主指標は既知退化軸XのVIO速度RMS、領域中央40秒×4。各固定は独立した単眼、配置正解をplannerに渡さない。
+- 全9本完了後、audit_motion_campaign.py validation --frozen ROOT/frozen.json、report/switching_index.htmlの結果を確認。run_switching_tunnel_trials.pyは完了済みをスキップ可能だが、失敗試行は原因確認してから扱う。まだ精度結果なし。新規手法調整はせず結果を全部保存。標準v57不変。以下は履歴。
+
+## 2026-10-23 最新：現検証を完了しユーザー指示で停止
+- ユーザー「今の検証が終わったら停止して」。ROOT=/root/uas_native/logs/gimbal-velocity-improvement-20261022、PAUSED.json/live_state.json。現在owner/待機ownerなし。新しい実験を開始せず、次の明示的な再開指示を待つ。
+- 最後のv10 a1は完了/全監査成功。frozen_v10_development.json/zip。development_v10_a1/report/index.html、final_audit.json、final_summary.json、recovery_execution.json。復帰4回すべて所定条件で完了。
+- VIO方向速度RMS 往路active .237817対最良+50 .143035、復路active .050780対最良正面 .066641m/s。復路は全固定より良好、往路は劣る。開発1飛行で独立再現性は未検証。融合位置RMSE .136418m対最良固定 .254291mは別指標。
+- v9は主3区間で事前良好固定に0/3、事前screen不達。v8独立9本は完了、主9組で良好固定に1/9。全完了結果は保持、重複実行不要。標準v57未変更。再開後はv10診断を踏まえて次の候補/独立比較を設計。以下は履歴であり、古い実行sessionを再起動しない。
+
+## 2026-10-23 最新：v9完了・v10 a1実行中
+- ROOT=/root/uas_native/logs/gimbal-velocity-improvement-20261022。現在session71161、development_v10_a1、/tmp/motion-view-v10-after-retry.log。frozen_v10_development.json/zip。後続待機なし。同時sim1。v10は追跡不足時に正面復帰を完了する別候補、6試験成功。
+- v9開発2本は監査済み。主3区間で固定平均には3/3、事前良好固定には0/3。v9_screening_resultの事前基準不達で独立反復しない。Fut旧終了エラーはinvalid_trialsに保持。合成encoder終了試験20回は再現なし、修正は未実施。
+- v10終了後audit_motion_campaign --frozen frozen_v10_development.json、annotate_motion_reports、復帰動作確認、全候補レポート更新。改善目標は未達。標準v57/推定器/センサ/融合重み不変、GUI/bagなし。以下は履歴。
+
+## 2026-10-23 最新：v8独立9本完了、v9開発実行中
+- ROOT=/root/uas_native/logs/gimbal-velocity-improvement-20261022。現在session64332/PID495489、development_v9のb1が走行中。その後Fut122秒。/tmp/motion-view-v9.log冒頭に上書き注記あり（v9_owner_notice.json参照）。試行内のログ/数値は正常。凍結frozen_v9_development.json/zip。
+- 後続v10 a1開発1本の待機session68228、start_v10.py、/tmp/motion-view-v10.log。v10はv8＋少数追跡時の復帰継続、v9の往復準備とは別候補。5試験成功、まだ未飛行。v10_plan.jsonにSHA/条件。停止時は64332と68228を含む所有者を止める。
+- v8 validation_round2は全9本・最終監査完了。全7区間×3回で固定平均に20/21、全固定に3/21勝。主3区間×3回では事前良好固定に1/9で目標未達。詳細report/final_summary.json。元a1/512終了エラー1本をinvalid_trials保持、再試行合格。旧owner35274は終了。再実行不要。
+- v9完了後audit_motion_campaign --frozen frozen_v9_development.json、audit_preview_preparation、annotate_motion_reports、report_motion_candidates。v9_validation_protocol.jsonの事前基準で新seed20261611/12/13への反復判断。v10 a1は別に検証。採用v57/default・推定器/センサ/融合重み不変。GUI/bagなし、Windows空き約162GiB。同時sim最大1。以下は履歴。
+
+## 2026-10-23 進行中：v8独立反復、次にv9開発比較
+- 現ownerはsession35274（/tmp/motion-round2-resume.log）。ROOT/validation_round2は5/9本完了、二ツ小屋/512を実行中。a1/512終了エラーの再試行は成功、無効元データ保持。設定変更なし。
+- 次のv9待機ownerはsession64332（start_v9.py、/tmp/motion-view-v9.log）。旧90918は待機検出修正のため停止。現在の9本完了とowner終了後、v9のb1/Fut122秒を順次実行。同時sim最大1。停止時は待機ownerも止める。
+- v9_validation_protocol.jsonに開発通過条件と未使用seed20261611/12/13を事前記録。audit_preview_preparation.pyは準備実行・評価除外・実視野保持・巡航視野差を確認する新読取用チェック（v9実データ実行は未了）。現在の凍結38ソースは全一致。
+- 目標未達、既定v57不変。最後は全所有sim停止。数値中心、Windows空き約163GiB。以下は履歴。
+
+## 2026-10-23 最新：v8独立検証の4本目を同条件で再試行中
+- ROOT=/root/uas_native/logs/gimbal-velocity-improvement-20261022。validation_round2で3本完了、a1/seed20261512再試行中。owner session35274、/tmp/motion-round2-resume.log。旧16303は終了、待機ownerなし。同時sim最大1。
+- 旧4本目は画像/推定の連続性は全て成功したが、終了SIGINT直後にyaw_m50_encoder exit -11。invalid_trialsへ保持し、凍結v8/seed不変で再取得。残り5本を順次継続。独立3本の結果はWORKLOG末尾。最良固定に安定して勝つ目標は未達。
+- v9は実装/5試験済み、未飛行。先に既存経路を最大15m往復し、巡航で選んだ視野を保って追加準備運動。固定にも同じ身体運動。v8より準備時間/観測が増える別条件。v9_plan.json参照。v8凍結依存は変更しない。
+- v8完了後はaudit_motion_campaign.py --frozen ROOT/frozen_round2.json、説明修正annotate_motion_reports.py、比較report_motion_candidates.py。採用v57/default不変。全sim停止は検証終了時、GUI/bagなし。以下は履歴。
+
+## 2026-10-23 12:51 UTC 最新：v8独立9飛行を実行中
+- ROOT=/root/uas_native/logs/gimbal-velocity-improvement-20261022。validation_round2、owner session16303、/tmp/motion-round2.log。開始はa1/seed20261511。残りも同設定で継続。追加待機ownerはない（現在のrunnerが9本を順次起動）。live_state.json参照。
+- 開発v1〜v8完了（v6はa1追加も完了）。v8は実ROVIO追跡/速度の同時不確かさ＋画像移動を抑える候補＋共通準備運動26秒追加/視野保持。未表示の画像地図点を検索するv3とは異なる。固定にも同じ追加身体運動、推定器/融合/センサは不変、DRPM OFF、真値は飛行制御/事後採点のみ。
+- v8開発の主VIO方向RMS active/事前固定：b1前半 .019904/.043674、後半 .027696/.036444、二ツ小屋 .026985/.022530m/s。2区間勝ち/1区間負け。事前比較比GM=.74580でv6/v7より小さく選択。設定はfrozen_round2.json/zipで固定し、未使用seed511/512/513×a1/b1/Fut362秒の9本へ。独立結果を見て途中調整しない。
+- 新しい独立結果はまだない。採用v57/defaultは変更していない。完了後 `python3 /root/uas_native/active_perception/audit_motion_campaign.py ROOT/validation_round2 --frozen ROOT/frozen_round2.json` で監査・集計し、report_motion_candidatesでHTML/PDF更新。v3独立9本は完了済みで再実行しない。
+- 中断再開helperは追加準備を自動判別：`resume_motion_view_trials.py ROOT/validation_round2 --frozen ROOT/frozen_round2.json`。途中中断の試行は先に状態確認し、結果を捨てない。GUI/bagなし、全simは検証終了後停止。ユーザーの自走改善指示を継続中。commitなし。以下のsessionや待機情報は履歴。
+
+## 2026-10-23 12:33 UTC 更新（この節を優先）
+- ROOT gimbal-velocity-improvement-20261022。v3独立9本、v5/v6各2本、v7各2本は完了/全監査成功。v7はb1前後で全5固定よりVIO方向誤差が小さかったが、二ツ小屋は .076895対上固定.008665m/sで悪化。詳細WORKLOG末尾。
+- 実行中はv6 a1開発1本（session38537 /tmp/motion-view-v6-a1.log）。後続v8（v6実追跡評価＋v7共通追加準備の組合せ）の2本が待機：start_v8.py session97395 /tmp/motion-view-v8.log。
+- 独立round2待機はstart_round2_validation.py session16303 /tmp/motion-round2.log。旧待機13025は停止。v6/v7/v8開発主3区間で事前固定へのRMS比幾何平均が小さい候補を選び、SHA/zip保存後、未使用seed20261511/12/13×a1/b1/Fut362秒の9本へ自動移行。独立結果はまだ一切見ていない。方針更新前後をprotocol/historyで保持。
+- 同時sim1、ユーザー停止時は全待機ownerも停止。live_state.jsonを確認。未完了なので自走継続。採用v57/default変更なし、commitなし。以下は履歴であり古いsessionを再起動しない。
+
+## 2026-10-23 改良実験を継続中（最新）
+- ROOT=/root/uas_native/logs/gimbal-velocity-improvement-20261022。live_state.jsonで所有者を確認。v3独立9本完了・9×85監査成功、final_audit.json。1本の共通取得欠落はinvalid_trialsへ保持し同条件再試行成功。再開後の6本に再発なし。採用v57は変更なし。
+- v3独立結果：全7区間×3回の21組で固定5方向の均等平均に18勝3敗、全固定に2勝19敗。主3区間×3回の9組で事前比較方向（b1 -50、二ツ小屋 上）に2勝7敗。固定平均への優位と良い固定への敗北を区別する。詳細final_summary.json。
+- v5（実ROVIO特徴/速度共同不確かさ＋早期開始）開発2本完了。主方向誤差 active / 事前固定：b1前半 .01757/.01859、後半 .07487/.01740、二ツ小屋 .02089/.00913 m/s。
+- v6（v5＋画像移動を抑える候補）開発2本完了。b1前半 .02934/.01774、後半 .03949/.01930、二ツ小屋 .006427/.009277 m/s。二ツ小屋では全5固定より良いが、1試行の開発結果。独立検証ではない。
+- v7はv3に準備運動26秒を全固定・偏向共通で追加し、その2回目だけ偏向の実角度を保持する別プロトコル。フィルタ/センサ/重みは変更せず、真値補正なし。条件付owner after_v6.py session74997 (/tmp/motion-view-v7.log) が開始。v5/v6の事前スクリーニングは両方未達。v7_plan.json/SHA固定、3試験成功。
+- v7完了後、v6のZaB a1開発1本を実行するowner after_preparation_trial.py session38537 (/tmp/motion-view-v6-a1.log)が待機。a1ではv3の計画地図があるのに実ROVIO追跡点が極端に少なかったため、実追跡評価の汎化を確認。全失敗保持。開発seed20261401、独立検証用の次seedは未使用の20261511/12/13。
+- 同時sim最大1。ユーザーが停止したら待機ownerも停止する。まだ自走実験中、終わっていない。source/config/各結果はROOT、比較入口candidate_report/index.html（更新要）。固定に安定して勝つ目標は未達、採用切替/commitなし。
+- 古いafter_validation.py/session67375は意図的停止、v5実行64013は終了、v6owner51605は終了。古い以下の進捗は履歴。GUI/raw bagなし、Windows空き約160GiB、8GiB停止guard維持。
+
+## 2026-10-23 再開中（以下の中断指示は解除済み）
+- ユーザー「再開して」。ROOT gimbal-velocity-improvement-20261022、resume_motion_view_trials.pyがvalidationの未完了分を実行中（session38925、/tmp/motion-view-resume.log）。無効a1/412はinvalid_trialsへ保存、同条件で再試行。凍結ソースと採用設定は不変。
+- 欠落は全固定画像/共通真値に同時発生。発生源は未特定、厳密な監査を維持して継続。完了済み3本を再実行しない。PAUSED.jsonはresumedへ更新。
+
+## 2026-10-22 — 偏向手法の改良（ユーザー指示で中断・全停止）
+- 最新指示「一回作業中断して」に従って停止。再開指示まで実験を開始しない。ROOT `/root/uas_native/logs/gimbal-velocity-improvement-20261022`、再開記録 `PAUSED.json`。記録済みownersと/procを確認し、今回の実験プロセス残存なし。
+- 依頼は「手法を改良し、固定に勝てるように」。開発4候補×2飛行完了、全監査合格。motion_view_v3をfrozen_candidate.json/zipに固定。既存採用v57の81ファイル・センサ・推定器・融合較正は不変。採用切替/commitなし。6単体試験成功。
+- v3は2画像の相対運動情報、LiDARの相対的に弱い並進方向、5×5画像区画の期待情報、4秒目標保持、準備運動中から視野選択。真値や経路名を制御へ入れない。主評価は融合前の実ROVIO速度誤差（共通LiDAR弱方向）。融合後の位置精度は分けて扱う。
+- 独立検証はseed20261411のZaB a1/b1/二ツ小屋の3飛行が完了・監査合格。4本目a1/20261412は飛行完了・全所有終了0だが入力連続性等の監査に失敗してownerが終了。`validation/campaign.json`はfailed、4本目エントリはrunningのまま（実プロセスはない）。生の失敗記録を保持。
+- 4本目失敗：comparison.jsonでreference_valid、純LIOの連続入力/scan/IMU完全一致/出力連続性がNG。array_comparison.jsonでも全方向の入力/画像/出力連続性がNG。純LIOのscan2817対参照2823、最大出力間隔0.7秒。原因の特定は未完了。速度制限違反や手法精度不良と決めつけない。無効試行を正常な精度比較へ混ぜない。
+- 初回独立検証VIO方向RMS[m/s]：b1前半偏向.12368/固定-50 .01759、後半偏向.00977/固定-50 .01838（後半は全固定5方向より良い）。二ツ小屋手前/中/奥：偏向.0204/.1124/.1275、上向き固定.0172/.0511/.0309。a1も最良固定には負ける。改善は区間によって逆転し、固定に安定して勝つという目標は未達。
+- 未実行はb1/Fut seed412、a1/b1/Fut seed413の5飛行。a1/412は原因解決後に必要なら再試行。元のcontinue_validation.pyを先頭から再実行しない（既存出力へ衝突、凍結情報を上書きする）。runnerにresume機能なし。別継続処理で完了済みを保持し、実験条件のSHAを確認する。
+- 次候補motion_view_v5.yamlは既存v54の実ROVIO特徴・速度の同時不確かさ評価＋準備運動中の視野選択。設定だけ用意、未実行。v3の結果を見て改良した次候補には別の未使用seedで独立検証が必要。v3を黙って書き換えない。
+- 結果/再開参考：各development_v*/report/motion_index.html、validation/report/summary.json、/tmp/motion-view-validation.log、ROOT/progress.py。最終report_motion_view_trials.pyとaudit_and_summarize.pyは独立9本完了前提なので未完了状態を最終結果と呼ばない。GUI/raw bagなし、数値ログ保持、Windows空きguard8GB。
+
+## 2026-10-22 — 固定優位のVIO拘束追加収集（完了）
+- 新規9飛行、ZaB a1/b1と二ツ小屋の7区間×3回。ROOT `/root/uas_native/logs/visual-constraint-survey-20261022`。全停止済み・継続待ちなし。レポート `report/index.html`、全比較PDF、代表時系列cases.pdf、summary/cases.json、visual_samples.csv。
+- VIO速度観測そのものの精度で固定が3/3回優位な代表3例: b1 60–120秒(-50,0) .017994 vs 偏向.299021m/s、b1 180–240秒(-50,0) .030396 vs .401186、二ツ小屋60–120秒(0,-90上) .011009 vs .149350。各飛行RMSの平均。5/10/20秒の共通方向更新・全3D速度誤差でも各3/3勝利。他2試行で方向を選んでも同じ方向が選ばれ、評価試行で勝つ。
+- 全候補は3区間11方向比較（独立11環境ではない）。他4区間は順位逆転を含み、固定が恒常的に良いとはしない。a1復路3回目は偏向が全固定より正確。二ツ小屋手前偏向は.359/.073/.016m/sと変動が大きいので平均のみで説明しない。
+- 採用v57・DRPM OFF・融合重み・偏向規則は変更なし。共通純LIO弱方向への速度誤差が主指標、融合後の誤差相殺で選んだケースではない。方向は漂流する純LIO地図由来の診断指標で、強異方性基準は126窓中8窓。真の退化を保証した実験ではない。
+- 各85項目×9飛行=765/765成功、全所有終了0、採用/実行/評価SHA一致。約537MiB、Windows空き約160GiB。詳細はWORKLOG最新節。新規ソースrun_visual_constraint_survey.py/report_visual_constraint_survey.py/plot_visual_constraint_cases.py。レポート再生成手順はWORKLOGに記載。commit未実施。
+
+## 最新：方向順位の反復検証（2026-10-22、完了・全停止）
+
+- ROOT=/root/uas_native/logs/direction-repeats-20261022、入口report/index.html。ZaB a1往路40–100秒/復路160–220秒、二ツ小屋60–120秒/180–240秒、各3回新規飛行（seed20261201/2/3）。履歴保持・評価のみ切出し、各約30m。v57/DRPM OFF・固定5方向＋偏向＋純LIO、真値補正なし、設定採用変更なし。
+- 主10秒方向誤差RMS平均[m]: ZaB往路 固定最良上.05804/偏向.03982（3/3で全固定より良好）、復路 正面.09069/偏向.10996（正面に1勝2敗）。上向きは復路3回目に破綻（10秒48.83m、60秒位置181.68m）し、入力検査合格の性能結果として除外せず保存。
+- 二ツ小屋は手前 −50 .20851/偏向.43462、奥 −50 .09294/偏向.53837。偏向は−50に手前1勝2敗・奥0勝3敗。奥の最良は下/下/−50で3回平均は−50。2回時点の最良方向切替は3回目に再現せず、最終平均では両区間−50が良い。固定優位を偶然として無効扱いしない。
+- 60秒位置RMSEではZaB往路 上.2104/偏向.2201、復路 正面.2768/偏向.2422で主10秒と一部逆転。二ツ小屋 手前−50 .3194/偏向1.5740、奥−50 .1683/偏向1.0601。全窓長/全試行値を保持し、一指標の勝ちを普遍的勝ちへ拡張しない。
+- 視覚速度そのものは二ツ小屋偏向が正確。奥の速度RMSは−50 .5570/偏向.0413m/s、−50の速度偏りは3回全て過大、純LIO移動は全て過小。系統的な誤差補償を支持する再現例。固定の融合成績の勝ちと、観測自体の正確さを分ける。因果寄与率未同定。
+- 残り2試行で方向を選んで1試行へ適用する評価も保存。ZaB 共通正面.08163/区間別.07436/偏向.07489、二ツ小屋 共通−50 .15072/区間別.17627/偏向.48649m。強異方性閾値該当は主72窓中3だけで、真の退化方向認定とは区別。
+- 全6×65/65監査成功、採用/実行/評価SHA不変、全所有停止正常終了。ログ約306MiB、Windows空き約173GB。GUI/bagなし。source: active_perception/run_direction_repeats.py、report_direction_repeats.py、report_direction_segments.py。再集計は上2report→ROOT/plot_choices.py→ROOT/finalize_findings.py。WORKLOG末尾に詳細。再開待ちなし、commitなし。
+
+## 二ツ小屋隧道290m・固定5方向（2026-10-21、完了・全停止）
+
+- 同じ飛行で固定5方向＋偏向を独立単眼ROVIO＋MIMOSA処理。v57/DRPM OFF/0.5m/s、角度以外同条件、追従582.177秒。新--view-arrayで再実行可。
+- 融合位置RMSE[m]: (-50,0)2.5665、(0,0)5.5140、(+50,0)6.0679、(0,+90)下7.8524、(0,-90)上9.8527、偏向5.1247。同時純LIO167.8541。固定5方向等確率選択のRMSE期待値6.3707より偏向19.56%低い。最良固定は事後選択。1試行で有意差/再現性未評価。
+- 前回二眼飛行とはノイズ厳密同一を仮定しない。今回65/65全方向監査、元20/20、全期間coverage1。採用/拡張/資産SHA不変、全所有/子exit0・残存なし。ログ89MiB、Windows空き176.65GB。
+- 結果 /root/uas_native/logs/futatsugoya-20261021-five-views290/index.html、interior/six_axes.pdf、summary.json、final_audit.json。全停止、自動再開不要、commitなし。
+
+## 二ツ小屋隧道290m比較（2026-10-21、完了・全停止）
+
+- ユーザー指示の290.088mを0.5m/s、追従582.177秒で完走。採用v57/DRPM OFFは変更なし。固定(0°,0°)、偏向、純LIOを同じ飛行で比較、GUI/bagなし。
+- 位置RMSE[m]: MIMOSA単体170.4573、固定融合2.1291、偏向融合7.2903。今回は偏向が固定より悪い。ROVIO単体は固定235.1055/偏向12.1992で逆順位。融合の原因切分けは未実施、誤差相殺とは断定しない。
+- 全5821評価時刻、初期剛体整合のみ、全監査合格・圧縮後再集計一致・採用/資産SHA不変。全所有/子exit0・残存なし。所要約11.2分、ログ45MiB、Windows空き176.82GB。
+- 結果 /root/uas_native/logs/futatsugoya-20261021-interior290/index.html、comparison.pdf（六軸2ページ）、final_audit.json。1試行、既存の近似尺度/照明条件の制約は維持。自動再開不要、commitなし。
+
+## 二ツ小屋隧道の導入（2026-10-21、20m確認完了・全停止）
+
+- 新環境assets/futatsugoya/futatsugoya.sdf、手順assets/futatsugoya/README.md。作者Fujihiko MatsumotoのCC BY 4.0モデル。元39.3万三角形と4K画像12枚を保持。材質対応を復元してGazebo用に変換。
+- 元の実寸不明につき近似入口間=384mで一様拡大。これは測量校正ではない。一様環境光＋写真テクスチャで、実際の暗闇の再現ではない。world名zabは通信互換用で、形状は新モデルのみ。
+- 新prepare_futatsugoya.py/run_futatsugoya.pyとsimulation_inputs/futatsugoya.json。採用v57/センサ/推定器/校正は変更なし。DRPM OFF。新規端末から `python3 /root/uas_native/active_perception/run_futatsugoya.py --output /root/uas_native/logs/futatsugoya-new-check` 。GUI/bagなし、Ctrl+C可。--route interiorは290m（形状距離確認済み、全飛行未実施）。既存出力へ上書きしない。
+- 20m/0.5m/s、真値制御の同一飛行で純LIO・固定融合・偏向融合を確認。最終試行位置RMSE[m]は11.7528/8.0917/8.2864、ROVIOは固定0.8632/偏向0.7357。短い区間で大ドリフトがあり、偏向の改善は出ていない。
+- 最初の2回も飛行と比較は正常だが補助点群確認に不具合があり、修正後の3回目は補助確認も成功。全3試行保持。独立3seedの性能実験ではない。LiDARと元形状の距離中央値2.0cm、95.1%が10cm以内。法線による形状診断は長手方向が弱い。詳細・制約はWORKLOG末尾。
+- 結果 /root/uas_native/logs/futatsugoya-20261021-final/index.html、smoke/comparison.pdf、final_audit.json。全所有プロセス終了、採用SHA不変。資産約105MiB/実験ログ計33MiB、Windows空き約180GB。自動再開不要、commitなし。
+
+## 旧logsのDrive移管（2026-10-20、完了・全停止）
+
+- ユーザー指示で旧native/logs全体をDriveへ移管し、ローカルから削除。以下の過去の実験結果パスは保存当時の記録であり、今はローカルに存在しない。旧データから自動再開しない。
+- 保存先: https://drive.google.com/drive/folders/1SNkp_XT7AsO2UyedbRQ1FqM1qJKQNiId 。元ファイル実体65,284,512,431 bytes、122,533 entries。圧縮ログ19,825,561,289 bytes（74分割）＋別保存47 MCAP 27,612,490,864 bytes。全分割・全MCAPのサイズとMD5一致、元ツリー不変を確認して削除。リンク先がlogs外にある実体は削除していない。
+- 新規オンライン実験に必要な入力は `/root/uas_native/simulation_inputs/README.md` に集約。14経路・採用3経路・融合校正・起動テンプレートを保持。採用v57の推定/偏向方式・数値設定は不変。オンライン起動側の過去logs参照を置換し、9経路比較のprefixも新規実行する。
+- 復元手順・保存確認は `/root/uas_native/archive_records/logs-20261020/`。`restore.py --destination <空のディレクトリ>` でlogs/を復元する。`--without-bags` で別保存47 MCAPを省略可能。Google DriveのフォルダIDを固定して取得。過去の図・オフライン再解析には復元が必要だが、新規シミュレーションには不要。
+- 削除後の入力/起動準備テスト2件、固定5方向モデルテスト2件成功。さらに旧logsが空の状態でrun3の離陸・初期化・3秒追従を完了、固定/偏向/純LIOの検査valid=true。全所有プロセス/子プロセスexit0、残存なし。短い起動確認であり新たな性能比較の結論には使わない。
+- 最終Windows空き12.91GB。WSL内データ削除量とCドライブの実空き増加は同一ではない。VHDのオフライン圧縮やWSL終了は行っていない。8GB停止条件は維持。
+
+<!-- CURRENT_FIXED_FIVE_VIEWS -->
+## ZaB固定5方向同時比較（2026-10-20、完了・全停止）
+- ROOT=/root/uas_native/logs/zab-fixed-five-directions-20261020。直前のrun3/run4/run1_tail_branch各2回で、固定5方向と偏向を同じ飛行で独立単眼ROVIO＋MIMOSA処理。5眼融合ではない。採用v57・DRPM OFFは不変。pitch+90下/-90上。各カメラの位置・画質・周期は同一、固定姿勢以外の推定設定は同一。
+- 2回平均位置RMSE[m]：
+
+|経路|(-50,0)|(0,0)|(50,0)|(0,90)下|(0,-90)上|偏向|
+|---|---:|---:|---:|---:|---:|---:|
+|run3|0.034024|0.038944|0.035754|0.057610|0.047277|0.039089|
+|run4|0.026034|0.021730|0.023391|0.033999|0.030232|0.023168|
+|run1_tail_branch|0.040888|0.043916|0.050413|0.068119|0.073542|0.044862|
+
+- 固定方向への依存あり。平均では偏向は最良固定を超えず、試行別で全固定を超えたのはbranch第1試行のみ（1/6）。run3の最良方向は試行ごとに変化。短い約33～52秒×2回の検証であり、最良固定は事後選択。長期一般化や有意差を示すものではない。前回二眼飛行とは同seedでも入力ノイズ一致を仮定しない。
+- 6/6 valid、全固定方向の露光・外部姿勢・ROVIO出力時刻、LiDAR/IMU共通、設定一致、連続推定を確認。凍結81SHA・追加4SHA不変、全子exit0、所有PID残存0。結果約109MB、Windows空き18.89GB。index.html/6ページcomparison.pdf/summary.json/final_audit.json。画像は方向ごと1例のみ、bagなし。
+- 実装はfixed_view_array.py/run_view_array.py/run_view_array_campaign.py/audit_view_array_inputs.py/report_view_array.py/test_fixed_view_array.pyとunipilot_view_array.launch.py。詳細はWORKLOG末尾。全完了で自動再開不要。採用方式は変更していない、commitなし。
+<!-- /CURRENT_FIXED_FIVE_VIEWS -->
+
+<!-- CURRENT_ZAB_ADDITIONAL_CONDITIONS -->
+## ZaB追加3条件の固定/偏向比較（2026-10-20、完了・全停止）
+- ROOT=/root/uas_native/logs/zab-additional-conditions-20261020。run3/run4/run1_tail_branchを事前指定し各2回（要求seed20261101/20261102）。採用v57・UniPilot単眼・DRPM OFFは変更なし。純LIO/固定融合/偏向融合を同じ飛行・LiDAR・IMUで評価。短い追従33～52秒、初回剛体整合・尺度補正なし。
+- 2回平均位置RMSE[m]：run3 単体.200956/固定.045081/偏向.044165、run4 .025844/.024048/.025814、branch .172256/.034792/.034141。偏向は3/6改善、3/6悪化。run3は2/2改善、run4は2/2悪化、branchは1勝1敗。差は小さく、新環境や長期退化への一般化を示す結果ではない。
+- 全6valid・圧縮後再計算一致・81SHA不変・全子exit0・残存0。GUI/bag/生画像点群なし、保存約61MB、Windows空き約19.37GB。index.html/6ページcomparison.pdf/summary.json/final_audit.json。WORKLOG末尾に全数値。採用方式の調整なし、commitなし。
+- 再実行コードrun_zab_additional_conditions.py（事前条件・再開状態・既存run_one再利用）、report_zab_additional_conditions.py。全完了なので自動再開不要。SubTGraphは却下されたまま、今回使用していない。
+<!-- /CURRENT_ZAB_ADDITIONAL_CONDITIONS -->
+
 <!-- CURRENT_LIO_FAILURE_COMPARISON -->
 ## 高誤差経路9本の三構成比較（2026-10-19、完了・全停止）
 - ROOT=/root/uas_native/logs/lio-failure-comparison-20261019。旧DRAGON14runの単体位置RMSE>1mで事前選定した9本を、現在のUniPilot v57・単眼・DRPM OFFで比較。prefixは直前結果を再利用、8本を新測定。各run1試行/seed20261026。現在単体誤差が小さいrunも除外せず保持。
@@ -1183,3 +1342,40 @@ v32短区間の融合位置はa1 .445→.340m、b1 5.316→.242m。ただしa1�
 - 2回目の通常固定3.975m/偏向2.888mで順位逆転。同じ要求seedでも2回の実観測は別。各回内は同一入力、48/48・51/51監査成功、複製軌跡厳密一致。元run全240秒の主因確定や固定画角の恒常的優位と称さない。
 - plannerは最終融合共分散を直接予測していない。今回地図のLiDAR直接深度は0、画像視差とMIMOSA移動に基づく三角測量のみ。この移動誤差の影響も追加確認対象だが未切分け。共通IMU相関・地図更新も今回単独未検証。
 - 実験は終了、シミュレーション継続なし。採用推定器/偏向規則/融合重み81SHAは維持。ログ最小化のため数値を可逆圧縮。今回も新たな設定を採用していない。
+
+## 2026-10-21 — ZaB・二ツ小屋の短窓比較完了
+- 最新結果: `/root/uas_native/logs/weak-direction-windows-20261021/window_report/index.html`、comparison.pdf、summary.json。ZaB a1/b1・二ツ小屋interiorを各120秒×2回、計6飛行。各60秒に分割し、共通純LIO診断の最弱並進方向へ5/10/20秒の移動誤差を投影。固定5方向は独立単眼＋偏向＋純LIO、v57/DRPM OFFを変更せず。新しい偏向方式は採用していない。
+- 主10秒の固定5方向平均→偏向[m]: a1前半 .01515→.01436、後半 .08500→.06877、b1前半 .01870→.01689、後半 .02011→.01394、二ツ小屋前半 .55346→1.16550、後半 .40475→.22582。ZaB後半2区間/二ツ小屋後半は2試行とも改善、二ツ小屋前半は2試行とも悪化。これらは5/20秒窓でも同符号。ZaB前半は試行で順位逆転。
+- 重要: 二ツ小屋後半の視覚速度誤差RMS正面.8332/上.0096/偏向.1389m/sに対し融合方向誤差.2222/.5230/.2258mで順位不一致。純LIO−4.981m/10秒に対し正面速度偏り+.698m/s、偏向も+.1225m/sで相殺し得る方向。ZaB b1後半も偏向は視覚速度が最も不正確なのに融合が最良。短窓でも正しい視覚拘束の効果と相殺を因果分離していない。
+- 診断は回転固定の並進ブロックで、ドリフトした純LIO地図に依存。事前の強異方性閾値.05以下は主10秒72窓中1窓、二ツ小屋0。「退化を検出した窓で普遍的に改善」と言わない。全窓/部分集合と全5/10/20秒を保存。2独立試行で、窓数を試行数とみなさない。
+- 実装: record_common_lidar.py、run_window_validation.py、window_metrics.py/test_window_metrics.py、report_window_validation.py。既存observer/runnerに任意診断記録追加、推定器変更なし。4数値試験、6飛行の各65/65検査、採用/実験/評価SHA不変・全所有停止を確認。約196MiB、Windows空き176GB、bag/GUIなし。再生成はreport_window_validation.py <campaign root>→ログ内finalize_findings.py。全終了済み、再開待ち作業なし。
+
+## 2026-10-24 — 特徴の偏在方向が変わる人工トンネルの検証完了
+- 最新結果: `/root/uas_native/logs/switching-tunnel-20261024/validation/report_sparse/index.html`。PDF/全数値/入力監査/実偏向角図を同ディレクトリへ保存。環境は `/root/multilink_autonomy_ws/assets/switching_tunnel_20261024`、再生成器は `active_perception/build_switching_tunnel.py`。
+- 幅6m・高さ5mの一定アーチ断面、形状/照明共通。特徴の多い面が32mごとに左→天井→右→床、逆順、全周豊富の3配置。130m/.5m/s、各3回、同一実飛行で固定5単眼と偏向単眼を比較。DRPM OFF、直前候補v10を無変更で使用。標準採用v57は変更していない。真値/正解模様配置は視野判断や推定へ入力しない。
+- 偏在2配置の全6飛行で、VIO10秒軸移動・融合10秒軸移動・融合全位置の全指標が全固定より改善。3回平均のVIO10秒は最良固定→偏向で2.306→1.065m / 5.307→1.969m、融合全位置は33.612→11.174m / 44.707→12.473m。主軸速度（全拘束利用）は .270→.130m/s / .459→.223m/s。
+- 全周豊富な対照は全3飛行で良い固定が優位。VIO10秒は最良下固定 .232m / 偏向1.139m、融合全位置は最良上固定6.042m / 偏向10.828m。固定平均と最良固定を混同しない。偏在でも絶対位置RMSE8.6〜13.2mが残る。制御された人工配置での結果で、実環境や単純な特徴追従方式への優位は未検証。
+- 上下固定の速度拘束利用率は偏在で約75%/50%。画像とROVIO出力は連続、不確かさにより融合が拒否。欠落を補間しないreport_switching_tunnel_sparse.pyを第一試行後に追加し評価変更を明記（evaluation_amendment.json）。全利用の主軸速度と利用時のみの速度を分離。全方法共通の10秒移動指標は補助指標で事前登録ではない。
+- 全9飛行85検査/回、74凍結SHA、圧縮再集計一致、全所有者停止をfinal_audit.jsonで確認。uniform初回は処理待ち停止で未完走→invalid_trialsへ保持し同seed/条件で再取得。取得ownerは全完了後に旧完全factor報告器で例外となるが取得はcomplete。再取得せず `report_switching_tunnel_sparse.py <validation>` → `audit_switching_tunnel.py <validation>` → `illustrate_switching_tunnel.py <validation>` で報告を再生成する。
+- 全実験停止、待機/後続所有者なし。約0.5GiB数値/少数静止画像だけ保存、rawbagなし、Windows空き約156GiB。今回の依頼は完了、再開待ち実験なし。
+
+## 2026-10-24 — Ostopoviceモデルを100mに拡張・比較完了
+- ユーザー提供Downloads/hitler-highway-tunnel-at-ostopoviceのFBX/実画像から自動生成。生成器 `active_perception/generate_ostopovice_tunnel.py`、Assimp取込補助import_fbx_mesh.cpp。幅中央値5mと仮定、内壁凹凸を再構成・周期接続し100m。元の落書きを回転/反転/拡縮/色変更して壁・天井へランダム配置。独立seed24101/24102/24103、形状共通・配置全記録、結果による選別なし。環境assets/ostopovice_100m_20261024、元Downloads無変更。
+- 表示は `ros2 launch multilink_uas_bringup ostopovice.launch.py` の一コマンド。seed:=24102/24103選択、機体/推定器なし、Ctrl+Cで終了。実GUI確認済み停止済み。新規生成のコマンドは結果HTMLへ記載、出力先上書き不可。
+- 結果 `/root/uas_native/logs/ostopovice-20261024/validation/report/index.html`、PDF/summary/final_auditあり。3配置×2反復、各90m/.5m/s、固定5独立単眼と偏向、純LIO。DRPM OFF・v10候補・標準v57は不変。6本×85検査、139SHA一致、全所有停止、圧縮後集計一致。速度拘束利用率は全方法100%。
+- VIO10秒軸移動RMSの2回平均[m] 固定平均→偏向：配置1 2.740→.602、配置2 4.118→.525、配置3 2.429→.301。最良上固定 .407/.358/.323。偏向は固定平均に6/6勝ち、全固定に1/6勝ち。
+- 融合全位置RMSE[m] 固定平均→偏向：.790→1.005、.737→1.121、.765→1.409。固定平均に0/6勝ち。最良正面固定 .428/.404/.422、純LIO平均1.816/1.437/1.998。VIOの順位と融合の順位を区別し、今回融合が改善したとは説明しない。融合の相殺/重み原因の交換試験は今回未実施。
+- 実偏向は序盤後主に天井を選ぶ。ランダム模様を配置した環境であり、最適視野が必ず場所ごとに切り替わるような作為的配置ではない。元凹凸があるため理想的な軸方向零拘束ではない。幅5mは実測復元ではなく仮定。2反復の結果を統計的有意と呼ばない。
+- 再集計: report_ostopovice_trials.py <validation> → audit_ostopovice_trials.py <validation> → finalize_ostopovice_report.py <validation>。6飛行は完了、再実行不要。ログ273MiB/asset190MiB、Windows156GiB空き、連続rawなし、全所有プロセス停止、今回依頼完了。
+
+## 2026-10-24 — 次の環境：自然なまとまりを持つ人工トンネル
+- ユーザーはOstopoviceを離れ、完全人工かつ明確な偏在が場所で変わる環境を希望。`active_perception/build_weathered_tunnel.py`、assets/weathered_tunnel_20261024へ新環境を生成。100m×幅5m、一定アーチ断面高さ4.5m。外部画像なし。コンクリート色むら・染み・ひび・剥離・析出跡のランダムな集まり。約12/29/47/69/90mで豊富な向きが天井/左壁/右壁/天井/右壁へ変わる。境界は滑らか、領域長と幅は不規則。分布自体は人工条件である。
+- 一コマンド表示 `ros2 launch multilink_uas_bringup weathered_tunnel.launch.py`。画像と概要 `/root/uas_native/logs/weathered-tunnel-20261024/index.html`。25実Gazebo画像と特徴数で偏在変化を確認、同seed再生成81asset一致。GUI描画39〜42fps確認後停止。新環境の飛行精度比較は未実施。旧比較/v10/標準v57無変更。
+- 再生成 `python3 /root/uas_native/active_perception/build_weathered_tunnel.py <新しい出力先> --seed 24201 --length 100`。同seed再現、出力先上書き不可。新worldはviewerのworld_file:=<path>で表示可能。環境分布メタ情報はcontrollerへ渡さない。
+
+## 2026-10-24 — 人工風化トンネルの固定/偏向比較完了
+- 同一weathered24201環境、90m/.5m/sを3反復。結果 `/root/uas_native/logs/weathered-tunnel-20261024/validation/report/index.html`、PDF/summary/findings/angles付き。run_weathered_trials.py/report_weathered_trials.py/audit_weathered_trials.py/finalize_weathered_report.py。飛行は完了、再実行不要、全所有停止。
+- 3回平均の融合位置RMSE：純LIO51.524m、固定5平均29.488m、最良固定上14.431m、偏向7.961m。偏向は固定平均へ3/3勝ち、各回全固定へ1/3勝ち。各回偏向4.360/14.381/5.143m、正面1.266/49.109/46.780m、上13.092/8.532/21.668m。試行ばらつきを省略しない。
+- VIO10秒軸移動は最良固定正面3.475m→偏向3.287m（約5.4%減）。下固定はVIO発散、速度拘束採用0%、その他100%。固定5平均741.511mは下固定の発散に支配されるため、これだけを根拠に大幅改善と説明しない。軸速度は正面 .3742→偏向 .3304m/s。誤差相殺の因果分離は今回行っていない。
+- シミュレーションの待ち合わせに修正あり。元pacerは新しい角度commandだけを完了扱いし、holdでreturnしたplannerを計算待ちと誤認して時計停止。未完了3回を保持。weathered_planner_node.py/scheduling_completion.pyで既存tickの正常return後に別topicへ処理完了を通知。推定器/選択規則/last_plan/command無変更、例外時は通知なし。run_weathered_view_array.pyで接続、元閾値.3/.25秒を維持。途中の閾値緩和だけの案は不採用。旧実験sourceは無変更、最終3回は共通修正。
+- 元の厳密監査は全3回planner_continuous=falseを保持（最大更新間隔2.527/2.728/2.098秒）。weathered_trial_acceptance.pyで取得条件と手法の保持挙動を分離。後者とその参照失敗のみ許可、センサ/推定出力/同一入力/設定/正常終了は必須のまま。分類変更は最初の完走結果後に行ったとdesignへ記録。all_acquisitions_valid=true、strict valid=falseを混同しない。228SHA一致、圧縮再集計一致、所有PID消滅確認。ログ223MiB、Windows153GiB空き、連続rawなし。
