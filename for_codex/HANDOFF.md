@@ -1,3 +1,11 @@
+## 2026-10-26 最新：未使用3配置での偏向採点比較、全30本完了・全停止
+- 最新結果は `/root/uas_native/logs/information-holdout-20261026/report/index.html`、comparison.pdf、findings.json。3新規模様配置×各方式5回、90m/.5m/s、単眼ROVIO+MIMOSA・DRPM OFF。視覚のみの採点 vs LiDAR情報を使う採点。形状・センサ・推定器・融合・偏向v10は共通。固定との比較ではない。
+- 全3配置の平均でLiDARあり改善。3配置平均の視覚速度誤差 .389103→.325277m/s（16.4%減）、VIO10秒3.650041→3.034276m、融合10秒1.824442→1.525933m、全位置10.932243→8.715399m（20.3%減）。速度で良いのは15組中7組、全位置10組。速度の最大値/ばらつきは全3配置で減少、毎回の改善や統計的有意は主張しない。24301の速度中央値は逆順位。
+- 30本の取得検査合格・速度利用率100%、751凍結入力一致、全終了コード0、210PID消滅。元の厳密valid=false（planner_continuousのみ）は保持して別記。圧縮データから30本再計算して数値厳密一致。初回未完了の補助上固定異常はincomplete_attemptsへ保持。全30本は補助4推定器を外した同一構成で実施、6カメラの描画と主推定器は不変。
+- 中断依頼の状態確認時には既に全30本が完了。再開後は最終集計のみ実施。現在のシミュレーション/待機runnerなし。ログ約723MiB、Windows空き約156GiB。全予定完了、再取得・継続起動は不要。
+- 再集計は run_information_holdout.py --output <ROOT> --report-only → finalize_information_holdout.py <ROOT>。run_information_holdout.pyの計測部分と実行wrapperは凍結済み、変更時は新キャンペーンとして扱う。詳細はWORKLOG末尾。
+- 以下は過去の履歴。古い「進行中」やsession番号を現在の状態と扱わない。
+
 ## 2026-10-24 最新：人工トンネル6/9本完了、最後の3本を実行中
 - ROOT=/root/uas_native/logs/switching-tunnel-20261024。owner session68566、/tmp/switching-tunnel-resume.log。現在alternating_seed20262403。先頭6本有効完了。最終3条件が終わるまで新設定・新実験なし。待機/追加observerは全て終了。
 - 偏在4本はVIO10秒移動/融合全位置で全固定より良好。全周rich対照2本は上固定が融合全位置で良好。速度RMSだけだとreversed/402は偏向 .280389と最良固定 .280929m/sでほぼ同等。全失敗値保持。
@@ -1379,3 +1387,9 @@ v32短区間の融合位置はa1 .445→.340m、b1 5.316→.242m。ただしa1�
 - VIO10秒軸移動は最良固定正面3.475m→偏向3.287m（約5.4%減）。下固定はVIO発散、速度拘束採用0%、その他100%。固定5平均741.511mは下固定の発散に支配されるため、これだけを根拠に大幅改善と説明しない。軸速度は正面 .3742→偏向 .3304m/s。誤差相殺の因果分離は今回行っていない。
 - シミュレーションの待ち合わせに修正あり。元pacerは新しい角度commandだけを完了扱いし、holdでreturnしたplannerを計算待ちと誤認して時計停止。未完了3回を保持。weathered_planner_node.py/scheduling_completion.pyで既存tickの正常return後に別topicへ処理完了を通知。推定器/選択規則/last_plan/command無変更、例外時は通知なし。run_weathered_view_array.pyで接続、元閾値.3/.25秒を維持。途中の閾値緩和だけの案は不採用。旧実験sourceは無変更、最終3回は共通修正。
 - 元の厳密監査は全3回planner_continuous=falseを保持（最大更新間隔2.527/2.728/2.098秒）。weathered_trial_acceptance.pyで取得条件と手法の保持挙動を分離。後者とその参照失敗のみ許可、センサ/推定出力/同一入力/設定/正常終了は必須のまま。分類変更は最初の完走結果後に行ったとdesignへ記録。all_acquisitions_valid=true、strict valid=falseを混同しない。228SHA一致、圧縮再集計一致、所有PID消滅確認。ログ223MiB、Windows153GiB空き、連続rawなし。
+
+## 2026-10-25 — 視覚だけの偏向とLiDAR情報を使う偏向の比較完了
+- 最新結果 `/root/uas_native/logs/information-ablation-20261025/report/index.html`。weathered24201で各90m/.5m/s×3回、新規seed20262701/702/703。方式間は別飛行で同一センサ列ではない。既存v10の評価入力H/U/weakのみを除去する対照を追加し、予測・保持・復帰・制限・ROVIO/MIMOSA融合/DRPM OFFは共通。既定方式は変更していない。
+- 視覚のみ→LiDARありの平均: 軸速度 .352952→.303592m/s、VIO10秒軸3.618391→3.117923m、融合10秒軸1.340792→1.072226m、全位置5.883566→4.952328m。各指標2/3勝ち。主評価区間の速度拘束100%。平均差には視覚のみ3回目の悪化が強く影響し、軸速度中央値はLiDARありが僅かに悪い。統計的有意や一般的優位とは呼ばない。
+- 新規view_information_ablation.py / ablation_planner_node.py / run_information_ablation_array.py / run_information_ablation_trials.py、数値報告report_information_ablation.py、取得/判断ログ監査・説明finalize_information_ablation.py、test_view_information_ablation.py。再生成はreport → finalize。既存凍結コードは全て不変。
+- 6本取得チェック合格/569凍結項目一致/全記録終了0/42PID消滅。元strict valid=falseは全試行保持（planner_continuous、最大角度更新間隔1.82〜4.27秒）。全シミュレーションとowner終了済み、再開待ちなし。ログ247MiB、Windows154GiB空き、連続rawなし。
