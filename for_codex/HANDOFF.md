@@ -1,3 +1,29 @@
+## 2026-10-27 最新：DRAGONジンバル配置・自己遮蔽確認完了、90m精度は発散、全停止
+- 最新依頼はDRAGONの両端センサを保ちカメラをジンバル化。link1 LiDAR/IMU、link4単眼、機体6関節は四角形固定。現行UniPilotセンサとROVIO＋MIMOSA継承、DRPM OFF。詳細 DRAGON_GIMBAL.md / WORKLOG末尾。
+- `ros2 launch multilink_uas_bringup dragon_gimbal.launch.py`。Gazebo GUIあり、90m/.5m/s後に自動終了、Ctrl+C対応。`inspect:=true distance:=0` は端角度の画像確認。旧dragon_articulated.launch.pyは関節変形方式のまま。
+- link4カメラ(0.10,-0.60,0)m、元から外側52cm移動・高さ/初期方向維持。yaw±50/pitch±90deg。支持部質量/たわみを含まない理想ジンバル。全画角4,641姿勢の保守的形状検査で重なり0、ホバリング9方向＋復帰の10画像で自己遮蔽なし。
+- `/root/uas_native/logs/dragon-gimbal-20261027/report/index.html`。20m検証は融合RMSE3.6618m/VIO5.8881m。通常の90mはROVIO1344.4594m/MIMOSA283.8248mで発散。初期yaw観測中にVIO位置誤差0.17→4.75m、特徴距離中央値4.79→844m、飛行前から不安定。配置・動作成功と精度失敗を区別する。新方式の安定精度を実証した扱いにしない。
+- 90mの実飛行90.1162m、機体関節固定、LiDARリンク姿勢変動0.1141deg、画像/IMU/LiDAR欠測なし。エンコーダ受信queueを1000Hzに対応する深さ2000へ増やした。全owned PID終了。90mのencoderのみ終了時exit1（ROS context破棄競合）、元記録保持、context終了時だけ例外許容する修正を追加。14単体チェック/build等成功。ここまでの変更は2026-10-27に実装・レポート・資料へ分割してコミット済み。
+- 以下は過去の履歴。新たな依頼なしに追加実験を起動しない。
+
+## 2026-10-27 最新：DRAGON大域関節探索・90m固定比較完了、全停止
+- 最新依頼「当初の狙い通りに複数関節で視野を選び、既存ジンバルrun一例を検証」に対応。機体両端LiDAR/単眼、現行UniPilotセンサ条件。詳細 DRAGON_ARTICULATED.md / WORKLOG末尾。
+- 新規 articulated_search.py と関節planner改良。237到達候補＋局所協調候補、観測特徴地図とLiDAR条件付き速度/位置情報、経路検査、10deg/s実行。LiDAR情報なしは視覚による観測継続。センサ/推定器/融合の設定変更なし。
+- 結果 `/root/uas_native/logs/dragon-global-20261027/report/index.html`。人工weathered24301の90m/.5m/s、各1飛行。同一ソース/バイナリ/設定、違いmodeのみ。MIMOSA位置RMSE固定51.98594→偏向18.25717m、ROVIO928.80977→24.52402m。偏向も残差は大きい。過去UniPilotジンバル同配置5.49879mには未達（機体以外の差もあり、機構だけの比較ではない）。
+- 走行中の関節変化幅最大65.10deg、カメラ姿勢全体最大41.95deg/光軸偏向30.61deg、位置幅最大.423m。初期180deg観測は両条件共通で評価外。LiDAR側実姿勢は最大7.06deg変動。候補/経路判定は近似幾何、全方位の飛行保証ではない。
+- 公称5Hzに対し計画更新中央値2.658秒。LiDAR新鮮33/70判断、情報なしの視覚継続37/70。これらを隠して「常時退化方向を検知」と説明しない。
+- 取得/飛行検査は両方成功、全owned PID終了・全終了コード0。11単体検査、build等成功。結果と失敗試行は約64MiB、rawなし、Windows空き146GB。未コミット。再実行/常駐は不要。
+- 起動 `ros2 launch multilink_uas_bringup dragon_articulated.launch.py`。既定GUIあり・90m/.5m/s、`headless:=true`でGUIなし、`mode:=fixed`で初期観測後の関節固定。Ctrl+Cでまとめて終了。
+
+## 2026-10-26 最新：DRAGON両端センサ・関節視野選択の初回実装/試験、全停止
+- 最新依頼は4リンク両端にLiDAR+IMU/単眼カメラを置き、現行UniPilotセンサ設定を継承して関節で視野を変える構成。実装と10m飛行試験まで完了。詳細 `DRAGON_ARTICULATED.md`、WORKLOG末尾。
+- 起動 `ros2 launch multilink_uas_bringup dragon_articulated.launch.py`。GUI/rosbagなし、準備運動2周期・関節変形・10m飛行・着陸後に自動停止。現時点でエージェントの起動プロセスなし。
+- 最新結果 `/root/uas_native/logs/dragon-articulated-20261026/flight10m_prepared_v2/validation.json`。実移動9.99972m、カメラ相対回転14.314deg/位置変化最大5.48cm、LiDARリンク姿勢変化1.489deg。全センサ設定一致、時刻・取得・推定出力継続、関節制御等の10検査合格。
+- **精度は不十分**: 評価83.85〜144.20秒、ROVIO位置RMSE2.00825m/MIMOSA5.31176m。融合推定は実移動を大幅過小評価。速度factorは入力されている。動作確認の合格を精度改善と混同しない。原因切り分けは次の課題で、今回の依頼を越えて追加調整はしていない。
+- FC/IMUとLiDARはlink1、カメラはlink4。ROVIOに回転+並進と共分散変換を別ビルドで追加。現行UniPilot推定器は不変。関節探索はpitch±.25rad/yaw1〜1.56radの限定範囲、5deg/s。全方位到達/全形状での飛行/厳密衝突は未検証。
+- 外部gz_ros2_controlのURDF取得が通信欠落で永久待ちになる問題も修正・再ビルド。差分 `native/dragon-control-description-retry.patch` を保存。通常のDRAGON旧設定は既定のまま、新構成はarticulated:=trueでのみ有効。
+- 未コミット（本作業へのcommit依頼なし）。ログ約17MB、Windows空き約152GB。以下の従来UniPilot検証は完了済みの履歴。
+
 ## 2026-10-26 最新：未使用3配置での偏向採点比較、全30本完了・全停止
 - 最新結果は `/root/uas_native/logs/information-holdout-20261026/report/index.html`、comparison.pdf、findings.json。3新規模様配置×各方式5回、90m/.5m/s、単眼ROVIO+MIMOSA・DRPM OFF。視覚のみの採点 vs LiDAR情報を使う採点。形状・センサ・推定器・融合・偏向v10は共通。固定との比較ではない。
 - 全3配置の平均でLiDARあり改善。3配置平均の視覚速度誤差 .389103→.325277m/s（16.4%減）、VIO10秒3.650041→3.034276m、融合10秒1.824442→1.525933m、全位置10.932243→8.715399m（20.3%減）。速度で良いのは15組中7組、全位置10組。速度の最大値/ばらつきは全3配置で減少、毎回の改善や統計的有意は主張しない。24301の速度中央値は逆順位。

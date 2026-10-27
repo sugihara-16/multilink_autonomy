@@ -3141,3 +3141,79 @@ GPUスキャンはLivoxの非反復パターンや実機の走査時間を再現
 - 実装は計測時の内容を維持し、コミット整理で推定・制御・評価値を変更しない。最初の2件は b2cd9d3 `Add LiDAR view-scoring ablation`、7e4b2bc `Add held-out layout validation`。文書は `Record gimbal validation results` として保存。
 - 既存.gitignoreで生成ログ、計測データ、Pythonキャッシュが除外されることを確認。追加対象はPython実装11ファイルと文書2ファイルのみ。ログ/rosbag/生成モデルは追加しない。
 - 確認: 偏向採点・追跡復帰・予測・移動考慮の25テスト成功、追加Python全11ファイルの構文解析成功、差分の空白検査成功。コミットのためのシミュレーション再取得は行っていない。
+
+### 2026-10-26: DRAGON両端LiDAR/単眼カメラと関節視野選択の初回実装
+- ユーザー指定: 4リンクの一端にLiDAR＋IMU、反対端に単眼カメラ。センサ設定は現行UniPilotを継承し、aerial_robot_baseの既定値は使わない。
+- `dragon_articulated.py` と `dragon_sim.launch.py articulated:=true` を追加。FC/IMU・LiDARをlink1、カメラをlink4へ配置。センサ定義は `unipilot_gimbal.prepare(native, resolved, camera_far=1000)` をコピー。IMU1000Hz（白色ノイズ密度維持）、LiDAR10Hz/500×48/測距σ3cm、カメラ480×270/20Hz。物理設定の同一性をmanifestで検査。FCのあるリンクの質量記述も移す。飛行制御に必須の磁気インターフェースはUniPilot元SDFからコピーし、SLAMには入力しない。既定GPS/磁気/IMU/旧LiDAR/旧カメラは使用しない。
+- カメラはlink4の(.10,-.08,0)m、ローカル-y向き。実測6関節角を露光時刻へ補間し、URDFからIMUに対するカメラの回転・並進を計算。既存ジンバルROVIOは並進を拒否するため、`articulated_rovio.hpp` と別ビルド `build/rovio-articulated/rovio_articulated` を追加。特徴点の方向・距離と全状態との共分散を変換し、IMU状態は動かさない。凍結UniPilotソース/バイナリは変更なし。
+- `articulated_planner.py`: 現在のLiDAR情報＋ROVIO特徴点/速度の共分散から、候補のカメラ位置の違いも含めて追加観測の評価を計算。関節限界・保持特徴量・機体の近似遮蔽・非隣接ローター間隔を検査。`articulated_actuator.py` が100Hzで指令を補間。初期検証範囲はpitch±.25rad/yaw1.0〜1.56rad、各軸5deg/s。全方位到達・全形状の飛行/厳密メッシュ干渉は未検証。既存ジンバルの候補生成をそのまま使ったものではなく、関節用の限定範囲プロトタイプ。
+- `run_articulated_dragon.py`、`articulated_hover_test.py`、`report_articulated_dragon.py` とROS2 launchを追加。独立ROS domain/master/所有子プロセス、8GB Windows予備容量検査、数値だけ記録。ROVIO+MIMOSAは現行速度/傾き融合・IMUモデル・ノイズ設定を継承、DRPM OFF。真値は制御/事後評価だけ。UniPilotと同じ準備運動26秒×2周期を実施。
+- 起動時にDRAGON制御プラグインのrobot_descriptionサービス応答が失われ、`future.wait()`でGazeboが永久停止することを2回確認。外部 `/root/ros2/aerial_robot_base_ws/src/gz_ros2_control/gz_ros2_control/src/gz_ros2_control_plugin.cpp` に2秒待ち/再要求を追加し、packageを再ビルド。再適用差分は `native/dragon-control-description-retry.patch`。センサ/推定アルゴリズムの変更ではない。
+- 最終飛行 `/root/uas_native/logs/dragon-articulated-20261026/flight10m_prepared_v2`。離陸→準備2周期→関節変形20秒→自動視野選択しつつ10m/.3m/s→着陸。実移動9.99972m、高度1.9980〜2.0021m、LiDAR搭載リンク姿勢変化最大1.489deg、カメラ相対姿勢変化14.314deg、撮影位置変化xyz各1.72/4.29/5.48cm。指令106回中68回で移動候補を選択。実測関節速度最大5.302deg/s（設定5deg/sに対し制御追従の過渡を含む）。10項目の統合動作検査合格。
+- 同飛行: IMU151089件・LiDAR1511件に欠落周期なし。画像3021枚、最初の補間不可の1枚以外は50ms周期を維持。ROVIO2563件（評価1208）、MIMOSA1291件（評価604）、評価中最大間隔.05/.1秒。区間83.85〜144.20秒、初期SE3合わせのみ/尺度調整なし。ROVIO位置RMSE2.00825m、MIMOSA5.31176m、最大誤差5.15515/10.10962m。**動作確認は成功したが、精度は不十分。関節方式による改善・新構成の精度検証完了とは扱わない。**
+- 融合への視覚入力が無いわけではない。巡航106〜138秒の受理済み視覚速度factor平均vx=.401287m/s（指令.3m/s）、cov_xx=.0158869。MIMOSAの進行方向の推定移動は同じ10m飛行で約.008m。現在のデータだけで移植バグ/環境退化/融合重みのどれかへ原因を確定していない。次の課題はこの過小移動の切り分け。追加の手法調整は未実施。
+- 初期10m試験では準備運動を省略していた（`flight10m_v3`、ROVIO3.11474m/MIMOSA5.17644m）。準備を追加した上記が現行結果。自己点混入を調べる別試験では、近似機体包絡で抽出した自己点は全て既存range_min=.8m以内（.8m以遠0点）。Python自己点除去は処理遅延も生じたため、不採用/ソース削除。診断記録 `flight10m_filtered` は中断試験として保持し、成功試験と混ぜない。
+- 単体検証: 実URDF/センサ移植5テスト成功。C++でROVIO4種類の距離表現の座標変換、実空間の点/共分散/他状態との相互共分散の保存を確認。ROS2 bringupと外部制御packageビルド成功。最終試験は全14所有プロセス終了コード0、全過去試験の記録PIDも消滅確認。数値ログ全体約17MB、Windows空き約152GB。GUI/rosbag/連続画像・点群は記録していない。
+- 起動: `ros2 launch multilink_uas_bringup dragon_articulated.launch.py`。10m有限試験、自動終了、Ctrl+Cで中断。詳細 `for_codex/DRAGON_ARTICULATED.md`。本作業のコミット指示はないため未コミット。
+
+## 2026-10-26 DRAGON関節検証launchのGazebo表示
+
+- 原因: `dragon_articulated.launch.py` から起動する実行管理側が `headless:=true` を固定していたため、ユーザーの起動コマンドでは画面が開かなかった。
+- 変更: launchに `headless` 引数を追加し、既定値を `false` にした。実行管理側の `--headless/--no-headless` を経由し、既存のDRAGON bringupへ渡す。直接Pythonで実行する既存のバッチ検証はGUIなしを維持。設定をprotocol.jsonにも記録。DRAGON_ARTICULATED.mdの起動説明を更新。
+- 検証: bringupパッケージのビルド成功、インストール済みlaunchの `--show-args` で `headless=false` を確認。変更したPythonの構文検査とgit diff --check成功。Gazeboの実画面表示は今回再実行していない。新たなシミュレーションは起動していない。
+
+## 2026-10-27 DRAGONの大域的な関節視野探索（検証中）
+
+- ユーザー依頼: 小さな関節変形に限定した動作確認を越え、当初の目的通りに関節を組み合わせて有利な視野へ移動し、既存ジンバルの区間を1例試す。対象は人工トンネルweathered24301、FC基準x=5→95m、z=2m、0.5m/s。
+- 新規 `articulated_search.py`: URDFの関節可動範囲から複数関節の候補と接続経路を作成。238候補、初期形状から237候補へ接続。全方位の水平角を含み、上下角は約−85〜+88°。機体の近似形状による接触、ローター配置の広がり、高低差を検査する。全方向での飛行成功や厳密なメッシュ干渉保証を意味しない。
+- `articulated_planner.py`: ROVIOの実測特徴点と不確かさを地図に保存し、現在LiDAR情報に視覚情報を加えた場合の並進不確かさ減少で離れた視野も評価する。通過経路での観測維持・遮蔽・実測点群との近接を調べ、複数関節の経路を最後まで追う。地図の独立特徴点近似は計画用であり、既存v10の相関付き局所速度予測と同一採点ではない。推定器や融合重みへの変更はない。
+- `dragon_articulated.py`: 狭い初回範囲をURDF制限に置換。関節速度10°/s、加速度20°/s²。順運動学の事前展開で計算を短縮。`articulated_actuator.py` は共通の経路進行率で複数関節を協調駆動する。
+- `articulated_hover_test.py`: 関節変形による重心移動を飛行指令で補償し、LiDAR/FCの経路を基準にする。真値の利用は従来通り飛行制御・事後評価だけ。まず20mの確認試験を行う。
+- 途中検証: センサ移植等の既存Python5検査、順運動学の独立実装との一致・大域到達範囲・経路内部・視覚情報ヤコビアンの数値差分の新規4検査が成功。
+- `logs/dragon-global-20261027/probe20`: 飛行・センサ連続取得は成功したが、視野制御が待機した。推定結果の約0.15秒の遅延に対し、現在姿勢の取得許容が0.1秒しかなかったため。時刻を揃え、現在までの短い予測を追加。画像時刻のカメラ変換は実測関節角の補間。失敗試行の数値とソースは保持。
+
+### 2026-10-27 同検証完了・全プロセス停止
+
+- 最終実装は地図を方向ごとに保持し、ROVIOの相関付き速度予測を主採点、観測地図の位置情報を補助採点に使用する。古い順に消す点数制限で別方向の観測が失われていた点を修正。LiDARの照合情報が0.5秒以上更新されない場合は、視野計画に限ってLiDAR情報ゼロ＋有限事前情報とし、視覚による観測継続へ切り替える。融合factorや重みは不変。
+- 追加修正: 特徴点が一時的に0個になった時の共分散配列の形を修正。計画スレッド内の例外をプロセス終了へ伝え、見かけ上起動したまま制御が止まる状態を防止。関節角は画像時刻へ補間、推定器の遅れは上限0.5秒の予測で時刻を合わせる。
+- 初期観測: 固定/偏向の双方で、3yaw関節を四角形から各30°へ同時に開き、四角形へ戻す40秒の動作。カメラ方向約180°・位置約1.4mの変化を実飛行で確認。これは初期観測であって、適応的偏向の改善実績には数えない。
+- 最終対象: `logs/dragon-global-20261027/active90` と `fixed90`。weathered24301、FC x=5→95m/z=2m、0.5m/s。各1飛行、同じ初期観測、同じソース/バイナリSHA・センサ・ROVIO/MIMOSA設定。違いはmodeのみ。独立したシミュレーションであり同一のセンサノイズ列ではない。DRPM OFF。推定器への真値入力なし。
+- 入口 `logs/dragon-global-20261027/report/index.html`、`comparison.pdf`、`summary.json`、`final_audit.json`。再集計 `python3 /root/uas_native/active_perception/report_articulated_comparison.py /root/uas_native/logs/dragon-global-20261027`。
+- 主結果（共通10Hz時刻・全90m・初回追従姿勢だけ整列・尺度補正なし）:
+  - MIMOSA位置RMSE: 固定51.98594m → 偏向18.25717m（この1組で64.9%減）。終端89.85337m →28.86608m。回転RMSE1.36189° →0.56375°。
+  - ROVIO位置RMSE: 固定928.80977m → 偏向24.52402m。固定ROVIOは発散。偏向ROVIOの終端誤差46.20163mで、精度改善を完了した状態ではない。
+  - 巡航10〜170秒の10秒間X移動誤差: VIO166.74857→2.81165m、融合4.99091→1.70614m。
+  - 融合の残差は主にトンネルX軸方向の過小評価。偏向で真値の拘束が十分に回復した、誤差相殺を排除した、統計的に優位等の主張はしない。
+- 実際の偏向（初期観測を除く）: 関節の変化幅最大65.10076°、カメラ姿勢全体は初期から最大41.95052°、光軸の偏向は30.60560°、カメラ位置変化の各軸幅[0.29316,0.25248,0.42261]m。33目標のうち15は大域候補、28は2軸以上が2°以上変わる協調目標。LiDARリンクの姿勢変動最大7.06109°（固定0.67014°）。LiDARは同一端リンクに固定されているが、動力学による世界姿勢の変動は残る。
+- 制御ログ70件のうちLiDAR新鮮33件、照合情報が欠けて視覚で継続37件。評価の全区間を「LiDAR退化方向が常に分かって制御」と呼ばない。計画更新の実測中央値2.658秒/最大4.731秒で、公称5Hzのタイマー周期とは異なる。経路・候補評価が律速。関節の実行は100Hzの速度制限器で行う。
+- 過去UniPilotジンバルの同配置・最初の試行は融合5.49879m、VIO21.43642m。機体・カメラ初期方向/位置・初期観測・探索/採点の実装が異なり、関節機構だけの優劣の実験ではない。今回DRAGONの融合18.25717mはその過去値には届いていない。
+- 途中試行も保持: probe20（時刻遅れで計画停止）、probe20_v2（既知の現在視野に偏った採点で変形せず）、probe20_v3（特徴点0個で計画スレッド停止、途中終了）、active90_v1（視野保持、VIO発散）、active90_v2（LiDAR照合情報が途絶えた間に停止、VIO発散）。精度の悪い結果を削除せず、最終方式と区別。active90_v2の保存ソースは実行時SHAと全件一致することを確認。
+- 検証: センサ移植等5件＋関節/情報行列4件＋空特徴/時刻遅れ2件の計11件成功。bringupビルド・launch引数確認・Python構文・git diff --check成功。両最終飛行の取得/動作検査10件成功、IMU/LiDAR欠落0、画像間隔50ms、ROVIO50ms/MIMOSA100msで継続。動作検査の合格は精度の合格を意味しない。
+- 起動は `ros2 launch multilink_uas_bringup dragon_articulated.launch.py`（Gazeboあり、既定90m/0.5m/s）。GUI不要なら `headless:=true`、固定比較は `mode:=fixed`。完了後自動終了/途中Ctrl+C。
+- 両最終試行で全14プロセス終了コード0、記録PIDが全て消滅。残存の当方起動シミュレーションなし。raw rosbag・画像列・点群列なし、数値/設定/図/診断を合計約64MiB保持、Windows空き約146GB。未コミット（今回commit依頼なし）。
+
+
+## 2026-10-27 DRAGONの固定四角形＋link4ジンバル実装・検証
+
+- 依頼: DRAGONの両端センサ構成を維持してカメラをジンバル化し、画角による自己遮蔽を避ける。機体6関節は四角形に固定、LiDAR/IMUはlink1、単眼はlink4。既存の関節偏向launchは維持。
+- 新規 `native/dragon_gimbal.py` と `launch/dragon_gimbal.launch.py`。カメラ位置はlink4の(0.10,-0.60,0)m、初期姿勢(0,0,-pi/2)、従来から外側へ52cm移動、高さ/初期方向は同じ。yaw±50deg/pitch±90deg、光学中心と2回転軸が交差する理想ジンバル。支持棒は可視、質量/たわみは未モデル化。回転リンクは各2g。センサ定義はUniPilot/native/resolvedのまま、変換前後一致検査成功。
+- `dragon_sim.launch.py` にend_gimbal引数追加。独立2軸のGazebo位置制御、8軸実測JointStateを配信。既存articulated encoderのFKを8軸に拡張し、画像時刻の実測機体関節とgimbal角でカメラSE3を算出。指令角の代用なし。ROVIO/MIMOSAのバイナリ・ノイズ・融合設定変更なし、DRPM OFF。
+- plannerは現在のDRAGON関節偏向版の地図＋相関付き視覚速度/LiDAR採点を継承。候補をジンバル2軸209姿勢＋近傍へ変更。過去UniPilotのv10等と完全同じ探索器ではない。新規gimbal actuatorは合成14deg/s、100Hz指令、2秒watchdog。Gazebo各軸上限20/sqrt(2)deg/s。
+- `audit_dragon_gimbal.py`: 全visualの境界＋15mm、ローターの可動範囲を囲む25cm境界、画角余裕3degで2deg格子4,641姿勢を検査。凸な境界と視錐台の交差を確認し、採用配置は重なり0。光軸だけの判定ではなく画面全体。旧位置/短い支持位置では重なりが残るため外側60cmを採用。起動時にも同検査を実行し、失敗したら離陸前に停止。固定四角形の範囲であり、任意の関節変形の保証ではない。
+- `inspect:=true`: ホバリングでyaw/pitch端を含む9方向＋原点復帰、実測目標到達後の画像を各1枚だけ取得。`inspect20_v2/inspection` の10枚すべてを目視し、機体/支持部/ローターの映り込みなし。マスクやロボットvisual非表示なし。body6関節は固定。
+- 成果物 `/root/uas_native/logs/dragon-gimbal-20261027/report/index.html`。生成 `report_dragon_gimbal.py <ROOT>`。全数値は初回追従姿勢SE3整列、尺度補正なし、初期観測除外。
+- 20m取り付け検証 `inspect20_v2`: 実移動20.11780m、ROVIO位置RMSE5.88814m/MIMOSA3.66180m。走行中yaw幅50deg/pitch幅10deg、搭載リンク姿勢変動0.11061deg。飛行と推定出力は継続したが、全flightの画像に1回100ms gapがあったため元validationはfalseのまま保持。関節1000Hzに対してencoder受信queue深さ5は短いため、実測サンプルを保持するqueueを2000へ拡張。補間上限を緩和したり欠測を隠したりしていない。
+- 90m通常飛行 `active90`: 347.16秒wall、実移動90.11620m、関節固定、LiDAR搭載リンクの姿勢変動0.11410deg、yaw幅15.14686deg/pitch変化なし。取得・機体動作の11検査はtrue、IMU/LiDAR欠測0、画像50ms間隔を維持（開始時の未同期1枚除外のみ）。ROVIO50ms/MIMOSA100msで出力継続。
+- **精度検証は失敗**: ROVIO位置RMSE1344.45939m/最大3471.44820m、MIMOSA位置RMSE283.82477m/最大998.12449m。動作検査合格を精度成功と呼ばない。準備運動終了83.75sのROVIO位置誤差約0.172mから、40秒yaw観測終了123.75sには4.752m。特徴数3→4、特徴距離中央値4.79→844.48m。飛行開始前から尺度が不安定で、その後発散した試行。新配置のジンバル方式が正常初期化状態でどこまで出せるかは未検証。過去関節偏向18.26mより数値は悪いが、カメラ位置/準備観測にも差があり駆動方式だけの因果比較ではない。
+- 計画123判断中119はhold_best_view、目標選択2/追従1/経路停止1。LiDAR新鮮55、視覚で継続68。悪い結果を除外せず残す。
+- 初回 `inspect20` はrclpy予約属性publishersへの代入で起動失敗。command_pubsへ修正して再検証。90m終了時encoderがROSコンテキスト破棄と受信処理の競合でexit1、その他13プロセス0。全プロセス消滅を確認。終了済みコンテキストに限ってRuntimeErrorを許容する後処理を追加し、動作中の例外は引き続きraiseする。元completionのexit1は書き換えない。この終了時修正後のフル飛行再実行はしていない。
+- 検証: 新規gimbal3件＋既存sensor/FK5件＋探索/情報4件＋時刻/空特徴2件、計14件成功。bringup build、launch引数、Python構文、git diff --check成功。
+- 起動 `ros2 launch multilink_uas_bringup dragon_gimbal.launch.py`（GUI、90m/.5m/s、完了後自動停止）。取り付け確認 `inspect:=true distance:=0`。詳細 `DRAGON_GIMBAL.md`。今回の起動プロセスは全て停止、rosbag/連続画像/点群記録なし、ログは数値＋10画像＋ソース/設定。未コミット。
+
+
+## 2026-10-27 ここまでの変更をコミット
+
+- ユーザー依頼により、ROVIOのカメラSE3対応、DRAGON関節/ジンバルの共通制御と起動、比較レポート、作業記録/引き継ぎの4単位に整理。共通制御の依存関係があるため関節版とジンバル版は同じコミットとした。
+- 実装コミット: `f85f5bb`（ROVIO）、`9cef4d6`（DRAGON制御）、`e0df85e`（レポート）。本項目と引き継ぎ資料を別の文書コミットに収録。
+- logs・rosbag・画像・バイナリ・実行時lockは除外。外部gz_ros2_controlの修正は再適用用patchとして収録。レポート生成スクリプトの行末空白を除去した以外、今回のコミット整理で実装の動作は変更していない。
+- コミット差分の空白検査と対象ファイル確認を実施。飛行実験は再実行していない。先の精度発散・制約も資料に保持。
