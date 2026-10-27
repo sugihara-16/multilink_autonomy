@@ -57,9 +57,20 @@ def setup(context):
     ET.SubElement(root,'gazebo',reference='link2').append(sensor)
     vio = LaunchConfiguration('vio').perform(context) == 'true'
     gimbal = LaunchConfiguration('gimbal').perform(context) == 'true'
+    articulated = LaunchConfiguration('articulated').perform(context) == 'true'
+    end_gimbal = LaunchConfiguration('end_gimbal').perform(context) == 'true'
+    if end_gimbal and not articulated:raise ValueError('end_gimbal requires articulated:=true')
+    if articulated:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
+        from dragon_articulated import configure
+        configure(root, Path(get_package_share_directory('rmf_gz'))/'resources/robots/rmf_unipilot/model.sdf', output)
+        if end_gimbal:
+            from dragon_gimbal import configure as configure_gimbal
+            configure_gimbal(root,output)
     if gimbal and not vio:
         raise ValueError('gimbal requires vio:=true')
-    if vio:
+    if vio and not articulated:
         import sys
         sys.path.insert(0, str(Path(__file__).resolve().parent))
         from dragon_cameras import add_cameras
@@ -82,10 +93,12 @@ def setup(context):
         Node(package='ros_gz_bridge', executable='parameter_bridge', name='dragon_sensors',
             arguments=['/dragon/imu/raw@sensor_msgs/msg/Imu[gz.msgs.IMU',
                        '/dragon/lidar/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked'] +
-                      ([f'/dragon/cam_link{i}/image@sensor_msgs/msg/Image[gz.msgs.Image' for i in ((3,) if gimbal else (1,3,4))] if vio else []) +
+                      ([f'/dragon/cam_link{i}/image@sensor_msgs/msg/Image[gz.msgs.Image' for i in ((3,) if gimbal else (1,3,4))] if vio and not articulated else []) +
+                      (['/dragon/end_camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
+                        '/dragon/articulated/states@sensor_msgs/msg/JointState[gz.msgs.Model'] if articulated else []) +
                       (['/active/gimbal/states@sensor_msgs/msg/JointState[gz.msgs.Model',
                         '/active/gimbal/yaw@std_msgs/msg/Float64]gz.msgs.Double',
-                        '/active/gimbal/pitch@std_msgs/msg/Float64]gz.msgs.Double'] if gimbal else []),
+                        '/active/gimbal/pitch@std_msgs/msg/Float64]gz.msgs.Double'] if gimbal or end_gimbal else []),
             remappings=[('/dragon/lidar/scan/points','/dragon/lidar/points')],
             parameters=[{'use_sim_time': True}], output='screen')]
 
@@ -97,4 +110,6 @@ def generate_launch_description():
         DeclareLaunchArgument('takeoff_height', default_value='1.5'),
         DeclareLaunchArgument('spawn_z', default_value='0.5'),
         DeclareLaunchArgument('gimbal', default_value='false'),
+        DeclareLaunchArgument('articulated', default_value='false'),
+        DeclareLaunchArgument('end_gimbal', default_value='false'),
         DeclareLaunchArgument('vio', default_value='false'), DeclareLaunchArgument('output'), OpaqueFunction(function=setup)])

@@ -54,3 +54,4 @@ multilink_uas_bringup/native/.unipilot-*.lock
 /multilink_uas_bringup/native/routes/**/*.gpickle
 /multilink_uas_bringup/native/routes/**/*.log
 /multilink_uas_bringup/native/routes/zab_full/capture_runs.json
+.articulated.lock

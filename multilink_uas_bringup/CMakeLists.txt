@@ -9,5 +9,6 @@ install(DIRECTORY native DESTINATION share/${PROJECT_NAME}
   PATTERN "__pycache__" EXCLUDE
   PATTERN "state.json" EXCLUDE
   PATTERN ".supervisor.lock" EXCLUDE
+  PATTERN ".articulated.lock" EXCLUDE
   PATTERN "*.before-workspace-migration" EXCLUDE)
 ament_package()
