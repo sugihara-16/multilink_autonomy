@@ -1,3 +1,56 @@
+# 次の方針：検証済みジンバル構成を固定して関節版と比較（2026-11-10）
+
+ユーザーとの最新合意。ジンバルの比較対象は `logs/dragon-fusion-fix-20261110/view_seed20262801/02/03` のv10＋回転専用ROVIO＋drpm_isotropic20_view。融合位置RMSE平均4.079690m。既存の構成・3試行をそのまま基準にし、関節版との共通化のためにジンバル側の処理を変更しない。通常のdragon_gimbal.launch.pyがこの構成を選択する。
+
+次は関節版をこの基準と比較する。環境・軌道・センサ・推定/融合の共通設定・評価方法を揃え、機構ごとに必要な制御/カメラ座標変換の差は明記する。既存結果も同一評価時刻で再集計して比較する。実用構成同士の比較と機構だけの因果比較を区別する。詳細はWORKLOG末尾。
+
+以下の平均38.88mのジンバルは、視野選択・ROVIO・準備動作を変更した別構成の診断結果。採用済みジンバルの性能ではなく、この悪化の切り分けを先に完了する必要もない。過去結果を改変・削除しない。今回は方針記録とコミットのみで新規実験は起動しない。
+
+---
+
+# 完了: DRAGON関節版の融合修正とジンバル対称比較（2026-11-10）
+
+依頼は完了。全シミュレーション・所有PID・実験ROSポート11520–11528停止済み。成果物は `/root/uas_native/logs/dragon-mechanism-paired-20261110-v3/report/index.html`、`comparison.pdf`、`summary.json` と親の `final_audit.json`。WORKLOG末尾に詳細。未コミット。
+
+共通条件: weathered24301、90m、0.5m/s、seed20262801/02/03各3回。前方同位置カメラ、同位置LiDAR、同物理センサ、同SE3対応ROVIO、同DRPM20/全6方向視野情報、同articulated_planner採点、同準備/ペーシング。到達可能な姿勢/位置・動作制約・実際の機体運動が機構によって異なる。関節指令7°/s・14°/s²、ジンバル14°/s。
+
+融合位置RMSE（共通10Hz・開始姿勢整列のみ・尺度補正なし）:
+- 関節: 3.410190 / 3.799512 / 58.503331 m、平均21.904344 m。
+- ジンバル: 39.307619 / 31.903226 / 45.434792 m、平均38.881879 m。
+- ROVIO平均: 関節22.022792m、ジンバル39.283341m。関節2回良好/1回大きなドリフト。平均だけで安定な優位を主張しない。
+
+**今回の共通構成と以前の既定v10ジンバルを混同しない。** 既定v10＋回転専用ROVIOの過去平均は4.079690m。今回、視野採点・SE3対応推定器・準備中の視線保持まで両機構で共通化した構成は、既定ジンバルより悪化している。既定v10は維持。今回の38.88mを元のv10方式そのものの性能として扱わない。
+
+取得/設定一致は全6本成功、LiDAR補正10920/10920成立。`data_valid=true`、厳密な全検査`passed=false`を維持。例外:
+1. 関節802は18181区間中1区間10msだけ12.597°/s>12°/s。取得・推定・飛行は有効なので除外/再取得せず、速度検査不合格として残す。瞬間超過は未解消。
+2. ジンバル801のactuatorは評価終了から5秒以上後まで正常記録したが、停止時のROS購読破棄で終了コード1。6本後に停止中だけ例外を扱う修正を追加、別ホバリングで全14プロセス終了0確認。
+
+初期のv1/v2、v3の初期化前起動失敗は診断として保持。v3のgimbal802初回はcontroller起動前離陸の失敗で走行データなし。controller-active/初期形状待機と45秒タイムアウトを6本後に実装し、別ホバリングの全11検査成功。数値/設定/図のみ約149MiB、Windows空き約130GiB。
+
+関節launch既定は修正済み対称構成。ジンバルは `mechanism_comparison:=true` で同条件。反復の新規実行は `run_mechanism_comparison.py --output <新規フォルダ> --keep-speed-violations`。このフラグは速度検査だけの不合格を結果に残すもので、欠測/飛行失敗は停止。再開時list/tupleのJSON比較不具合も修正済み。凍結済みv3結果は取得時ソースを各implementation/に保持。全結果確定後の起動/終了・集計修正はWORKLOGに区別して記録。
+
+---
+
+## 2026-11-10 最新：DRAGON＋ジンバルの融合不良を修正、90m×3回完了・全停止
+- 最新依頼（DRAGONでもUniPilot相当の性能）を完了。ROOT=/root/uas_native/logs/dragon-fusion-fix-20261110。最終はview_seed20262801/02/03、validation_view_plan/protocol.json。全3試行を保持。旧進行中sessionを再開しない。
+- 融合位置RMSE m: 修正前51.8080/19.5729/52.0648（平均41.1486）→修正後1.02515/7.10006/4.11386（平均4.07969）。過去UniPilot参照5.50188/6.38089/11.86986（平均7.91754）。同じweathered24301・90m/.5m/s、初回追従SE3整列・尺度補正なし。修正後ROVIO平均4.67308m。別飛行のため同一入力の機体比較ではない。
+- 直接原因: 単調壁面から作る進行方向の誤ったLiDAR拘束が、移動推定を出発点へ引き戻す。同一入力の完全複製は厳密一致、LiDAR幾何なしで改善。通常の20/50点化だけ、標準退化ON、距離方向DRPMだけは不十分。
+- 採用profile=drpm_isotropic20_view。公式更新則を使う既存4DoF DRPM＋公称3cm等方近似＋20点で法線推定。物理雑音を変えたわけではない。build_drpm_support.pyは公式EstimateNormal<N>と0.1rad閾値を維持。さらにbuild_drpm_view_information.pyで、更新変数4DoFの制限をplannerの観測可能性に混ぜず、全6方向の測定幾何を渡す。view90の新旧telemetry対照は全7872状態で厳密一致（factor不変）。
+- 物理センサ・ROVIO実行ファイル・IMU設定/数値cutoff・視覚重み・v10の視野採点は不変。DRPMはOFFからONへ変更している。新ライブラリbuild/mimosa-batched-drpm-support-viewを分離し、既存UniPilot出力/ライブラリを保持。
+- 不採用: 等方5点候補はLiDARを全棄却していた。IMU物理noise＋cutoff0候補は同一入力対照で改善したが独立final_seed20262801で融合が発散し中断。両方ともpartial/理由を保存。calibrated候補を既定に戻さない。
+- 全3本の取得11項目/監査11項目成功、LiDARは追従5,460/5,460回成立、常に3方向保持。全所有PID245記録消滅、実験用masterポートの残存processなし。final_audit.json、report/index.html、comparison.pdf、summary.json。数値中心ログ約0.6GB、bag/連続画像なし。未コミット。
+- `ros2 launch multilink_uas_bringup dragon_gimbal.launch.py` が修正版の既定。GUI付き90m飛行後に全停止。headless:=trueでGUIなし、fusion_profile:=baselineで旧DRPMなし融合。autoは旧構成/取り付け検査ではbaselineを維持する。詳細DRAGON_GIMBAL.md。
+- 今回は融合不良の修正確認。修正後の固定対偏向比較やDRAGON関節変形方式の再評価は未実施。以下は履歴。
+
+## 2026-11-10 最新：DRAGONジンバルのUniPilot条件整合、90m×3回完了・全停止
+- 最新依頼はUniPilot時の諸条件を揃えた再検証。既存UniPilotのROVIO/MIMOSAバイナリ、融合設定、v10/LiDAR条件付き視野選択、準備2周期と視線保持、直線加減速、センサ処理・通信待ちを整合。追加40秒旋回を除去。DRPM OFF、真値は制御/評価だけ。
+- カメラはlink4搭載のまま前向き、FC基準(.8,0,-.025)m。UniPilotの前方.18mでは機体が遮るため位置は異なる。LiDARの元位置はローター部品の境界内で約半数の観測線が遮られていたため、FC(-.15,0,.30)mへ25cm上げ、実位置を推定器へ設定。ノイズ/走査角/距離閾値は不変。
+- 最終結果 `/root/uas_native/logs/dragon-unipilot-matched-20261110/report/index.html`、comparison.pdf、summary.json、ROOT/final_audit.json。weathered24301、90m/.5m/s、3seed。位置RMSE平均: DRAGONのROVIO10.3414m/融合41.1486m、過去UniPilot同3seedは19.4772m/7.9175m。前回DRAGON1飛行の1344.46m/283.82mから巨大発散は解消したが、融合精度は未達。
+- DRAGON融合RMSE各51.8080/19.5729/52.0648m。実移動90mに対して融合の終端移動距離.2304/64.0924/.0135m。視覚速度入力は全試行で受理されている。残る問題は融合後の著しい過小移動。LIO単体との切り分けは今回未実施であり、LiDAR重みが原因と断定しない。
+- 全3本の取得検査11項目・整合/終了検査14項目成功、全子終了0。14単体検査成功。全所有シミュレーション停止、追加取得不要。前段の設定試行・IMU欠落1試行・離陸前待機1試行も保持し、精度による除外はしない。数値中心210MiB、Windows空き131GiB。未コミット。
+- 起動は `ros2 launch multilink_uas_bringup dragon_gimbal.launch.py`。既定 `unipilot_matched:=true`、GUIあり。`headless:=true` でGUIなし、`unipilot_matched:=false` で旧後方向配置/関節planner。詳細 DRAGON_GIMBAL.md。機体・飛行制御・取付距離・独立センサ系列は異なるため、機構だけの因果比較ではない。
+- 以下は履歴。古い進行中sessionを再開しない。
+
 ## 2026-10-27 最新：DRAGONジンバル配置・自己遮蔽確認完了、90m精度は発散、全停止
 - 最新依頼はDRAGONの両端センサを保ちカメラをジンバル化。link1 LiDAR/IMU、link4単眼、機体6関節は四角形固定。現行UniPilotセンサとROVIO＋MIMOSA継承、DRPM OFF。詳細 DRAGON_GIMBAL.md / WORKLOG末尾。
 - `ros2 launch multilink_uas_bringup dragon_gimbal.launch.py`。Gazebo GUIあり、90m/.5m/s後に自動終了、Ctrl+C対応。`inspect:=true distance:=0` は端角度の画像確認。旧dragon_articulated.launch.pyは関節変形方式のまま。
