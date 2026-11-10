@@ -10,11 +10,12 @@ def setup(context):
     value=lambda n:LaunchConfiguration(n).perform(context)
     output=value('output') or str(native/'logs'/('dragon-articulated-'+time.strftime('%Y%m%d-%H%M%S')))
     args=[sys.executable,str(native/'active_perception/run_articulated_dragon.py'),'--output',output,
-          '--mode',value('mode'),'--distance',value('distance'),'--speed',value('speed'),'--domain',value('domain'),'--port',value('port')]
+          '--mode',value('mode'),'--distance',value('distance'),'--speed',value('speed'),'--domain',value('domain'),'--port',value('port'),'--seed',value('seed'),'--fusion-profile',value('fusion_profile')]
+    if value('mechanism_comparison').lower() in ('true','1'):args.append('--mechanism-comparison')
     if value('world_file'):args.extend(['--world',value('world_file')])
     args.append('--headless' if value('headless').lower() in ('true','1') else '--no-headless')
     return [ExecuteProcess(cmd=args,output='screen',sigterm_timeout='25',sigkill_timeout='30')]
 
 def generate_launch_description():
-    defaults={'output':'','mode':'active','distance':'90','speed':'0.5','domain':'89','port':'11489','world_file':'','headless':'false'}
+    defaults={'output':'','mode':'active','distance':'90','speed':'0.5','domain':'89','port':'11489','world_file':'','headless':'false','seed':'20262801','fusion_profile':'drpm_isotropic20_view','mechanism_comparison':'true'}
     return LaunchDescription([DeclareLaunchArgument(k,default_value=v) for k,v in defaults.items()]+[OpaqueFunction(function=setup)])

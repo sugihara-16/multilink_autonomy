@@ -1,5 +1,5 @@
 """ROS2 joint slew limiter: planner targets never reach the servo as steps."""
-import sys,argparse
+import sys,argparse,yaml
 from pathlib import Path
 import numpy as np
 import rclpy
@@ -16,6 +16,10 @@ class Actuator(Node):
     def __init__(self,out):
         super().__init__('articulated_joint_slew');self.set_parameters([Parameter('use_sim_time',value=True)])
         self.kin=Kinematics(out/'dragon_slam.urdf');self.goal=None;self.q=None;self.command=None;self.enabled=False;self.last=None;self.rate=0.;self.qstamp=None;self.goalstamp=None;self.log=(out/'joint_commands.jsonl').open('w',buffering=1)
+        cfg=yaml.safe_load((out/'planner.yaml').read_text())
+        self.kin.speed=np.deg2rad(cfg.get('body_joint_speed_deg_s',10.))
+        self.kin.acceleration=np.deg2rad(cfg.get('body_joint_acceleration_deg_s2',20.))
+        self.step_limit=.01 if 'body_joint_speed_deg_s' in cfg else .02
         self.pub=self.create_publisher(JointState,'/dragon/joints_ctrl',10)
         self.create_subscription(JointState,'/articulated/target',self.target,10)
         self.create_subscription(JointState,'/dragon/articulated/states',self.joints,qos_profile_sensor_data)
@@ -31,7 +35,7 @@ class Actuator(Node):
             if self.kin.valid(q):self.goal=q;self.goalstamp=self.get_clock().now().nanoseconds*1e-9
     def tick(self):
         now=self.get_clock().now().nanoseconds*1e-9
-        dt=.01 if self.last is None else min(.02,max(0.,now-self.last));self.last=now
+        dt=.01 if self.last is None else min(self.step_limit,max(0.,now-self.last));self.last=now
         if not self.enabled or self.q is None or self.goal is None:self.command=None;self.rate=0.;return
         if now-self.qstamp>.15 or now-self.goalstamp>2.:self.command=self.q.copy();self.rate=0.;return
         if self.command is None:self.command=self.q.copy()

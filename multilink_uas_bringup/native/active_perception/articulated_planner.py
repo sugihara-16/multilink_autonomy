@@ -7,7 +7,7 @@ import rospy,yaml
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import JointState,Imu,PointCloud2,Image
 from sensor_msgs import point_cloud2
-from std_msgs.msg import Float64MultiArray,Bool
+from std_msgs.msg import Float64MultiArray,Bool,String
 from scipy.spatial import cKDTree
 from scipy.spatial.transform import Rotation,Slerp
 from joint_geometry import decode,advance
@@ -26,7 +26,11 @@ class Planner:
         if self.gimbal:
             from dragon_gimbal import GimbalKinematics,GIMBAL_NAMES
             self.kin=GimbalKinematics(out/'dragon_slam.urdf');self.names=GIMBAL_NAMES
-        self.cfg=yaml.safe_load((out/'planner.yaml').read_text());self.q=None;self.geo=None;self.info=None;self.cloud=None
+        self.cfg=yaml.safe_load((out/'planner.yaml').read_text())
+        if not self.gimbal:
+            self.kin.speed=np.deg2rad(self.cfg.get('body_joint_speed_deg_s',10.))
+            self.kin.acceleration=np.deg2rad(self.cfg.get('body_joint_acceleration_deg_s2',20.))
+        self.q=None;self.geo=None;self.info=None;self.cloud=None
         self.omega=np.zeros(3);self.enabled=False;self.poses=deque(maxlen=300);self.joint_history=deque(maxlen=2000);self.map=VisualMap(30.,400);self.image_map=VisualMap(30.,3000);self.image=None;self.image_stamp=-1
         cam=yaml.safe_load((out/'cam0.yaml').read_text());K=np.array([[cam['camera_matrix']['data'][0],0,cam['camera_matrix']['data'][2]],[0,cam['camera_matrix']['data'][4],cam['camera_matrix']['data'][5]],[0,0,1]])
         self.image_geometry=ImageGeometryMap(K,180)
@@ -35,6 +39,7 @@ class Planner:
         cfg=yaml.safe_load((out/'mimosa.yaml').read_text());p=cfg['lidar']['T_B_S']
         self.velocity_scale=cfg['odometry']['manager']['velocity_covariance_scale']
         self.TBL=np.eye(4);self.TBL[:3,:3]=Rotation.from_quat(p[3:]).as_matrix();self.TBL[:3,3]=p[:3]
+        self.scheduling=rospy.Publisher('/active/scheduling_complete',String,queue_size=10)
         self.pub=rospy.Publisher('/articulated/target',JointState,queue_size=1)
         self.subs=[rospy.Subscriber('/active/image',Image,lambda m:setattr(self,'image',m),queue_size=1),rospy.Subscriber('/dragon/articulated/states',JointState,self.joints,queue_size=10),
                    rospy.Subscriber('/rovio_gimbal/joint_geometry',Float64MultiArray,self.geometry,queue_size=1),
@@ -138,7 +143,9 @@ class Planner:
         return minimum>=min(4.,counts[0]*.6) if counts else False,minimum
 
     def checked_tick(self,event):
-        try:self.tick(event)
+        try:
+            self.tick(event)
+            self.scheduling.publish(String(data=json.dumps({'stamp_ns':rospy.Time.now().to_nsec()})))
         except Exception as error:
             rospy.logerr('Articulated planner stopped: %s',error)
             (self.out/'planner_failure.json').write_text(json.dumps({'error':repr(error)}))

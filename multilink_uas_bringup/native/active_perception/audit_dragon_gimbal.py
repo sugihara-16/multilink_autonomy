@@ -51,7 +51,10 @@ def visual_bounds(root):
     return np.array(boxes),labels
 
 
-def audit(root,mount=MOUNT_XYZ):
+def audit(root,mount=None):
+    origin=root.find("joint[@name='active_camera_yaw_joint']/origin")
+    if mount is None:mount=np.fromstring(origin.get('xyz'),sep=' ')
+    mount_rpy=np.fromstring(origin.get('rpy'),sep=' ')
     boxes,labels=visual_bounds(root)
     camera=root.find(".//sensor[@type='camera']/camera")
     h=float(camera.findtext('horizontal_fov'))/2
@@ -62,7 +65,7 @@ def audit(root,mount=MOUNT_XYZ):
     bad=[];count=0
     for yaw in np.arange(-50,51,2):
         for pitch in np.arange(-90,91,2):
-            R=transform(rpy=MOUNT_RPY)[:3,:3]@transform(rpy=(0,0,np.deg2rad(yaw)))[:3,:3]@transform(rpy=(0,np.deg2rad(pitch),0))[:3,:3]@OPTICAL
+            R=transform(rpy=mount_rpy)[:3,:3]@transform(rpy=(0,0,np.deg2rad(yaw)))[:3,:3]@transform(rpy=(0,np.deg2rad(pitch),0))[:3,:3]@OPTICAL
             p=(boxes-mount)@R;x,y,z=p[...,0],p[...,1],p[...,2]
             outside=(np.all(z<=0,axis=1)|np.all(x>th*z,axis=1)|np.all(x<-th*z,axis=1)|np.all(y>tv*z,axis=1)|np.all(y<-tv*z,axis=1))
             # Different corners can lie outside different image edges. Resolve

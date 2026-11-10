@@ -13,9 +13,17 @@ def setup(context):
           '--mode',value('mode'),'--distance',value('distance'),'--speed',value('speed'),'--domain',value('domain'),'--port',value('port')]
     if value('world_file'):args.extend(['--world',value('world_file')])
     if value('inspect').lower() in ('true','1'):args.append('--inspect-gimbal')
+    elif value('mechanism_comparison').lower() in ('true','1'):args.append('--mechanism-comparison')
+    elif value('unipilot_matched').lower() in ('true','1'):args.append('--unipilot-matched')
+    if value('unipilot_matched').lower() in ('true','1'):args.extend(['--gimbal-profile','unipilot'])
+    fusion=value('fusion_profile')
+    if fusion=='auto':
+        fusion='drpm_isotropic20_view' if (value('unipilot_matched').lower() in ('true','1') or value('mechanism_comparison').lower() in ('true','1')) and value('inspect').lower() not in ('true','1') else 'baseline'
+    args.extend(['--fusion-profile',fusion])
+    args.extend(['--seed',value('seed')])
     args.append('--headless' if value('headless').lower() in ('true','1') else '--no-headless')
     return [ExecuteProcess(cmd=args,output='screen',sigterm_timeout='25',sigkill_timeout='30')]
 
 def generate_launch_description():
-    defaults={'output':'','mode':'active','distance':'90','speed':'0.5','domain':'89','port':'11489','world_file':'','headless':'false','inspect':'false'}
+    defaults={'output':'','mode':'active','distance':'90','speed':'0.5','domain':'89','port':'11489','world_file':'','headless':'false','inspect':'false','unipilot_matched':'true','seed':'20262801','fusion_profile':'auto','mechanism_comparison':'false'}
     return LaunchDescription([DeclareLaunchArgument(k,default_value=v) for k,v in defaults.items()]+[OpaqueFunction(function=setup)])

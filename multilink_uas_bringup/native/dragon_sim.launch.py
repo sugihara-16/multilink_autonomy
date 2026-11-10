@@ -67,7 +67,10 @@ def setup(context):
         configure(root, Path(get_package_share_directory('rmf_gz'))/'resources/robots/rmf_unipilot/model.sdf', output)
         if end_gimbal:
             from dragon_gimbal import configure as configure_gimbal
-            configure_gimbal(root,output)
+            configure_gimbal(root,output,profile=LaunchConfiguration('gimbal_profile').perform(context))
+        elif LaunchConfiguration('matched_joint_mount').perform(context)=='true':
+            from dragon_gimbal import configure_fixed_mount
+            configure_fixed_mount(root,output)
     if gimbal and not vio:
         raise ValueError('gimbal requires vio:=true')
     if vio and not articulated:
@@ -112,4 +115,6 @@ def generate_launch_description():
         DeclareLaunchArgument('gimbal', default_value='false'),
         DeclareLaunchArgument('articulated', default_value='false'),
         DeclareLaunchArgument('end_gimbal', default_value='false'),
+        DeclareLaunchArgument('gimbal_profile', default_value='legacy'),
+        DeclareLaunchArgument('matched_joint_mount', default_value='false'),
         DeclareLaunchArgument('vio', default_value='false'), DeclareLaunchArgument('output'), OpaqueFunction(function=setup)])

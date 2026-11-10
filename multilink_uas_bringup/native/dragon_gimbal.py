@@ -18,9 +18,27 @@ MOUNT_RPY=(0.,0.,-math.pi/2)
 LIMITS=np.deg2rad([50.,90.])
 
 
-def configure(root,output):
+def configure(root,output,profile='legacy'):
     """Apply after dragon_articulated.configure: do not change sensor physics."""
     output=Path(output)
+    if profile not in ('legacy','unipilot'):raise ValueError('Unknown gimbal profile')
+    mount_xyz,mount_rpy=MOUNT_XYZ,MOUNT_RPY
+    if profile=='unipilot':
+        # Same forward optical orientation/height as UniPilot, outside the
+        # larger DRAGON airframe. Retain attachment to link4 and measured FK.
+        frames=link_transforms(root,dict(zip(NAMES,[0.,1.56]*3)))
+        T=np.linalg.inv(frames['link4'])@frames['fc']@transform((.8,0.,-.025))
+        mount_xyz=tuple(T[:3,3]);mount_rpy=tuple(Rotation.from_matrix(T[:3,:3]).as_euler('xyz'))
+        # The UniPilot lidar origin (z=.05) is inside DRAGON's rotor module.
+        # Preserve beam angles/noise/rate; lift the physical sensor above the
+        # rotor swept bounds, and calibrate this actual offset in the owner.
+        lidar=root.find(".//sensor[@name='end_lidar']")
+        pose=np.fromstring(lidar.findtext('pose'),sep=' ');pose[2]=.30
+        lidar.find('pose').text=' '.join(map(str,pose))
+        support=ET.SubElement(root.find("link[@name='fc']"),'visual',name='matched_lidar_support')
+        ET.SubElement(support,'origin',xyz='-.15 0 .165')
+        ET.SubElement(ET.SubElement(support,'geometry'),'cylinder',radius='.005',length='.23')
+        ET.SubElement(ET.SubElement(support,'material',name='lidar_support_gray'),'color',rgba='.25 .25 .25 1')
     camera=root.find(".//sensor[@name='end_camera']")
     for g in root.findall('gazebo'):
         if camera in list(g):g.remove(camera)
@@ -37,8 +55,8 @@ def configure(root,output):
         j=ET.SubElement(root,'joint',name=name+'_joint',type='revolute')
         ET.SubElement(j,'parent',link='link4' if axis=='yaw' else 'active_camera_yaw')
         ET.SubElement(j,'child',link=name)
-        ET.SubElement(j,'origin',xyz=' '.join(map(str,MOUNT_XYZ)) if axis=='yaw' else '0 0 0',
-                      rpy=' '.join(map(str,MOUNT_RPY)) if axis=='yaw' else '0 0 0')
+        ET.SubElement(j,'origin',xyz=' '.join(map(str,mount_xyz)) if axis=='yaw' else '0 0 0',
+                      rpy=' '.join(map(str,mount_rpy)) if axis=='yaw' else '0 0 0')
         ET.SubElement(j,'axis',xyz='0 0 1' if axis=='yaw' else '0 1 0')
         ET.SubElement(j,'limit',lower=str(-limit),upper=str(limit),effort='.05',velocity=str(math.radians(20)))
         plugin=ET.SubElement(ET.SubElement(root,'gazebo'),'plugin',filename='gz-sim-joint-position-controller-system',name='gz::sim::systems::JointPositionController')
@@ -50,8 +68,9 @@ def configure(root,output):
     ET.SubElement(ET.SubElement(housing,'material',name='gimbal_blue'),'color',rgba='.1 .3 .9 1')
     # An actual visible support, with its inner end at link4. No height mast.
     bracket=ET.SubElement(link4,'visual',name='gimbal_boom')
-    ET.SubElement(bracket,'origin',xyz=f'{MOUNT_XYZ[0]} {MOUNT_XYZ[1]/2} 0')
-    ET.SubElement(ET.SubElement(bracket,'geometry'),'box',size=f'.018 {-MOUNT_XYZ[1]-.12} .018')
+    # Support stops behind the optical centre, for either attachment side.
+    ET.SubElement(bracket,'origin',xyz=f'{mount_xyz[0]} {mount_xyz[1]/2} {mount_xyz[2]}')
+    ET.SubElement(ET.SubElement(bracket,'geometry'),'box',size=f'.018 {abs(mount_xyz[1])-.12} .018')
     ET.SubElement(ET.SubElement(bracket,'material',name='gimbal_boom_gray'),'color',rgba='.25 .25 .25 1')
     j=root.find("joint[@name='camera_optical_mount']")
     j.find('parent').set('link','active_camera_pitch')
@@ -60,13 +79,40 @@ def configure(root,output):
     plugin=root.find("gazebo/plugin[@name='gz::sim::systems::JointStatePublisher']")
     for name in GIMBAL_NAMES:ET.SubElement(plugin,'joint_name').text=name
     q={n:v for n,v in zip(NAMES,[0.,1.56]*3)};frames=link_transforms(root,q)
-    T=np.linalg.inv(frames['fc'])@frames['link4']@transform(MOUNT_XYZ,MOUNT_RPY)
+    T=np.linalg.inv(frames['fc'])@frames['link4']@transform(mount_xyz,mount_rpy)
     report=json.loads((output/'articulated_manifest.json').read_text())
-    report.update(camera_actuation='gimbal',camera_xyz=MOUNT_XYZ,camera_rpy=MOUNT_RPY,T_FC_camera=T.tolist(),
+    report.update(camera_actuation='gimbal',camera_xyz=mount_xyz,camera_rpy=mount_rpy,T_FC_camera=T.tolist(),gimbal_profile=profile,
                   gimbal_limits_deg=np.rad2deg(LIMITS).tolist(),body_configuration='fixed square',
                   gimbal_axes='intersect at optical centre',gimbal_added_mass_kg=.004,
                   support_model='visible ideal boom; support mass and compliance not modeled')
+    report['lidar_pose_fc']=list(map(float,root.findtext(".//sensor[@name='end_lidar']/pose").split()))
     (output/'articulated_manifest.json').write_text(json.dumps(report,indent=2)+'\n')
+    return report
+
+
+def configure_fixed_mount(root, output):
+    """Identical forward mount/mass/sensors, with the two camera axes welded.
+
+    The articulated arm moves the camera through link4 only. Retaining the
+    housing and inertias avoids introducing a different mount as a confound.
+    """
+    report=configure(root,output,profile='unipilot')
+    for name in GIMBAL_NAMES:
+        joint=root.find(f"joint[@name='{name}']")
+        joint.set('type','fixed')
+        for tag in ('axis','limit'):
+            node=joint.find(tag)
+            if node is not None:joint.remove(node)
+    for gazebo in root.findall('gazebo'):
+        for plugin in gazebo.findall('plugin'):
+            if plugin.findtext('joint_name') in GIMBAL_NAMES:
+                gazebo.remove(plugin)
+            elif plugin.get('name')=='gz::sim::systems::JointStatePublisher':
+                for node in plugin.findall('joint_name'):
+                    if node.text in GIMBAL_NAMES:plugin.remove(node)
+    report.update(camera_actuation='body_joints',body_configuration='articulated',
+                  gimbal_axes='fixed at zero; matched housing, mass and mounting')
+    (Path(output)/'articulated_manifest.json').write_text(json.dumps(report,indent=2)+'\n')
     return report
 
 

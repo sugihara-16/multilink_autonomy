@@ -13,6 +13,7 @@ from rclpy.node import Node
 from rclpy.parameter import Parameter
 from rclpy.qos import qos_profile_sensor_data,QoSProfile,ReliabilityPolicy
 from sensor_msgs.msg import Image,JointState
+from std_msgs.msg import Float64MultiArray
 from geometry_msgs.msg import PoseStamped
 from scipy.spatial.transform import Rotation
 sys.path.insert(0,str(Path(__file__).resolve().parent.parent))
@@ -27,6 +28,7 @@ class Encoder(Node):
         self.paired=0;self.dropped=0;self.max_gap=0;self.first=None;self.last=None;self.positions=[];self.gaps=[]
         self.image_pub=self.create_publisher(Image,'/active/image',20)
         self.ex_pub=self.create_publisher(PoseStamped,'/active/extrinsic',20)
+        self.encoder_pub=self.create_publisher(Float64MultiArray,'/active/encoder',2000)
         # The joint publisher is 1000 Hz: depth five buffers only 5 ms while
         # an image callback computes full FK. Retain measured samples instead
         # of accepting longer interpolation gaps or dropping camera frames.
@@ -38,6 +40,8 @@ class Encoder(Node):
         d=dict(zip(m.name,m.position));t=stamp(m)
         if not all(n in d for n in self.kin.names) or (self.joints and t<=self.joints[-1][0]):return
         self.joints.append((t,np.array([d[n] for n in self.kin.names])));self.drain()
+        if len(self.kin.names)==8:
+            self.encoder_pub.publish(Float64MultiArray(data=[t*1e-9,*[float(d[n]) for n in self.kin.names[-2:]]]))
 
     def on_image(self,m):self.images.append(m);self.drain()
 

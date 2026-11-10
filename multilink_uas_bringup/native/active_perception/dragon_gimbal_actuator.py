@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 import rclpy
 from rclpy.node import Node
+from rclpy.executors import ExternalShutdownException
 from rclpy.parameter import Parameter
 from rclpy.qos import qos_profile_sensor_data
 from sensor_msgs.msg import JointState
@@ -49,7 +50,9 @@ if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);a=p.parse_args()
     rclpy.init();n=Actuator(a.output)
     try:rclpy.spin(n)
-    except KeyboardInterrupt:pass
+    except (KeyboardInterrupt,ExternalShutdownException):pass
+    except RuntimeError:
+        if rclpy.ok():raise
     finally:
         n.log.close();n.destroy_node()
         if rclpy.ok():rclpy.shutdown()

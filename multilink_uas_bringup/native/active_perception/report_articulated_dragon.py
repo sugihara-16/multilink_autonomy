@@ -30,7 +30,7 @@ def report(out):
             position_rmse_m=float(np.sqrt(np.mean(err[m]**2))),position_max_m=float(err[m].max()),
             rotation_rmse_deg=float(np.sqrt(np.mean(angle[m]**2))))
     flight=read_csv(out/'flight.csv');active=flight[(flight[:,0]>=phases['active'])&(flight[:,0]<end)]
-    decisions=[json.loads(l) for l in (out/'joint_decisions.jsonl').read_text().splitlines()]
+    decisions=[json.loads(l) for l in (out/('decisions.jsonl' if protocol.get('unipilot_matched') else 'joint_decisions.jsonl')).read_text().splitlines()]
     encoder=json.loads((out/'encoder_audit.json').read_text());inputs=json.loads((out/'input_audit.json').read_text())
     model=json.loads((out/'articulated_manifest.json').read_text())
     from dragon_articulated import Kinematics
@@ -42,11 +42,17 @@ def report(out):
     rotation=max(Rotation.from_matrix(T0[:3,:3].T@T[:3,:3]).magnitude() for T in camera)*180/np.pi
     optical_angle=max(np.arccos(np.clip(T0[:3,2]@T[:3,2],-1.,1.)) for T in camera)*180/np.pi
     commands=sum(d['reason'] in ('select_global_view','follow_joint_path') for d in decisions)
+    if protocol.get('unipilot_matched'):
+        commands=int(sum(np.linalg.norm(np.array(d['target'])-np.array(d['encoder']))>np.deg2rad(.1) for d in decisions if d.get('encoder') is not None and start<=d['stamp_ns']*1e-9<=end))
     mode=json.loads((out/'protocol.json').read_text())['mode'] if (out/'protocol.json').exists() else 'active'
     requested=json.loads((out/'flight_result.json').read_text())['requested_distance_m']
     active_fc=truth[(truth[:,0]>=start)&(truth[:,0]<=end)]
     travel=float(np.linalg.norm(active_fc[-1,1:4]-active_fc[0,1:4]))
-    speeds=np.abs(np.diff(active[:,4:],axis=0)/np.diff(active[:,0])[:,None])
+    if (out/'joint_measurements.csv').exists():
+        measured=read_csv(out/'joint_measurements.csv');measured=measured[(measured[:,0]>=start)&(measured[:,0]<end)]
+        speeds=np.abs(np.diff(measured[:,1:],axis=0)/np.diff(measured[:,0])[:,None])
+    else:
+        speeds=np.abs(np.diff(active[:,4:],axis=0)/np.diff(active[:,0])[:,None])
     max_speed=float(np.max(speeds))*180/np.pi
     rotation_gt=Rotation.from_quat(truth[:,4:8]);ii=(truth[:,0]>=start)&(truth[:,0]<end)
     attitude_excursion=float((rotation_gt[np.flatnonzero(ii)[0]].inv()*rotation_gt[ii]).magnitude().max()*180/np.pi)

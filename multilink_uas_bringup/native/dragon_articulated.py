@@ -99,7 +99,7 @@ def configure(root, source, output):
 class Kinematics:
     def __init__(self, path):
         self.root=ET.parse(path).getroot()
-        self.names=NAMES+[j.get('name') for j in self.root.findall('joint') if j.get('name') in ('active_camera_yaw_joint','active_camera_pitch_joint')]
+        self.names=NAMES+[j.get('name') for j in self.root.findall('joint') if j.get('type')!='fixed' and j.get('name') in ('active_camera_yaw_joint','active_camera_pitch_joint')]
         self.home=np.array([0.,1.56]*3)
         # Actual URDF limits, with a small stop margin; shape feasibility is
         # checked independently instead of imposing the old near-square box.
