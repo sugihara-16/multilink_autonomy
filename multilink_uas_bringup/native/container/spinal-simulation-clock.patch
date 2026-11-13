@@ -1,0 +1,50 @@
+diff --git a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp
+index eefebc9..46e3fbe 100644
+--- a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp
++++ b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.cpp
+@@ -567,10 +567,7 @@ float AttitudeController::deltaTime_()
+ uint32_t AttitudeController::nowMillis_() const
+ {
+ #ifdef SIMULATION
+-  using Clock = std::chrono::steady_clock;
+-  const auto now = Clock::now().time_since_epoch();
+-  return static_cast<uint32_t>(
+-    std::chrono::duration_cast<std::chrono::milliseconds>(now).count());
++  return simulation_time_ms_.load(std::memory_order_relaxed);
+ #else
+   return HAL_GetTick();
+ #endif
+diff --git a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h
+index e2f6027..cd5001d 100644
+--- a/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h
++++ b/spinal/mcu_project/lib/My_Lib/flight_control/attitude/attitude_control.h
+@@ -2,6 +2,9 @@
+ 
+ #include <cstddef>
+ #include <cstdint>
++#ifdef SIMULATION
++#include <atomic>
++#endif
+ 
+ #include "flight_control/flight_control_types.h"
+ #include "math/AP_Math.h"
+@@ -16,6 +19,9 @@ public:
+   void init(StateEstimate* estimator);
+   void reset();
+   bool update();
++#ifdef SIMULATION
++  void setSimulationTime(uint32_t milliseconds) { simulation_time_ms_.store(milliseconds, std::memory_order_relaxed); }
++#endif
+ 
+   bool applyFourAxisCommand(const FlightControlFourAxisCommand& cmd);
+   bool applyRpyGains(const FlightControlRpyTerms& gains);
+@@ -58,6 +64,9 @@ public:
+   bool controlFeedbackStatePublishReady(bool update_last_time = false);
+ 
+ private:
++#ifdef SIMULATION
++  std::atomic<uint32_t> simulation_time_ms_{0};
++#endif
+   StateEstimate* estimator_{nullptr};
+ 
+   int8_t uav_model_{-1};

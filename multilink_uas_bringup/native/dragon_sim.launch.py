@@ -86,6 +86,23 @@ def setup(context):
         if name.startswith('ground_truth_') and ('noise' in name or 'drift' in name):
             params[name] = 0.0
     (output/'Simulation.yaml').write_text(yaml.safe_dump(cfg))
+    bridge_topics=(['/dragon/imu/raw@sensor_msgs/msg/Imu[gz.msgs.IMU',
+                    '/dragon/lidar/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked'] +
+        ([f'/dragon/cam_link{i}/image@sensor_msgs/msg/Image[gz.msgs.Image' for i in ((3,) if gimbal else (1,3,4))] if vio and not articulated else []) +
+        (['/dragon/end_camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
+          '/dragon/articulated/states@sensor_msgs/msg/JointState[gz.msgs.Model'] if articulated else []) +
+        (['/active/gimbal/states@sensor_msgs/msg/JointState[gz.msgs.Model',
+          '/active/gimbal/yaw@std_msgs/msg/Float64]gz.msgs.Double',
+          '/active/gimbal/pitch@std_msgs/msg/Float64]gz.msgs.Double'] if gimbal or end_gimbal else []))
+    entries=[]
+    for spec in bridge_topics:
+        topic,types=spec.split('@',1)
+        delimiter='[' if '[' in types else ']'
+        ros_type,gz_type=types.split(delimiter,1)
+        depth=2000 if ros_type in ('sensor_msgs/msg/Imu','sensor_msgs/msg/JointState') else 10
+        entries.append(dict(ros_topic_name=topic,gz_topic_name=topic,ros_type_name=ros_type,gz_type_name=gz_type,
+            direction='GZ_TO_ROS' if delimiter=='[' else 'ROS_TO_GZ',publisher_queue=depth,subscriber_queue=depth))
+    bridge_config=output/'gazebo_bridge.yaml';bridge_config.write_text(yaml.safe_dump(entries))
     return [SetEnvironmentVariable('GZ_SIM_RESOURCE_PATH', ':'.join(resources)),
         IncludeLaunchDescription(PythonLaunchDescriptionSource(str(share/'launch/bringup_launch.py')),
         launch_arguments={'headless': LaunchConfiguration('headless'), 'rviz': 'false',
@@ -94,16 +111,8 @@ def setup(context):
             'takeoff_height': LaunchConfiguration('takeoff_height'),
             **{'spawn_'+a: str(v) for a,v in zip('xyz',spawn)}, 'render_engine': 'ogre2'}.items()),
         Node(package='ros_gz_bridge', executable='parameter_bridge', name='dragon_sensors',
-            arguments=['/dragon/imu/raw@sensor_msgs/msg/Imu[gz.msgs.IMU',
-                       '/dragon/lidar/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked'] +
-                      ([f'/dragon/cam_link{i}/image@sensor_msgs/msg/Image[gz.msgs.Image' for i in ((3,) if gimbal else (1,3,4))] if vio and not articulated else []) +
-                      (['/dragon/end_camera/image@sensor_msgs/msg/Image[gz.msgs.Image',
-                        '/dragon/articulated/states@sensor_msgs/msg/JointState[gz.msgs.Model'] if articulated else []) +
-                      (['/active/gimbal/states@sensor_msgs/msg/JointState[gz.msgs.Model',
-                        '/active/gimbal/yaw@std_msgs/msg/Float64]gz.msgs.Double',
-                        '/active/gimbal/pitch@std_msgs/msg/Float64]gz.msgs.Double'] if gimbal or end_gimbal else []),
             remappings=[('/dragon/lidar/scan/points','/dragon/lidar/points')],
-            parameters=[{'use_sim_time': True}], output='screen')]
+            parameters=[{'use_sim_time': True,'config_file':str(bridge_config)}], output='screen')]
 
 
 def generate_launch_description():

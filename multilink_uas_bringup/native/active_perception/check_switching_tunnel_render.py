@@ -28,7 +28,8 @@ def main():
                     rgb=np.frombuffer(msg.data,dtype=np.uint8).reshape(msg.height,msg.step)[:,:msg.width*3].reshape(msg.height,msg.width,3).copy();frames[key]=rgb
                 callbacks.append(callback);node.subscribe(Image,topic,callback)
         path=a.output/f'{layout}_inspection.sdf';tree.write(path,encoding='unicode')
-        env=os.environ.copy();env['LD_PRELOAD']='/usr/lib/wsl/lib/libd3d12core.so';started=time.monotonic()
+        env=os.environ.copy();started=time.monotonic()
+        if Path('/usr/lib/wsl/lib/libd3d12core.so').exists():env['LD_PRELOAD']='/usr/lib/wsl/lib/libd3d12core.so'
         with (a.output/f'{layout}_gazebo.log').open('w') as log:
             proc=subprocess.Popen(['gz','sim','-s','-r','--render-engine','ogre2',str(path)],env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
             try:
@@ -43,7 +44,7 @@ def main():
         canvas=PILImage.new('RGB',(1600,4*270),'white');draw=ImageDraw.Draw(canvas);records={}
         for i,x in enumerate([42,74,106,138]):
             for j,name in enumerate(VIEWS):
-                key=f'{layout}_{i}_{name}';rgb=frames[key];PILImage.fromarray(rgb).save(a.output/f'{key}.png');gray=cv2.cvtColor(rgb,cv2.COLOR_RGB2GRAY)
+                key=f'{layout}_{i}_{name}';rgb=frames[key];gray=cv2.cvtColor(rgb,cv2.COLOR_RGB2GRAY)
                 n=len(cv2.FastFeatureDetector_create(threshold=20,nonmaxSuppression=True).detect(gray))
                 records[key]=dict(x_m=x,view=name,corners=n,std_intensity=float(gray.std()),mean_intensity=float(gray.mean()))
                 canvas.paste(PILImage.fromarray(rgb).resize((320,240)),(j*320,i*270+30));draw.text((j*320+4,i*270+5),f'x={x} {name}: {n}',fill='black')

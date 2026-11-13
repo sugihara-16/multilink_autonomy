@@ -1,0 +1,23 @@
+diff --git a/aerial_robot_simulation/src/simulation_attitude_controller.cpp b/aerial_robot_simulation/src/simulation_attitude_controller.cpp
+index ed07dd8..09eb466 100644
+--- a/aerial_robot_simulation/src/simulation_attitude_controller.cpp
++++ b/aerial_robot_simulation/src/simulation_attitude_controller.cpp
+@@ -126,13 +126,17 @@ controller_interface::CallbackReturn SimulationAttitudeController::on_deactivate
+   return controller_interface::CallbackReturn::SUCCESS;
+ }
+ 
+-controller_interface::return_type SimulationAttitudeController::update(const rclcpp::Time &, const rclcpp::Duration &)
++controller_interface::return_type SimulationAttitudeController::update(const rclcpp::Time &time, const rclcpp::Duration &)
+ {
+   if (get_state().id() != lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE)
+   {
+     return controller_interface::return_type::OK;
+   }
+ 
++  // Watchdog and integration use physics time, which stops during pacing pauses.
++  flight_control_ros_mod_.getFlightControlCore()->getAttitudeController().setSimulationTime(
++    static_cast<uint32_t>(time.nanoseconds() / 1000000));
++
+   spinal_iface_.onGround(false);
+ 
+   const double q_x = state_interfaces_[0].get_value();

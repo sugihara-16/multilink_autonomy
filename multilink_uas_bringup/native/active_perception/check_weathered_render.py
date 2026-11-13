@@ -29,7 +29,10 @@ def main():
                     rgb=np.frombuffer(msg.data,dtype=np.uint8).reshape(msg.height,msg.step)[:,:msg.width*3].reshape(msg.height,msg.width,3).copy();frames[key]=rgb
                 callbacks.append(callback);node.subscribe(Image,topic,callback)
         path=a.output/f'{layout}_inspection.sdf';tree.write(path,encoding='unicode')
-        env=os.environ.copy();env['LD_PRELOAD']='/usr/lib/wsl/lib/libd3d12core.so';started=time.monotonic()
+        env=os.environ.copy()
+        d3d12=Path('/usr/lib/wsl/lib/libd3d12core.so')
+        if d3d12.exists():env['LD_PRELOAD']=str(d3d12)
+        started=time.monotonic()
         with (a.output/f'{layout}_gazebo.log').open('w') as log:
             proc=subprocess.Popen(['gz','sim','-s','-r','--render-engine','ogre2',str(path)],env=env,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
             try:

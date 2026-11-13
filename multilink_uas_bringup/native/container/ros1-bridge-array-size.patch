@@ -1,0 +1,21 @@
+diff --git a/resource/interface_factories.cpp.em b/resource/interface_factories.cpp.em
+--- a/resource/interface_factories.cpp.em
++++ b/resource/interface_factories.cpp.em
+@@ -157,7 +157,7 @@
+ @[      else]@
+   // statically sized array
+   static_assert(
+-    (ros2_msg.@(ros2_field_selection).size()) >= (ros1_msg.@(ros1_field_selection).size()),
++    (decltype(ros2_msg.@(ros2_field_selection)){}.size()) >= (decltype(ros1_msg.@(ros1_field_selection)){}.size()),
+     "destination array not large enough for source array"
+   );
+ @[      end if]@
+@@ -244,7 +244,7 @@
+ @[      else]@
+   // statically sized array
+   static_assert(
+-    (ros1_msg.@(ros1_field_selection).size()) >= (ros2_msg.@(ros2_field_selection).size()),
++    (decltype(ros1_msg.@(ros1_field_selection)){}.size()) >= (decltype(ros2_msg.@(ros2_field_selection)){}.size()),
+     "destination array not large enough for source array"
+   );
+ @[      end if]@

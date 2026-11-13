@@ -12,9 +12,16 @@ target_include_directories(reliable_bridge PRIVATE ${ros1_roscpp_INCLUDE_DIRS})
 # workspace libraries (which have different SONAMEs and logging globals).
 list(GET ros1_bridge_LIBRARIES 0 BRIDGE_LIBRARY)
 get_filename_component(BRIDGE_LIBDIR "${BRIDGE_LIBRARY}" DIRECTORY)
-target_link_libraries(reliable_bridge
-  "${BRIDGE_LIBDIR}/libroscpp.so.4d"
-  "${BRIDGE_LIBDIR}/libxmlrpcpp.so.3d")
+if(EXISTS "${BRIDGE_LIBDIR}/libroscpp.so.4d" AND EXISTS "${BRIDGE_LIBDIR}/libxmlrpcpp.so.3d")
+  target_link_libraries(reliable_bridge
+    "${BRIDGE_LIBDIR}/libroscpp.so.4d"
+    "${BRIDGE_LIBDIR}/libxmlrpcpp.so.3d")
+else()
+  # A source-built upstream bridge uses the Noetic installation found above.
+  target_link_directories(reliable_bridge PRIVATE ${ros1_roscpp_LIBRARY_DIRS})
+  target_link_libraries(reliable_bridge ${ros1_roscpp_LIBRARIES})
+  set_property(TARGET reliable_bridge APPEND PROPERTY BUILD_RPATH ${ros1_roscpp_LIBRARY_DIRS})
+endif()
 # ROS1 transitive dependencies live outside the system library search path.
 # Keep the isolated binary runnable from the ROS2-only launcher environment.
 target_link_options(reliable_bridge PRIVATE -Wl,--disable-new-dtags)

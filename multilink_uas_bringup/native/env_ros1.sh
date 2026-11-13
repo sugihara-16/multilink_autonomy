@@ -5,6 +5,8 @@ if [[ ${ROS_VERSION:-1} == 2 ]]; then
   return 1
 fi
 source /root/ros1_noetic/install_isolated/setup.bash
-source /root/unified_autonomy_stack/workspaces/ws_gbplanner/devel/setup.bash
+if [[ -f /root/unified_autonomy_stack/workspaces/ws_gbplanner/devel/setup.bash ]]; then
+ source /root/unified_autonomy_stack/workspaces/ws_gbplanner/devel/setup.bash
+fi
 export ROS_MASTER_URI=http://127.0.0.1:11374 ROS_IP=127.0.0.1
 export PATH="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)/bin:$PATH"
