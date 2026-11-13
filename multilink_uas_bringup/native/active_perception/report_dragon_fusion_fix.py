@@ -9,10 +9,11 @@ import numpy as np
 import yaml
 
 from report_matched_dragon import NATIVE, flight
+from compact_record_io import open_record
 
 
 def registration(path, start, end):
-    with path.open() as stream:
+    with open_record(path) as stream:
         rows = [r for r in csv.DictReader(stream)
                 if start <= int(r['stamp_ns']) * 1e-9 <= end]
     ok = [r for r in rows if r['status'] == 'ok']
