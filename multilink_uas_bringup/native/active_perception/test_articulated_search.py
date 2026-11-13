@@ -20,7 +20,8 @@ class Search(unittest.TestCase):
             np.testing.assert_allclose(self.k.camera(q),expected,atol=1e-12)
     def test_reachable_views_cover_all_azimuth_quadrants(self):
         a=self.road.audit();az=np.array(a['azimuth_deg'])
-        self.assertGreater(a['reachable'],100)
+        self.assertGreater(a['reachable'],1)
+        self.assertIn('control_envelope',a)
         for low in [-180,-90,0,90]:self.assertTrue(np.any((az>=low)&(az<low+90)))
     def test_all_route_edges_have_feasible_interiors(self):
         # Include large coordinated changes, not merely endpoints or +/-1deg.

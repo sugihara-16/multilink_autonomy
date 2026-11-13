@@ -45,11 +45,13 @@ def calibration(out,world):
 def run(a):
     import shutil,socket,fcntl
     if shutil.disk_usage('/mnt/c').free<8e9:raise RuntimeError('Less than 8GB Windows reserve')
-    if not np.isfinite(a.distance) or not 0<=a.distance<=90:raise ValueError('This validation supports 0 to 90 metres')
+    if not np.isfinite(a.distance) or not 0<=a.distance<=130:raise ValueError('This validation supports 0 to 130 metres')
     if not np.isfinite(a.speed) or a.speed<=0:raise ValueError('Positive finite flight speed required')
     if a.inspect_gimbal and not a.gimbal:raise ValueError('Gimbal inspection requires --gimbal')
     if a.unipilot_matched and (not a.gimbal or a.inspect_gimbal):raise ValueError('Matched experiment requires gimbal without inspection sweep')
     common_runtime=a.unipilot_matched or a.mechanism_comparison
+    use_v10=a.unipilot_matched or a.gimbal_v10
+    if a.gimbal_v10 and not (a.gimbal and a.mechanism_comparison):raise ValueError('Established v10 control requires the matched gimbal mechanism')
     if a.mechanism_comparison and (a.unipilot_matched or a.inspect_gimbal):raise ValueError('Mechanism comparison is separate from legacy/matched-gimbal runs')
     rovio_binary=WS/('build/rovio-joint-geometry/rovio_gimbal' if a.unipilot_matched else 'build/rovio-articulated/rovio_articulated')
     fusion_library=WS/('build/mimosa-batched-vision' if a.fusion_profile=='baseline' else 'build/mimosa-batched-drpm')
@@ -59,7 +61,9 @@ def run(a):
         raise ValueError('View diagnostic requires drpm_isotropic20_view profile')
     if not (fusion_library/'libmimosa_lib.so').exists():raise RuntimeError('Missing fusion library: '+str(fusion_library))
     if not rovio_binary.exists():raise RuntimeError('Missing ROVIO binary: '+str(rovio_binary))
-    lock=(NATIVE/'.articulated.lock').open('w');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    # ROS and Gazebo already use a domain-specific namespace. Keep the lock
+    # scoped to that same domain so independent experiments can run together.
+    lock=(NATIVE/f'.articulated-{a.domain}.lock').open('w');fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
     with socket.socket() as s:
         if s.connect_ex(('127.0.0.1',a.port))==0:raise RuntimeError('ROS master already running on test port')
     out=a.output.resolve();out.mkdir(parents=True,exist_ok=False)
@@ -73,9 +77,11 @@ def run(a):
     wrapper=bindir/'gz';wrapper.write_text('#!/bin/bash\nif [[ "$1" == sim ]]; then\nshift\nexec '+shlex.quote(real_gz)+' sim --seed '+str(a.seed)+' "$@"\nfi\nexec '+shlex.quote(real_gz)+' "$@"\n');wrapper.chmod(0o755)
     sources=list(HERE.glob('*articulated*'))+list(HERE.glob('*dragon_gimbal*'))+[NATIVE/'dragon_articulated.py',NATIVE/'dragon_gimbal.py',NATIVE/'dragon_sim.launch.py',HERE/'initialization_motion.py']
     if common_runtime:sources+=list(HERE.glob('*.py'))+[HERE/'motion_view_v10.yaml',HERE/'config.yaml']
+    sources.append(NATIVE/'dragon_control_guard.py')
     binaries=[rovio_binary,WS/'build/mimosa-batched-vision/mimosa_batched_node',fusion_library/'libmimosa_lib.so']
-    (out/'protocol.json').write_text(json.dumps(dict(mode=a.mode,world=str(a.world),distance_m=a.distance,speed_mps=a.speed,
-        sensor_profile='native',imu_sampling='resolved',camera_far_m=1000,preparation_cycles=2,seed=a.seed,unipilot_matched=a.unipilot_matched,mechanism_comparison=a.mechanism_comparison,
+    (out/'protocol.json').write_text(json.dumps(dict(mode=a.mode,world=str(a.world),distance_m=a.distance,speed_mps=a.speed,origin=a.origin,
+        sensor_profile='native',imu_sampling='resolved',camera_far_m=1000,preparation_cycles=2,bootstrap_seconds=26 if a.mechanism_comparison else 0,bootstrap_axis_order="y,z,x" if a.mechanism_comparison else None,seed=a.seed,unipilot_matched=a.unipilot_matched,mechanism_comparison=a.mechanism_comparison,gimbal_v10=a.gimbal_v10,
+        view_policy='established_v10' if use_v10 else 'reachable_retention',
         estimator=('UniPilot ROVIO rotation-only binary' if a.unipilot_matched else 'ROVIO with full SE3 camera transform')+' + MIMOSA',fusion_profile=a.fusion_profile,
         truth_usage='flight control and offline evaluation only',record_bag=False,headless=a.headless,camera_actuation='gimbal' if a.gimbal else 'body_joints',inspection_sweep=a.inspect_gimbal,
         sha256={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources+binaries if p.is_file()}),indent=2))
@@ -99,7 +105,7 @@ def run(a):
     success=False
     try:
         start('master',['roscore','-p',a.port],True);time.sleep(2)
-        sim=start('simulation',['ros2','launch',NATIVE/'dragon_sim.launch.py','articulated:=true',f'end_gimbal:={str(a.gimbal).lower()}',f'gimbal_profile:={gimbal_profile}',f'matched_joint_mount:={str(a.mechanism_comparison and not a.gimbal).lower()}',f'headless:={str(a.headless).lower()}',f'world_file:={simulation_world}',f'output:={out}','spawn_x:=4.6755','spawn_y:=0.001','spawn_z:=0.4','takeoff_height:=2.0'],
+        sim=start('simulation',['ros2','launch',NATIVE/'dragon_sim.launch.py','articulated:=true',f'end_gimbal:={str(a.gimbal).lower()}',f'gimbal_profile:={gimbal_profile}',f'matched_joint_mount:={str(a.mechanism_comparison and not a.gimbal).lower()}',f'headless:={str(a.headless).lower()}',f'world_file:={simulation_world}',f'output:={out}',f'spawn_x:={a.origin[0]-.3245}',f'spawn_y:={a.origin[1]+.001}','spawn_z:=0.4',f'takeoff_height:={a.origin[2]}'],
             extra=f'export GZ_SIM_RESOURCE_PATH={shlex.quote(str(a.world.parent/"models"))}:${{GZ_SIM_RESOURCE_PATH:-}}')
         deadline=time.monotonic()+90
         while not (out/'dragon_slam.urdf').exists():
@@ -165,6 +171,10 @@ def run(a):
         if common_runtime:
             from matched_dragon import prepare_runtime
             prepare_runtime(out,a.world,mechanism_comparison=a.mechanism_comparison)
+            if a.gimbal_v10:
+                matching=json.loads((out/'matching.json').read_text())
+                matching['planner']='Established v10 gimbal policy, same full SE3 ROVIO, fusion and matched hardware as shared-policy arms'
+                (out/'matching.json').write_text(json.dumps(matching,indent=2)+'\n')
         if a.gimbal:
             from audit_dragon_gimbal import audit
             audit_result=audit(ET.parse(out/'dragon_slam.urdf').getroot())
@@ -174,7 +184,7 @@ def run(a):
                 '/active/image':'sensor_msgs/msg/Image','/active/extrinsic':'geometry_msgs/msg/PoseStamped','/active/initialize_vio':'std_msgs/msg/Bool',
                 '/articulated/enable':'std_msgs/msg/Bool','/articulated/target':'sensor_msgs/msg/JointState','/dragon/articulated/states':'sensor_msgs/msg/JointState',
                 '/dragon/ground_truth':'nav_msgs/msg/Odometry'}
-        if a.unipilot_matched:topics.update({'/active/encoder':'std_msgs/msg/Float64MultiArray',
+        if use_v10:topics.update({'/active/encoder':'std_msgs/msg/Float64MultiArray',
               '/active/gimbal/yaw':'std_msgs/msg/Float64','/active/gimbal/pitch':'std_msgs/msg/Float64'})
         config={'active_lidar_diagnostics':True,'use_sim_time':True,'topics':[dict(topic=k,type=v,queue_size=2000 if k.endswith(('/raw','/states','/encoder')) else 30) for k,v in topics.items()],'services_1_to_2':[],'services_2_to_1':[]}
         (out/'bridge.yaml').write_text(yaml.safe_dump(config))
@@ -182,7 +192,7 @@ def run(a):
             if start(name,['rosparam','load',out/file],True).wait(20):raise RuntimeError('Parameter setup failed')
         start('bridge',[WS/'build/reliable-bridge/reliable_bridge'])
         start('encoder',['python3',HERE/'articulated_encoder.py','--output',out])
-        if not a.unipilot_matched:start('actuator',['python3',HERE/('dragon_gimbal_actuator.py' if a.gimbal else 'articulated_actuator.py'),'--output',out])
+        if not use_v10:start('actuator',['python3',HERE/('dragon_gimbal_actuator.py' if a.gimbal else 'articulated_actuator.py'),'--output',out])
         start('monitor',['python3',HERE/'monitor.py','--output',out],True)
         if a.fusion_diagnostics:start('input_probe',['python3',HERE/'fusion_input_probe.py','--output',out/'input_probe'],True)
         start('inputs',[WS/'build/native-adapters/native_slam_inputs','_imu_topic:=/dragon/imu/raw','_points_topic:=/dragon/lidar/points','_gate_slam:=true','_imu_rate:=1000',f'_audit_path:={out}/input_audit.json'],True)
@@ -197,13 +207,27 @@ def run(a):
                 if variant=='view_masked':libdir=WS/'build/mimosa-batched-drpm-support'
                 start(variant,['roslaunch',directory/'mimosa.launch',f'config:={directory}/mimosa.yaml',f'logs:={directory}','external_odometry:=/rovio/odometry'],True,
                     extra=f'export UAS_TBB_THREADS=1 LD_PRELOAD={WS}/build/mimosa-speed/libtbb_limit.so:${{LD_PRELOAD:-}}\nexport LD_LIBRARY_PATH={libdir}:{WS}/build/active_perception:{WS}/comparison_ws/deps/lib:${{LD_LIBRARY_PATH:-}}')
-        if a.unipilot_matched:
+        if use_v10:
             start('planner',['python3',HERE/'ablation_planner_node.py','--output',out,'--mode',a.mode,'--config',out/'planner.yaml','--library',WS/'build/active_perception/libfif_active.so'],True)
             start('pacing',['python3',out/'matched_pacer.py','--output',out,'--planner','--planner-period','.2','--lidar-stop-lag','.4','--lidar-resume-lag','.26'],True)
         else:
             start('planner',['python3',HERE/'articulated_planner.py','--output',out,'--mode',a.mode],True)
             if a.mechanism_comparison:start('pacing',['python3',out/'matched_pacer.py','--output',out,'--planner','--planner-period','.2','--lidar-stop-lag','.4','--lidar-resume-lag','.26'],True)
-        flight=start('flight',['python3',HERE/'articulated_hover_test.py','--output',out,'--distance',a.distance,'--speed',a.speed]+(['--gimbal'] if a.gimbal else [])+(['--inspect-gimbal'] if a.inspect_gimbal else [])+(['--unipilot-matched'] if common_runtime else []))
+        if a.mechanism_comparison:
+            # Controller activation can precede its helper's process exit.
+            # Never arm until all four helpers have finished cleanly.
+            ready_deadline=time.monotonic()+90
+            while True:
+                log=(out/'simulation.log').read_text(errors='replace')
+                if 'process has died' in log or sim.poll() is not None:
+                    raise RuntimeError('Simulation startup process failed before arming')
+                finished=set(re.findall(r'\[spawner-(\d+)\]: process has finished cleanly',log))
+                if len(finished)>=4:
+                    (out/'startup_process_audit.json').write_text(json.dumps(dict(passed=True,finished_spawners=sorted(finished),before_flight_process=True)))
+                    break
+                if time.monotonic()>ready_deadline:raise RuntimeError('Controller startup helpers did not finish before arming')
+                time.sleep(.2)
+        flight=start('flight',['python3',HERE/'articulated_hover_test.py','--output',out,'--distance',a.distance,'--speed',a.speed,'--origin',*a.origin]+(['--gimbal'] if a.gimbal else [])+(['--inspect-gimbal'] if a.inspect_gimbal else [])+(['--unipilot-matched'] if common_runtime else [])+(['--symmetric-view-preparation'] if a.mechanism_comparison else []))
         deadline=time.monotonic()+1250
         while flight.poll() is None:
             failed=[n for n,p in children if n not in ('flight','bridge_params','rovio_params') and p.poll() is not None]
@@ -255,11 +279,13 @@ if __name__=='__main__':
     p.add_argument('--world',type=Path,default=WS/'assets/weathered_holdout_20261026/24301/world.sdf')
     p.add_argument('--domain',type=int,default=89);p.add_argument('--port',type=int,default=11489)
     p.add_argument('--distance',type=float,default=90.)
+    p.add_argument('--origin',type=float,nargs=3,default=[5.,0.,2.])
     p.add_argument('--speed',type=float,default=.5)
     p.add_argument('--gimbal',action='store_true')
     p.add_argument('--inspect-gimbal',action='store_true')
     p.add_argument('--unipilot-matched',action='store_true')
     p.add_argument('--mechanism-comparison',action='store_true',help='Common forward mount, SE3 ROVIO, preparation and articulated planner for both mechanisms')
+    p.add_argument('--gimbal-v10',action='store_true',help='Established gimbal view control, retaining the matched full SE3 estimator and hardware')
     p.add_argument('--fusion-profile',choices=['baseline','drpm_isotropic','drpm_isotropic20','drpm_isotropic20_view','drpm_isotropic20_calibrated','drpm_radial'],default='baseline')
     p.add_argument('--fusion-diagnostics',action='store_true',help='Trace post-sensor states and run duplicate/no-vision controls on the identical inputs')
     p.add_argument('--diagnostic-suite',choices=['basic','solver','constraints','drpm','planes','support','view'],default='basic')

@@ -49,7 +49,7 @@ def prepare_runtime(out,world,mechanism_comparison=False):
     cfg.update(view_information_mode='lidar_conditioned',
                fusion_velocity_covariance_scale=fusion['odometry']['manager']['velocity_covariance_scale'],
                fusion_velocity_period_s=fusion['odometry']['manager']['velocity_period_s'])
-    if mechanism_comparison:cfg.update(body_joint_speed_deg_s=7.,body_joint_acceleration_deg_s2=14.)
+    if mechanism_comparison:cfg.update(body_joint_speed_deg_s=4.,body_joint_acceleration_deg_s2=8.)
     (out/'planner.yaml').write_text(yaml.safe_dump(cfg))
     (out/'route').mkdir()
     # Same catch-up scheduling as the held-out UniPilot experiments. The
@@ -79,8 +79,8 @@ def prepare_runtime(out,world,mechanism_comparison=False):
         path=out/'matching.json';record=json.loads(path.read_text())
         record.update(reference='Symmetric DRAGON joint/gimbal comparison',
             planner='Shared articulated_planner.py map and correlated velocity scoring; different reachable candidates',
-            preparation='8 s settle, initialization gate, 12 s approach, two 26 s excitation cycles, no camera or body-joint sweep',
-            actuation='Body joints commanded at 7 deg/s, acceleration 14 deg/s2, physical audit limit unchanged at 12 deg/s, or optical-centre gimbal at 14 deg/s; actual measured joints used',
+            preparation='8 s settle, initialization gate, fixed-view lateral-first 26 s bootstrap, 12 s approach plus first 26 s excitation with active view selection; second 26 s excitation holds selected view; identical policy lifecycle for all mechanisms',
+            actuation='Body joints commanded at 4 deg/s, acceleration 8 deg/s2 with control envelope and flight feedback interlock; optical-centre gimbal at 14 deg/s; actual measured joints used',
             estimator='Same full SE3 ROVIO binary for both; measured camera translation and orientation at each image stamp',
             residual_differences=['Six body axes vs two gimbal axes, attainable camera poses and path constraints',
                 'Resulting body and sensor motions, including camera translation for the joint arm',

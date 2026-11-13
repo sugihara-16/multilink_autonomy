@@ -73,7 +73,7 @@ class Roadmap:
                     elevation_deg=np.rad2deg(np.arcsin(np.clip(d[:,2],-1,1))).tolist(),
                     joint_min_deg=np.rad2deg(self.kin.lower).tolist(),joint_max_deg=np.rad2deg(self.kin.upper).tolist(),
                     clearance='sampled body-tube and rotor-module bounds; not exact meshes',
-                    support='minimum planar spread 0.10m, vertical rotor span <=1.25m')
+                    control_envelope=self.kin.control.manifest())
 
 
 def visual_information(points,covariances,T,bearing_sigma):

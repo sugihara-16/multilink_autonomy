@@ -3,6 +3,7 @@ import argparse,json,sys
 from pathlib import Path
 import numpy as np
 import rclpy
+from synchronous_shutdown import initialize,spin
 from rclpy.node import Node
 from rclpy.executors import ExternalShutdownException
 from rclpy.parameter import Parameter
@@ -48,11 +49,9 @@ class Actuator(Node):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--output',required=True,type=Path);a=p.parse_args()
-    rclpy.init();n=Actuator(a.output)
-    try:rclpy.spin(n)
+    initialize();n=Actuator(a.output)
+    try:spin(n)
     except (KeyboardInterrupt,ExternalShutdownException):pass
-    except RuntimeError:
-        if rclpy.ok():raise
     finally:
         n.log.close();n.destroy_node()
         if rclpy.ok():rclpy.shutdown()

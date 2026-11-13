@@ -9,10 +9,17 @@ def read_csv(path):
     if len(a)<2:raise ValueError('Insufficient data: '+str(path))
     return a
 
+def fixed_body_measurements(body):
+    """Reject real body motion, not uninitialized flight-timer placeholders."""
+    body=np.asarray(body)
+    return bool(body.ndim==2 and body.shape[1]==6 and len(body)>1 and
+                np.isfinite(body).all() and np.max(np.ptp(body,axis=0))<np.deg2rad(1.))
+
 def report(out):
     out=Path(out);events=json.loads((out/'flight_events.json').read_text())
     phases={v['stage']:v['time'] for v in events};start=phases['active'];end=phases['landing']
     protocol=json.loads((out/'protocol.json').read_text())
+    use_v10=protocol.get('unipilot_matched') or protocol.get('gimbal_v10')
     end=min(end,start+protocol['distance_m']/protocol.get('speed_mps',.3)+2.) if protocol['distance_m'] else end
     truth=read_csv(out/'truth.csv');truth[:,0]*=1e-9
     truth=truth[np.r_[True,np.diff(truth[:,0])>0]]
@@ -30,7 +37,7 @@ def report(out):
             position_rmse_m=float(np.sqrt(np.mean(err[m]**2))),position_max_m=float(err[m].max()),
             rotation_rmse_deg=float(np.sqrt(np.mean(angle[m]**2))))
     flight=read_csv(out/'flight.csv');active=flight[(flight[:,0]>=phases['active'])&(flight[:,0]<end)]
-    decisions=[json.loads(l) for l in (out/('decisions.jsonl' if protocol.get('unipilot_matched') else 'joint_decisions.jsonl')).read_text().splitlines()]
+    decisions=[json.loads(l) for l in (out/('decisions.jsonl' if use_v10 else 'joint_decisions.jsonl')).read_text().splitlines()]
     encoder=json.loads((out/'encoder_audit.json').read_text());inputs=json.loads((out/'input_audit.json').read_text())
     model=json.loads((out/'articulated_manifest.json').read_text())
     from dragon_articulated import Kinematics
@@ -41,8 +48,8 @@ def report(out):
     translation_span=np.ptp([T[:3,3] for T in camera],axis=0)
     rotation=max(Rotation.from_matrix(T0[:3,:3].T@T[:3,:3]).magnitude() for T in camera)*180/np.pi
     optical_angle=max(np.arccos(np.clip(T0[:3,2]@T[:3,2],-1.,1.)) for T in camera)*180/np.pi
-    commands=sum(d['reason'] in ('select_global_view','follow_joint_path') for d in decisions)
-    if protocol.get('unipilot_matched'):
+    commands=sum(d['reason'] in ('select_global_view','follow_joint_path') and start<=d.get('time',-1)<=end for d in decisions)
+    if use_v10:
         commands=int(sum(np.linalg.norm(np.array(d['target'])-np.array(d['encoder']))>np.deg2rad(.1) for d in decisions if d.get('encoder') is not None and start<=d['stamp_ns']*1e-9<=end))
     mode=json.loads((out/'protocol.json').read_text())['mode'] if (out/'protocol.json').exists() else 'active'
     requested=json.loads((out/'flight_result.json').read_text())['requested_distance_m']
@@ -63,10 +70,11 @@ def report(out):
                 estimators_running=all(r['evaluated_count']>200 and r['max_gap_s']<.5 for r in results.values()),
                 moving_camera_observed=(rotation>5 and (gimbal or max(translation_span)>.02)) if mode=='active' else True,
                 autonomous_view_selection=commands>0 if mode=='active' else True,
-                controlled_flight=abs(travel-requested)<.5 and np.max(abs(active_fc[:,3]-2.))<.3,
+                controlled_flight=abs(travel-requested)<.5 and np.max(abs(active_fc[:,3]-protocol.get('origin',[5.,0.,2.])[2]))<.3,
                 joint_slew=max_speed<(21. if gimbal else 12.))
     if gimbal:
-        checks['body_joints_fixed']=bool(np.max(np.ptp(flight[:,4:10],axis=0))<np.deg2rad(1.))
+        body=read_csv(out/'joint_measurements.csv')[:,1:7] if (out/'joint_measurements.csv').exists() else flight[:,4:10]
+        checks['body_joints_fixed']=fixed_body_measurements(body)
     checks={k:bool(v) for k,v in checks.items()}
     result=dict(passed=all(checks.values()),checks=checks,estimators=results,
                 evaluation_interval_s=[start,end],alignment='First tracking pose SE3 alignment; no scale fitting; takeoff and preparation excluded',

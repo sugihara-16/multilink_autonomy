@@ -16,12 +16,14 @@ sys.path.insert(0,str(Path(__file__).resolve().parent.parent))
 from trajectory_math import blend as approach_blend,segment_value
 
 class Test(Node):
-    def __init__(self,out,distance=0.,speed=.5,gimbal=False,inspect_gimbal=False,unipilot_matched=False):
+    def __init__(self,out,distance=0.,speed=.5,gimbal=False,inspect_gimbal=False,unipilot_matched=False,origin=(5.,0.,2.),symmetric_view_preparation=False):
         super().__init__('articulated_hover_test');self.set_parameters([Parameter('use_sim_time',value=True)])
         self.out=out;self.state=None;self.cog=None;self.joints={};self.stage='waiting';self.start_wall=time.monotonic();self.start=None;self.done=False;self.failed=None
         self.samples=[];self.joint_samples=[];self.events=[];self.names=[f'joint{i}_{a}' for i in (1,2,3) for a in ('pitch','yaw')]
         self.distance=distance;self.speed=speed;self.origin=None;self.fc=None
+        self.route_origin=np.asarray(origin,dtype=float)
         self.unipilot_matched=unipilot_matched
+        self.symmetric_view_preparation=symmetric_view_preparation
         self.gimbal=gimbal;self.inspect_gimbal=inspect_gimbal;self.inspection_index=0;self.inspection_since=None;self.last_image=None
         if gimbal:
             from sensor_msgs.msg import Image
@@ -67,8 +69,10 @@ class Test(Node):
         if stage=='arming':
             (self.out/'startup_control.json').write_text(json.dumps(dict(controller_active=self.controller_active,body_joints_deg=[float(np.rad2deg(self.joints[n])) for n in self.names[:6]],time_s=self.start)))
         if command:self.cmd[command].publish(Empty())
+        if stage=='bootstrap':
+            p=self.fc.pose.pose.position;self.origin=np.array([p.x,p.y,p.z])
         if stage in ('active','preparation'):
-            self.origin=np.array([5.,0.,2.])
+            self.origin=self.route_origin.copy()
         if stage=='approach':
             p=self.fc.pose.pose.position;self.approach_start=np.array([p.x,p.y,p.z]);self.origin=self.approach_start.copy()
 
@@ -93,8 +97,8 @@ class Test(Node):
         if self.done:return
         t=self.get_clock().now().nanoseconds*1e-9
         elapsed=t-self.start if self.start is not None else 0
-        if self.cog:
-            p=self.cog.pose.pose.position;self.samples.append([t,p.x,p.y,p.z,*[self.joints.get(n,0) for n in self.names]])
+        if self.cog and all(n in self.joints for n in self.names):
+            p=self.cog.pose.pose.position;self.samples.append([t,p.x,p.y,p.z,*[self.joints[n] for n in self.names]])
         if self.stage=='waiting' and self.state==0 and self.cog and self.fc and all(n in self.joints for n in self.names) and self.controllers_ready() and np.max(abs(np.array([self.joints[n] for n in self.names[:6]])-np.array([0.,1.56]*3)))<np.deg2rad(2.):self.transition('arming','start')
         elif self.stage=='arming' and self.state==2:self.transition('takeoff','takeoff')
         elif self.stage=='takeoff' and self.state==5:self.transition('settle')
@@ -103,14 +107,23 @@ class Test(Node):
         elif self.stage=='initialize':
             self.gate.publish(Bool(data=True))
             if self.unipilot_matched:
-                if self.estimators_ready():self.transition('approach')
+                if self.estimators_ready():self.transition('bootstrap' if self.symmetric_view_preparation else 'approach')
                 elif elapsed>30:raise RuntimeError('Airborne initialization timed out')
             elif elapsed>12:self.transition('preparation')
+        elif self.stage=='bootstrap':
+            # Same fixed optical pose and bounded lateral-first excitation for
+            # both mechanisms. No estimator reset, selection or truth feedback.
+            self.active.publish(Bool(data=False))
+            delta,velocity=initialization_motion.reference(elapsed)
+            self.position_command(delta[[2,0,1]],velocity[[2,0,1]])
+            if elapsed>=initialization_motion.DURATION:self.transition('approach')
         elif self.stage=='approach':
-            s,ds=approach_blend(elapsed/12);delta=np.array([5.,0.,2.])-self.approach_start
+            if self.symmetric_view_preparation:self.active.publish(Bool(data=True))
+            s,ds=approach_blend(elapsed/12);delta=self.route_origin-self.approach_start
             self.position_command(s*delta,ds/12*delta)
             if elapsed>=12:self.transition('preparation')
         elif self.stage=='preparation':
+            if self.symmetric_view_preparation:self.active.publish(Bool(data=elapsed<initialization_motion.DURATION))
             # Exact current UniPilot metric-scale preparation, two cycles.
             delta,velocity=initialization_motion.reference(elapsed%initialization_motion.DURATION)
             self.position_command(delta,velocity)
@@ -165,7 +178,7 @@ class Test(Node):
                 self.position_command(np.array([d,0,0]),np.array([v,0,0]))
             if elapsed>=max(30,self.distance/self.speed+7):self.active.publish(Bool(data=False));self.transition('landing','land')
         elif self.stage=='landing' and self.state==0:self.done=True;self.save()
-        if self.stage in ('settle','initialize','approach','preparation','articulation','active') and self.state!=5:
+        if self.stage in ('settle','initialize','bootstrap','approach','preparation','articulation','active') and self.state!=5:
             self.failed=f'Lost hover in {self.stage}: {self.state}';self.done=True;self.cmd['land'].publish(Empty());self.save()
         if (self.stage=='waiting' and time.monotonic()-self.start_wall>45) or (self.stage in ('arming','takeoff') and elapsed>45):
             self.failed='Controller readiness or takeoff timed out';self.done=True;self.cmd['land'].publish(Empty());self.save()
@@ -185,7 +198,7 @@ class Test(Node):
         (self.out/'flight_result.json').write_text(json.dumps(dict(passed=self.failed is None,failed=self.failed,stage=self.stage,flight_state=self.state,requested_distance_m=self.distance),indent=2))
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--distance',type=float,default=0.);p.add_argument('--speed',type=float,default=.5);p.add_argument('--gimbal',action='store_true');p.add_argument('--inspect-gimbal',action='store_true');p.add_argument('--unipilot-matched',action='store_true');a=p.parse_args();rclpy.init();n=Test(a.output,a.distance,a.speed,a.gimbal,a.inspect_gimbal,a.unipilot_matched)
+    p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);p.add_argument('--distance',type=float,default=0.);p.add_argument('--speed',type=float,default=.5);p.add_argument('--gimbal',action='store_true');p.add_argument('--inspect-gimbal',action='store_true');p.add_argument('--unipilot-matched',action='store_true');p.add_argument('--symmetric-view-preparation',action='store_true');p.add_argument('--origin',type=float,nargs=3,default=[5.,0.,2.]);a=p.parse_args();rclpy.init();n=Test(a.output,a.distance,a.speed,a.gimbal,a.inspect_gimbal,a.unipilot_matched,a.origin,a.symmetric_view_preparation)
     try:
         while rclpy.ok() and not n.done:rclpy.spin_once(n,timeout_sec=.1)
     except KeyboardInterrupt:n.failed='Interrupted';n.save()

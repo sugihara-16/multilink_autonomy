@@ -8,6 +8,7 @@ import sys
 import cv2
 import numpy as np
 import rclpy
+from synchronous_shutdown import initialize,spin
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.parameter import Parameter
@@ -82,13 +83,9 @@ class Encoder(Node):
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('--output',type=Path,required=True);a=p.parse_args()
-    cv2.setNumThreads(1);rclpy.init();node=Encoder(a.output)
-    try:rclpy.spin(node)
+    cv2.setNumThreads(1);initialize();node=Encoder(a.output)
+    try:spin(node)
     except (KeyboardInterrupt,ExternalShutdownException):pass
-    except RuntimeError:
-        # Humble may invalidate a subscription while SIGINT shuts its context
-        # down. Never suppress a conversion error while ROS is still running.
-        if rclpy.ok():raise
     finally:
         node.report();node.destroy_node()
         if rclpy.ok():rclpy.shutdown()

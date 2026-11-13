@@ -119,21 +119,26 @@ class Kinematics:
                 rpy=list(map(float,o.get('rpy','0 0 0').split())) if o is not None else [0]*3
                 name=joint.get('name');index=self.names.index(name) if name in self.names else None
                 axis=np.array(list(map(float,joint.find('axis').get('xyz').split()))) if index is not None else None
-                self._chain.append((parent,child,transform(xyz,rpy),index,axis))
+                self._chain.append((parent,child,transform(xyz,rpy),index,axis,name))
                 known.add(child);pending.remove(joint);progressed=True
             if not progressed:raise ValueError('Disconnected URDF')
         self._last_q=None;self._last_frames=None
+        from dragon_control_guard import ControlEnvelope
+        self.control=ControlEnvelope(self)
 
-    def frames(self, q):
+    def frames(self, q, rotor_angles=None):
         q=np.asarray(q)
-        if self._last_q is not None and np.array_equal(q,self._last_q):return self._last_frames
+        if rotor_angles is None and self._last_q is not None and np.array_equal(q,self._last_q):return self._last_frames
         frames={'root':np.eye(4)}
-        for parent,child,origin,index,axis in self._chain:
+        for parent,child,origin,index,axis,name in self._chain:
             T=frames[parent]@origin
             if index is not None:
                 T=T.copy();T[:3,:3]=T[:3,:3]@Rotation.from_rotvec(axis*q[index]).as_matrix()
+            elif rotor_angles is not None and re.fullmatch(r'gimbal[1-4]_(roll|pitch)',name):
+                rotor=int(name[6])-1;pitch=name.endswith('pitch')
+                T=T.copy();T[:3,:3]=T[:3,:3]@Rotation.from_rotvec(np.array([0.,1.,0.] if pitch else [1.,0.,0.])*rotor_angles[rotor,int(pitch)]).as_matrix()
             frames[child]=T
-        self._last_q=q.copy();self._last_frames=frames
+        if rotor_angles is None:self._last_q=q.copy();self._last_frames=frames
         return frames
 
     def camera(self, q):
@@ -157,9 +162,11 @@ class Kinematics:
                 if j-i>1 and np.min(np.linalg.norm(samples[i][:,None]-samples[j][None],axis=-1))<.10:return False
                 if np.min(np.linalg.norm(samples[i]-centers[j],axis=-1))<.23:return False
                 if np.min(np.linalg.norm(samples[j]-centers[i],axis=-1))<.23:return False
-        return True
+        return self.control.evaluate(q)['valid']
 
     def path_valid(self,a,b,resolution=np.deg2rad(3.)):
+        # Use the same dense sampling for roadmap, planner and actuator paths.
+        resolution=min(resolution,np.deg2rad(1.))
         n=max(2,int(np.ceil(np.max(abs(np.asarray(b)-a))/resolution))+1)
         return all(self.valid(q) for q in np.linspace(a,b,n))
 
